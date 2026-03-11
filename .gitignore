@@ -1,0 +1,21 @@
+[Bb]in/
+[Oo]bj/
+[Pp]ackages/
+TestResults/
+*.pdb
+*.dll
+*.exe
+
+## --- JetBrains Rider 
+.idea/
+riderModule.iml
+_ReSharper.Caches/
+*.sln.iml
+*.DotSettings.user
+
+## --- Local User Settings
+.vs/
+*.user
+*.suo
+*.userprefs
+usersecrets.json
