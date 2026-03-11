@@ -39,4 +39,21 @@ public static class Enums
         Exam,
         Practical
     }
+
+    public enum SubjectName
+    {
+        Math = 1,
+        Biology,
+        English,
+        Georgian,
+        Russian,
+        Physics,
+        Chemistry,
+        Geography,
+        History,
+        PhysicalEducation,
+        Art,
+        Music,
+        // ...
+    }
 }

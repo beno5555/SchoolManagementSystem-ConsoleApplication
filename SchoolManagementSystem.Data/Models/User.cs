@@ -14,17 +14,13 @@ public class User
     public string PasswordHash { get; set; }
     public DateTime RegisterDate { get; set; } = DateTime.Now;
 
-    public List<Role> Roles { get; set; } = [];
-
-    public TeacherProfile? TeacherProfile { get; set; }
-    public StudentProfile? StudentProfile { get; set; }
-    public PrincipalProfile? PrincipalProfile { get; set; }
-
+    public Role Role { get; set; }
+    
     public User(Person person, string email, string passwordHash, Enums.RoleName roleName)
     {
         Person = person;
         Email = email;
         PasswordHash = passwordHash;
-        Roles.Add(new(roleName));
+        Role = new Role(roleName);
     }
 }
