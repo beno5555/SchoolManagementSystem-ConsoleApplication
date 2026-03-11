@@ -9,7 +9,7 @@ public class Person
     public int PersonId { get; private set; } = _idIncrement++;
     public string FirstName { get; private set; }
     public string LastName { get; private set; }
-    public string FullName => $"{FirstName.ToCapitalized()} {LastName.ToCapitalized()}";
+    public string FullName => $"{FirstName.ToCapitalized().Value} {LastName.ToCapitalized().Value}";
 
     public User? User { get; set; }
 

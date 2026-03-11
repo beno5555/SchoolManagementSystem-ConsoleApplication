@@ -2,7 +2,7 @@
 
 public static class Enums
 {
-    public enum Role
+    public enum RoleName
     {
         SuperAdmin = 1,
         Principal,
