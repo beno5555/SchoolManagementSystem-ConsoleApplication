@@ -6,7 +6,7 @@ public class TeacherProfile : User
 {
     public List<Subject> Subjects { get; set; } = new(5);
     public Group? Group { get; set; } 
-    public TeacherProfile(Person person, string email, string passwordHash) : base(person, email, passwordHash, Enums.RoleName.Teacher)
+    public TeacherProfile(string firstName, string lastName, DateTime dateOfBirth, string privateId, string email, string passwordHash) : base(firstName, lastName, dateOfBirth, privateId, email, passwordHash, Enums.RoleName.Teacher)
     {
         
     }

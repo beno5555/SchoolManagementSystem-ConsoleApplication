@@ -1,5 +1,5 @@
-﻿using SchoolManagementSystem.Data.Constants;
-using SchoolManagementSystem.Data.Models.UserProfiles;
+﻿using ProjectHelperLibrary.Utilities;
+using SchoolManagementSystem.Data.Constants;
 
 namespace SchoolManagementSystem.Data.Models;
 
@@ -9,16 +9,23 @@ public class User
     private static int _idIncrement = 1;
 
     public int UserId { get; set; } = _idIncrement++;
-    public Person? Person { get; set; }
+    public string FirstName { get; private set; }
+    public string LastName { get; private set; }
+    public string FullName => $"{FirstName.ToCapitalized().Value} {LastName.ToCapitalized().Value}";
+    public DateTime DateOfBirth { get; set; }
+    public string PrivateId { get; private set; }
     public string Email { get; set; } 
     public string PasswordHash { get; set; }
     public DateTime RegisterDate { get; set; } = DateTime.Now;
 
     public Role Role { get; set; }
     
-    public User(Person person, string email, string passwordHash, Enums.RoleName roleName)
+    public User(string firstName, string lastName, DateTime dateOfBirth, string privateId, string email, string passwordHash, Enums.RoleName roleName)
     {
-        Person = person;
+        FirstName = firstName;
+        LastName = lastName;
+        DateOfBirth = dateOfBirth;
+        PrivateId = privateId;
         Email = email;
         PasswordHash = passwordHash;
         Role = new Role(roleName);
