@@ -10,6 +10,5 @@ public class Laboratory
     public string LaboratoryName { get; set; } = string.Empty;
     [MaxLength(1000)]
     public string Description { get; set; } = string.Empty;
-
-    public List<Subject> Subjects { get; set; } = new(5);
+    
 }

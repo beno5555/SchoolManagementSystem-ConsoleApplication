@@ -18,9 +18,9 @@ public class User
     public string PasswordHash { get; set; }
     public DateTime RegisterDate { get; set; } = DateTime.Now;
 
-    public Role Role { get; set; }
+    public int RoleId { get; set; }
     
-    public User(string firstName, string lastName, DateTime dateOfBirth, string privateId, string email, string passwordHash, Enums.RoleName roleName)
+    public User(string firstName, string lastName, DateTime dateOfBirth, string privateId, string email, string passwordHash, int roleId)
     {
         FirstName = firstName;
         LastName = lastName;
@@ -28,6 +28,6 @@ public class User
         PrivateId = privateId;
         Email = email;
         PasswordHash = passwordHash;
-        Role = new Role(roleName);
+        RoleId = roleId;
     }
 }

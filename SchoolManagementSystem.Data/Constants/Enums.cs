@@ -18,14 +18,13 @@ public static class Enums
 
     public enum AssignmentStatus
     {
-        
+        Pending = 0,
+        Submitted,
+        OverDue,
+        Reviewed
     }
-
-    public enum AssignmentType
-    {
-        
-    }
-
+    
+    // ???
     public enum UserStatus
     {
         
@@ -37,16 +36,18 @@ public static class Enums
         Classwork,
         Test,
         Exam,
-        Practical
+        Quiz,
+        Project
     }
 
     public enum SubjectName
     {
         Math = 1,
         Biology,
-        English,
+        ForeignLanguageEnglish,
         Georgian,
-        Russian,
+        Literature,
+        ForeginLanguageRussian,
         Physics,
         Chemistry,
         Geography,
@@ -54,6 +55,14 @@ public static class Enums
         PhysicalEducation,
         Art,
         Music,
-        // ...
+        
+        WorldHistory,
+        GeorgianHistory,
+        CivicEducation,
+        InformationTechnology,
+        Robotics,
+        HealthEducation,
+        
+        
     }
 }

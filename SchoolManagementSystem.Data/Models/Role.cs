@@ -8,15 +8,9 @@ public class Role
     private static int _idIncrement = 1;
     public int RoleId { get; set; } = _idIncrement++;
     public Enums.RoleName RoleName { get; set; } 
-    public List<Permission> Permissions { get; set; } = [];
 
     public Role(Enums.RoleName roleName)
     {
         RoleName = roleName;
-    }
-
-    public List<Permission> GetPermissions()
-    {
-        throw new NotImplementedException();
     }
 }

@@ -1,5 +1,4 @@
-﻿using SchoolManagementSystem.Data.Constants;
-using SchoolManagementSystem.Data.Models.UserProfiles;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace SchoolManagementSystem.Data.Models;
 
@@ -7,11 +6,10 @@ public class Subject
 {
     private static int _idIncrement = 1;
     public int SubjectId { get; set; } = _idIncrement++;
-    public Enums.SubjectName SubjectName { get; set; }
+
+    // use Enums.SubjectName
+    [MaxLength(100)] public string SubjectName { get; set; } = string.Empty; 
     public string Description { get; set; } = string.Empty;
-
+    
     public int LaboratoryId { get; set; }
-
-    public List<StudentProfile> Students { get; set; } = [];
-    public List<TeacherProfile> Teachers { get; set; } = [];
 }
