@@ -2,8 +2,9 @@
 
 public class Program
 {
-    static void Main()
+    static async Task Main()
     {
-        Menu.Run();
+        var menu = new Menu();
+        await menu.Run();
     }
 }

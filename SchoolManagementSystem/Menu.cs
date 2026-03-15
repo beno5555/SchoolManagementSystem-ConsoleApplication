@@ -1,8 +1,8 @@
 ﻿namespace SchoolManagementSystem;
 
-public static class Menu
+public class Menu
 {
-    public static void Run()
+    public async Task Run()
     {
         
     }
