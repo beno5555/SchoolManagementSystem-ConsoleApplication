@@ -1,6 +1,7 @@
 ﻿using SchoolManagementSystem.Data.Models;
 using SchoolManagementSystem.Data.Models.JoinedModels;
 using SchoolManagementSystem.Data.Models.UserProfiles;
+using System;
 
 namespace SchoolManagementSystem.Data;
 
