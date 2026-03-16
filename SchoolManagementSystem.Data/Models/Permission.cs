@@ -2,10 +2,9 @@
 
 public class Permission : BaseModel
 {
-    public string PermissionName { get; set; } = string.Empty;
-    public Permission(int id, string permissionName)
+    public string PermissionName { get; set; } 
+    public Permission(int id, string permissionName) : base(id)
     {
-        Id = id;
         PermissionName = permissionName;
     }
 }

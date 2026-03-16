@@ -1,7 +1,4 @@
-﻿using System.Security.AccessControl;
-using SchoolManagementSystem.Data.Models.UserProfiles;
-
-namespace SchoolManagementSystem.Data.Models.JoinedModels;
+﻿namespace SchoolManagementSystem.Data.Models.JoinedModels;
 
 // student data in a specific subjects subjects
 public class SubjectEnrollment

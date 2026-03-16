@@ -1,5 +1,4 @@
 ﻿using ProjectHelperLibrary.Utilities;
-using SchoolManagementSystem.Data.Constants;
 
 namespace SchoolManagementSystem.Data.Models;
 
@@ -17,9 +16,8 @@ public class User : BaseModel
 
     public int RoleId { get; set; }
     
-    public User(int id, string firstName, string lastName, DateTime dateOfBirth, string privateId, string email, string passwordHash, int roleId)
+    public User(int id, string firstName, string lastName, DateTime dateOfBirth, string privateId, string email, string passwordHash, int roleId) : base(id)
     {
-        Id = id;
         FirstName = firstName;
         LastName = lastName;
         DateOfBirth = dateOfBirth;

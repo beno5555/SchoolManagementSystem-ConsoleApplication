@@ -1,7 +1,4 @@
-﻿using SchoolManagementSystem.Data.Constants;
-using SchoolManagementSystem.Data.Models.JoinedModels;
-
-namespace SchoolManagementSystem.Data.Models.UserProfiles;
+﻿namespace SchoolManagementSystem.Data.Models.UserProfiles;
 
 public class StudentProfile : User
 {

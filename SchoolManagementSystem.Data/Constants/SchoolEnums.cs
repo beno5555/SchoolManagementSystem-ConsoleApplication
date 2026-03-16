@@ -41,13 +41,7 @@ public static class SchoolEnums
         Reviewed
     }
     
-    // ???
-    public enum UserStatus
-    {
-        
-    }
-
-    public enum AssessmentType
+    public enum AssignmentType
     {
         Homework = 1,
         Classwork,
@@ -56,6 +50,13 @@ public static class SchoolEnums
         Quiz,
         Project
     }
+    
+    // ???
+    public enum UserStatus
+    {
+        
+    }
+
 
     public enum SubjectName
     {
@@ -64,7 +65,7 @@ public static class SchoolEnums
         ForeignLanguageEnglish,
         Georgian,
         Literature,
-        ForeginLanguageRussian,
+        ForeignLanguageRussian,
         Physics,
         Chemistry,
         Geography,

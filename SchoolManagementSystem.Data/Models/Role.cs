@@ -6,9 +6,8 @@ public class Role : BaseModel
 {
     public string RoleName { get; set; } 
 
-    public Role(int id, string roleName)
+    public Role(int id, string roleName) : base(id)
     {
-        Id = id;
         RoleName = roleName;
     }
 }

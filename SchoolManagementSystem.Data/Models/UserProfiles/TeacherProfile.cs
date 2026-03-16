@@ -1,6 +1,4 @@
-﻿using SchoolManagementSystem.Data.Constants;
-
-namespace SchoolManagementSystem.Data.Models.UserProfiles;
+﻿namespace SchoolManagementSystem.Data.Models.UserProfiles;
 
 public class TeacherProfile : User
 {

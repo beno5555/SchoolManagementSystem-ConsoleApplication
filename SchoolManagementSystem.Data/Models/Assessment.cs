@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using SchoolManagementSystem.Data.Constants;
-using SchoolManagementSystem.Data.Models.UserProfiles;
 
 namespace SchoolManagementSystem.Data.Models;
 
@@ -13,7 +11,12 @@ public class Assessment : BaseModel
     
     // reference to assignment the student was assessed for
     public int AssignmentId { get; set; } 
-    public SchoolEnums.AssessmentType AssessmentType { get; set; }
     [MaxLength(1000)]
     public string? Comment { get; set; }
+
+    public Assessment(int id, decimal gradeValue, string? comment = null) : base(id) 
+    {
+        GradeValue = gradeValue;
+        Comment = comment;
+    }
 }

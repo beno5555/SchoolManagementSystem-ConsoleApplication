@@ -6,13 +6,12 @@ public class Subject : BaseModel
 {
 
     // use Enums.SubjectName
-    [MaxLength(100)] public string SubjectName { get; set; } = string.Empty; 
+    [MaxLength(100)] public string SubjectName { get; set; }  
     public string Description { get; set; } = string.Empty;
     
     public int LaboratoryId { get; set; }
-    public Subject(int id, string subjectName)
+    public Subject(int id, string subjectName) : base(id)
     {
-        Id = id;
         SubjectName = subjectName;
     }
 }
