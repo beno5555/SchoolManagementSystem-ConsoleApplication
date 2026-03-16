@@ -1,5 +1,4 @@
-﻿using System.Reflection.Metadata;
-using System.Text.Json;
+﻿using System.Text.Json;
 using SchoolManagementSystem.Data.Models;
 using SchoolManagementSystem.Data.Models.JoinedModels;
 using SchoolManagementSystem.Data.Models.UserProfiles;
@@ -95,9 +94,6 @@ public class SchoolContext
 
     #region Constructors
 
-    public SchoolContext()
-    {
-    }
 
 
     #endregion
