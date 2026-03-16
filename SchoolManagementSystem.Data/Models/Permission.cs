@@ -1,8 +1,11 @@
 ﻿namespace SchoolManagementSystem.Data.Models;
 
-public class Permission
+public class Permission : BaseModel
 {
-    public int PermissionId { get; set; }
-    public required Constants.Enums.Permission PermissionName { get; set; }
-    
+    public string PermissionName { get; set; } = string.Empty;
+    public Permission(int id, string permissionName)
+    {
+        Id = id;
+        PermissionName = permissionName;
+    }
 }

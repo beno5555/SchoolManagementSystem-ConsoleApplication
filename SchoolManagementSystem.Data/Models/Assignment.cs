@@ -3,14 +3,12 @@ using SchoolManagementSystem.Data.Constants;
 
 namespace SchoolManagementSystem.Data.Models;
 
-public class Assignment
+public class Assignment : BaseModel
 {
-    private static int _idIncrement = 1;
-    public int AssignmentId { get; set; } = _idIncrement++;
     [MaxLength(70)]
-    public string AssingmentName { get; set; } = string.Empty;
+    public string AssignmentName { get; set; } = string.Empty;
 
-    public Enums.AssignmentStatus AssignmentStatus { get; set; } = Enums.AssignmentStatus.Pending;
+    public SchoolEnums.AssignmentStatus AssignmentStatus { get; set; } = SchoolEnums.AssignmentStatus.Pending;
     [MaxLength(500)]
     public string Description { get; set; } = string.Empty;
 

@@ -3,12 +3,9 @@ using SchoolManagementSystem.Data.Constants;
 
 namespace SchoolManagementSystem.Data.Models;
 
-public class User
+public class User : BaseModel
 {
-    // temporary solution. will need to store the maximum id in a file later.
-    private static int _idIncrement = 1;
 
-    public int UserId { get; set; } = _idIncrement++;
     public string FirstName { get; private set; }
     public string LastName { get; private set; }
     public string FullName => $"{FirstName.ToCapitalized().Value} {LastName.ToCapitalized().Value}";
@@ -20,8 +17,9 @@ public class User
 
     public int RoleId { get; set; }
     
-    public User(string firstName, string lastName, DateTime dateOfBirth, string privateId, string email, string passwordHash, int roleId)
+    public User(int id, string firstName, string lastName, DateTime dateOfBirth, string privateId, string email, string passwordHash, int roleId)
     {
+        Id = id;
         FirstName = firstName;
         LastName = lastName;
         DateOfBirth = dateOfBirth;

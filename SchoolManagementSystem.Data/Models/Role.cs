@@ -2,15 +2,13 @@
 
 namespace SchoolManagementSystem.Data.Models;
 
-public class Role
+public class Role : BaseModel
 {
-    // temporary solution
-    private static int _idIncrement = 1;
-    public int RoleId { get; set; } = _idIncrement++;
-    public Enums.RoleName RoleName { get; set; } 
+    public string RoleName { get; set; } 
 
-    public Role(Enums.RoleName roleName)
+    public Role(int id, string roleName)
     {
+        Id = id;
         RoleName = roleName;
     }
 }

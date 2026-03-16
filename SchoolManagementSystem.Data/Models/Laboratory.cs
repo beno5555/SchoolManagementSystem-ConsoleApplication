@@ -2,10 +2,8 @@
 
 namespace SchoolManagementSystem.Data.Models;
 
-public class Laboratory
+public class Laboratory : BaseModel
 {
-    private static int _idIncrement = 1;
-    public int LaboratoryId { get; set; } = _idIncrement++;
     [MaxLength(50)]
     public string LaboratoryName { get; set; } = string.Empty;
     [MaxLength(1000)]

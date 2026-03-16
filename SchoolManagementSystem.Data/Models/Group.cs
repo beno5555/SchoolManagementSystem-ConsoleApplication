@@ -2,10 +2,8 @@
 
 namespace SchoolManagementSystem.Data.Models;
 
-public class Group
+public class Group : BaseModel
 {
-    private static int _idIncrement = 1;
-    public int GroupId { get; set; } = _idIncrement++;
     public string GroupName { get; set; } = string.Empty;
     
     public int TeacherId { get; set; }

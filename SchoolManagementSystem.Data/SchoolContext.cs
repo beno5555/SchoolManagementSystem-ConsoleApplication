@@ -1,8 +1,8 @@
 ﻿using System.Text.Json;
+using SchoolManagementSystem.Data.Constants;
 using SchoolManagementSystem.Data.Models;
 using SchoolManagementSystem.Data.Models.JoinedModels;
 using SchoolManagementSystem.Data.Models.UserProfiles;
-using System;
 
 namespace SchoolManagementSystem.Data;
 
@@ -52,6 +52,7 @@ public class SchoolContext
     #region File Paths
 
     private const string DataFolder = "DataFolder";
+    //private const string IdCounterPath = "idCounters.json";
     
     #region Main
     
@@ -123,40 +124,45 @@ public class SchoolContext
         await ForceFile(TeacherSubjectPath);
         await ForceFile(SubjectEnrollmentPath);
         await ForceFile(RolePermissionPath);
-        
-        
+
+        //await ForceFile(IdCounterPath);
     }
 
-    public async Task LoadData()
-    {
-        Users = await Load<User>(UserPath);
-        Subjects = await Load<Subject>(SubjectPath);
-        Rooms = await Load<Room>(RoomPath);
-        Roles = await Load<Role>(RolePath);
-        Permissions = await Load<Permission>(PermissionPath);
-        Laboratories = await Load<Laboratory>(LaboratoryPath);
-        Groups = await Load<Group>(GroupPath);
-        
-        Assignments = await Load<Assignment>(AssignmentPath);
-        Assessments = await Load<Assessment>(AssessmentPath);
-        
-        TeacherProfiles = await Load<TeacherProfile>(TeacherProfilePath);
-        StudentProfiles = await Load<StudentProfile>(StudentProfilePath);
-        PrincipalProfiles = await Load<PrincipalProfile>(PrincipalProfilePath);
-        
-        TeacherSubjects = await Load<TeacherSubject>(TeacherSubjectPath);
-        SubjectEnrollments = await Load<SubjectEnrollment>(SubjectEnrollmentPath);
-        RolePermissions = await Load<RolePermission>(RolePermissionPath);
-        
-    }
+    #region Rubbish
 
-    public void SaveData()
-    {
-        
-    }
+    //public async Task LoadData()
+    //{
+    //    Users = await Load<User>(UserPath);
+    //    Subjects = await Load<Subject>(SubjectPath);
+    //    Rooms = await Load<Room>(RoomPath);
+    //    Roles = await Load<Role>(RolePath);
+    //    Permissions = await Load<Permission>(PermissionPath);
+    //    Laboratories = await Load<Laboratory>(LaboratoryPath);
+    //    Groups = await Load<Group>(GroupPath);
 
-    #region Singles
-    
+    //    Assignments = await Load<Assignment>(AssignmentPath);
+    //    Assessments = await Load<Assessment>(AssessmentPath);
+
+    //    TeacherProfiles = await Load<TeacherProfile>(TeacherProfilePath);
+    //    StudentProfiles = await Load<StudentProfile>(StudentProfilePath);
+    //    PrincipalProfiles = await Load<PrincipalProfile>(PrincipalProfilePath);
+
+    //    TeacherSubjects = await Load<TeacherSubject>(TeacherSubjectPath);
+    //    SubjectEnrollments = await Load<SubjectEnrollment>(SubjectEnrollmentPath);
+    //    RolePermissions = await Load<RolePermission>(RolePermissionPath);
+
+    //}
+
+    //public async Task SaveData()
+    //{
+    //    await Save(UserPath, Users);
+    //    // ..
+    //}
+
+    #endregion
+
+    #region Interacting with json files
+
     /// <summary>
     /// deserialize singular collection data from json file and set it to the list it belongs to
     /// </summary>
@@ -175,11 +181,13 @@ public class SchoolContext
     /// <summary>
     /// serialize singular collection set to json format and save to the file it belongs to
     /// </summary>
-    public async Task Save<T>(string fileName)
+    public async Task Save<T>(string fileName, List<T> collection)
     {
         var path = Path.Combine(DataFolder, fileName);
         if (File.Exists(path))
         {
+            var json = JsonSerializer.Serialize(collection);
+            await File.WriteAllTextAsync(path, json);
         }
     }
 
@@ -190,8 +198,77 @@ public class SchoolContext
             await File.AppendAllTextAsync(path, "[]");
         }
     }
-    
+
     #endregion
+
+
+    public async Task SeedData()
+    {
+        await SeedRoles();
+        await SeedPermissions();
+        await SeedSuperAdmin();
+    }
+
+    private async Task SeedRoles()
+    {
+        int maxId = GetMaxId(Roles);
+        foreach(string roleName in Enum.GetNames<SchoolEnums.RoleName>())
+        {
+            Roles.Add(new(maxId += 1, roleName));
+        }
+    }
+    private async Task SeedPermissions()
+    {
+        int maxId = GetMaxId(Permissions);
+        foreach(string permission in Enum.GetNames<SchoolEnums.Permission>())
+        {
+            Permissions.Add(new(maxId += 1, permission));
+        }
+    }
+    private async Task SeedSubjects()
+    {
+        if(Subjects.Count == 0)
+        {
+            int maxId = GetMaxId(Subjects);
+            foreach(string subjectName in Enum.GetNames<SchoolEnums.SubjectName>())
+            {
+                Subjects.Add(new(maxId += 1, subjectName));
+            }
+        }
+    }
+    private async Task SeedSuperAdmin()
+    {
+        if(Users.Count > 0)
+        {
+            bool adminExists = Users
+                .Any(user => user.RoleId == Roles.FirstOrDefault(role => role.RoleName == nameof(SchoolEnums.RoleName.SuperAdmin)).Id);
+            if (!adminExists)
+            {
+                int maxId = GetMaxId(Users);
+                var roleId = Roles.FirstOrDefault(role => role.RoleName == nameof(SchoolEnums.RoleName.SuperAdmin))?.Id;
+                Users.Add(new(
+                    maxId += 1,
+                    "superadmin",
+                    "superadmin",
+                    new DateTime(2009, 04, 17),
+                    "01255339127",
+                    "superadmin@gmail.com",
+                    "123",
+                    (int)roleId));
+            }
+        }
+    }
+
+
+    public int GetMaxId<T>(List<T> collection) where T : BaseModel
+    {
+        int maxId = 0;
+        if(collection is not null)
+        {
+            maxId = collection.Count > 0 ? collection.Select(item => item.Id).Max() : 0;
+        }
+        return maxId;
+    }
 
     #endregion
 }

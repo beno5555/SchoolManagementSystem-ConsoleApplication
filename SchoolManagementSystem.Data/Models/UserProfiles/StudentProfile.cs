@@ -12,8 +12,8 @@ public class StudentProfile : User
     
     #endregion
     public StudentProfile(
-        string firstName, string lastName, DateTime dateOfBirth, string privateId, string email, string passwordHash,
-        int groupId) : base(firstName, lastName, dateOfBirth, privateId, email, passwordHash, 4) // 4 for student
+        int id, string firstName, string lastName, DateTime dateOfBirth, string privateId, string email, string passwordHash,
+        int groupId) : base(id, firstName, lastName, dateOfBirth, privateId, email, passwordHash, 4) // 4 for student
     {
         GroupId = GroupId;
     }
