@@ -1,4 +1,6 @@
-﻿using SchoolManagementSystem.Data.Models;
+﻿using System.Reflection.Metadata;
+using System.Text.Json;
+using SchoolManagementSystem.Data.Models;
 using SchoolManagementSystem.Data.Models.JoinedModels;
 using SchoolManagementSystem.Data.Models.UserProfiles;
 
@@ -91,10 +93,63 @@ public class SchoolContext
 
     #endregion
 
-    #region Methods
+    #region Constructors
 
-    public void LoadData()
+    public SchoolContext()
     {
+    }
+
+
+    #endregion
+    
+    #region Methods
+    // call after initialization
+    private async Task ForceStorage()
+    {
+        Directory.CreateDirectory(DataFolder);
+        
+        await ForceFile(UserPath);
+        await ForceFile(SubjectPath);
+        await ForceFile(RoomPath);
+        await ForceFile(RolePath);
+        await ForceFile(PermissionPath);
+        await ForceFile(LaboratoryPath);
+        await ForceFile(GroupPath);
+        
+        await ForceFile(AssignmentPath);
+        await ForceFile(AssessmentPath);
+        
+        await ForceFile(TeacherProfilePath);
+        await ForceFile(StudentProfilePath);
+        await ForceFile(PrincipalProfilePath);
+        
+        await ForceFile(TeacherSubjectPath);
+        await ForceFile(SubjectEnrollmentPath);
+        await ForceFile(RolePermissionPath);
+        
+        
+    }
+
+    public async Task LoadData()
+    {
+        Users = await Load<User>(UserPath);
+        Subjects = await Load<Subject>(SubjectPath);
+        Rooms = await Load<Room>(RoomPath);
+        Roles = await Load<Role>(RolePath);
+        Permissions = await Load<Permission>(PermissionPath);
+        Laboratories = await Load<Laboratory>(LaboratoryPath);
+        Groups = await Load<Group>(GroupPath);
+        
+        Assignments = await Load<Assignment>(AssignmentPath);
+        Assessments = await Load<Assessment>(AssessmentPath);
+        
+        TeacherProfiles = await Load<TeacherProfile>(TeacherProfilePath);
+        StudentProfiles = await Load<StudentProfile>(StudentProfilePath);
+        PrincipalProfiles = await Load<PrincipalProfile>(PrincipalProfilePath);
+        
+        TeacherSubjects = await Load<TeacherSubject>(TeacherSubjectPath);
+        SubjectEnrollments = await Load<SubjectEnrollment>(SubjectEnrollmentPath);
+        RolePermissions = await Load<RolePermission>(RolePermissionPath);
         
     }
 
@@ -103,21 +158,43 @@ public class SchoolContext
         
     }
 
+    #region Singles
+    
     /// <summary>
     /// deserialize singular collection data from json file and set it to the list it belongs to
     /// </summary>
-    public void Load()
+    public async Task<List<T>> Load<T>(string fileName)
     {
-        
+        var path = Path.Combine(DataFolder, fileName);
+        var result = new List<T>();
+        if (File.Exists(path))
+        {
+            var json = await File.ReadAllTextAsync(path);
+            result = JsonSerializer.Deserialize<List<T>>(json) ?? [];
+        }
+        return result;
     }
 
     /// <summary>
     /// serialize singular collection set to json format and save to the file it belongs to
     /// </summary>
-    public void Save()
+    public async Task Save<T>(string fileName)
     {
-        
+        var path = Path.Combine(DataFolder, fileName);
+        if (File.Exists(path))
+        {
+        }
     }
+
+    public async Task ForceFile(string path)
+    {
+        if (!File.Exists(path))
+        {
+            await File.AppendAllTextAsync(path, "[]");
+        }
+    }
+    
+    #endregion
 
     #endregion
 }
