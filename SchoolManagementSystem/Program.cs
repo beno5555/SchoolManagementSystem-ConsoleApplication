@@ -17,7 +17,6 @@ public class Program
         PrintCollection(schoolContext.StudentProfiles);
         ConsoleUtilities.WaitForKey(ConsoleKey.A);
         schoolContext.StudentProfiles.Add(new StudentProfile(
-            1, 
             "John", 
             "Doe", 
             new DateTime(2009, 08,16), 

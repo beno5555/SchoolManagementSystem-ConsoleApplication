@@ -18,7 +18,7 @@ public class Assignment : BaseModel
     public DateTime UploadedAt { get; set; } = DateTime.Now;
     public DateTime DueDate { get; set; }
 
-    public Assignment(int id, string name, int assignmentTypeId, string description, DateTime dueDate) : base(id)
+    public Assignment(string name, int assignmentTypeId, string description, DateTime dueDate) : base()
     {
         AssignmentName = name;
         AssignmentTypeId = assignmentTypeId;
@@ -26,7 +26,7 @@ public class Assignment : BaseModel
         DueDate = dueDate;
     }
 
-    public Assignment(int id, string name, int assignmentTypeId, DateTime dueDate) : base(id)
+    public Assignment(string name, int assignmentTypeId, DateTime dueDate) : base()
     {
         AssignmentName = name;
         AssignmentTypeId = assignmentTypeId;

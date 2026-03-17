@@ -10,7 +10,7 @@ public class Subject : BaseModel
     public string Description { get; set; } = string.Empty;
     
     public int LaboratoryId { get; set; }
-    public Subject(int id, string subjectName) : base(id)
+    public Subject(string subjectName) : base()
     {
         SubjectName = subjectName;
     }

@@ -9,7 +9,7 @@ public class Laboratory : BaseModel
     [MaxLength(1000)]
     public string Description { get; set; } 
 
-    public Laboratory(int id, string laboratoryName, string description = "") : base(id)
+    public Laboratory(string laboratoryName, string description = "") : base()
     {
         LaboratoryName = laboratoryName;
         Description = description;

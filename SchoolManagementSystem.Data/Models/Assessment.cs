@@ -14,7 +14,7 @@ public class Assessment : BaseModel
     [MaxLength(1000)]
     public string? Comment { get; set; }
 
-    public Assessment(int id, decimal gradeValue, string? comment = null) : base(id) 
+    public Assessment(decimal gradeValue, string? comment = null) : base() 
     {
         GradeValue = gradeValue;
         Comment = comment;

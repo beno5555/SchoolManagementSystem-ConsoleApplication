@@ -8,14 +8,13 @@ public static class Seeder
     /// <summary>
     /// adds T type objects to List of type T collection with predefined enum names given that collection has 0 items
     /// </summary>
-    public static void SeedEnums<T>(List<T> collection, Type enumType, Func<int, string, T> create) where T : BaseModel
+    public static void SeedEnums<T>(List<T> collection, Type enumType, Func<string, T> create) where T : BaseModel
     {
-        if (collection.Count == 0)
+        if (!collection.Any())
         {
-            int maxId = IdHelper.GetMaxId(collection);
             foreach (string name in Enum.GetNames(enumType))
             {
-                collection.Add(create(++maxId, name));
+                collection.Add(create(name));
             }        
         }
     }
@@ -31,9 +30,7 @@ public static class Seeder
                 .Any(user => user.RoleId == adminRoleId);
             if (!adminExists)
             {
-                int maxId = IdHelper.GetMaxId(users);
                 users.Add(new(
-                    ++maxId,
                     "superadmin",
                     "superadmin",
                     new DateTime(2009, 04, 17),

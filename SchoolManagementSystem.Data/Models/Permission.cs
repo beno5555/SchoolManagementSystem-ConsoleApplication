@@ -3,7 +3,7 @@
 public class Permission : BaseModel
 {
     public string PermissionName { get; set; } 
-    public Permission(int id, string permissionName) : base(id)
+    public Permission(string permissionName) : base()
     {
         PermissionName = permissionName;
     }

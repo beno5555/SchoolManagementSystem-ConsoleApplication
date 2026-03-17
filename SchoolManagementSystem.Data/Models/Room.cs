@@ -4,7 +4,7 @@ public class Room : BaseModel
 {
     public string RoomName { get; set; } 
 
-    public Room(int id, string roomName) : base(id)
+    public Room(string roomName) : base()
     {
         RoomName = roomName;
     }

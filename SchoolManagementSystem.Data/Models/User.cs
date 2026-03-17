@@ -16,7 +16,7 @@ public class User : BaseModel
 
     public int RoleId { get; set; }
     
-    public User(int id, string firstName, string lastName, DateTime dateOfBirth, string privateId, string email, string passwordHash, int roleId) : base(id)
+    public User(string firstName, string lastName, DateTime dateOfBirth, string privateId, string email, string passwordHash, int roleId) : base()
     {
         FirstName = firstName;
         LastName = lastName;
