@@ -1,5 +1,6 @@
 ﻿using ProjectHelperLibrary.Utilities;
 using SchoolManagementSystem.Data;
+using SchoolManagementSystem.Data.Config;
 using SchoolManagementSystem.Data.HelperClasses;
 using SchoolManagementSystem.Data.Models;
 using SchoolManagementSystem.Data.Models.UserProfiles;
@@ -12,26 +13,26 @@ public class Program
     {
         SchoolContext schoolContext = new();
         await schoolContext.InitializeAsync();
-        schoolContext.StudentProfiles = await FileManager.LoadAsync<StudentProfile>(FolderPaths.StudentProfilePath);
-        
-        PrintCollection(schoolContext.StudentProfiles);
-        ConsoleUtilities.WaitForKey(ConsoleKey.A);
-        schoolContext.StudentProfiles.Add(new StudentProfile(
-            "John", 
-            "Doe", 
-            new DateTime(2009, 08,16), 
-            "454345434", 
-            "alo@gmail.com", 
-            "admin123", 
-            1));
-        Console.WriteLine("added new student");
-        await FileManager.SaveAsync(
-            FolderPaths.GetFullPath(FolderPaths.StudentProfilePath),
-            schoolContext.StudentProfiles);
-        
-        ConsoleUtilities.WaitForKey(ConsoleKey.A);
-
-        
+        // await FileManager.LoadAsync(AppConstants.FolderPaths.UserPath, schoolContext.Users);
+        //
+        // PrintCollection(schoolContext.Users);
+        // ConsoleUtilities.WaitForKey(ConsoleKey.A);
+        // schoolContext.Users.Add(User.CreateStudent(
+        //     "John", 
+        //     "Doe", 
+        //     new DateTime(2009, 08,16), 
+        //     "454345434", 
+        //     "alo@gmail.com", 
+        //     "admin123", 
+        //     1));
+        // Console.WriteLine("added new student");
+        // await FileManager.SaveAsync(
+        //     AppConstants.FolderPaths.GetFullPath(AppConstants.FolderPaths.UserPath),
+        //     schoolContext.Users);
+        //
+        // ConsoleUtilities.WaitForKey(ConsoleKey.A);
+        //
+        //
         // var menu = new Menu();
         // await menu.Run();
 
@@ -39,7 +40,7 @@ public class Program
         Console.ReadKey();
     }
 
-    static void PrintCollection(List<StudentProfile> collection) 
+    static void PrintCollection(List<User> collection) 
     {
         if (collection.Count == 0)
         {

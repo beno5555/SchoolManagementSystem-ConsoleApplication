@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using SchoolManagementSystem.Data.Constants;
+using SchoolManagementSystem.Data.Config;
+using SchoolManagementSystem.Data.Models.Base;
 
 namespace SchoolManagementSystem.Data.Models;
 
 public class Assignment : BaseModel
+
 {
     [MaxLength(70)]
     public string AssignmentName { get; set; } 
@@ -18,18 +20,11 @@ public class Assignment : BaseModel
     public DateTime UploadedAt { get; set; } = DateTime.Now;
     public DateTime DueDate { get; set; }
 
-    public Assignment(string name, int assignmentTypeId, string description, DateTime dueDate) : base()
+    public Assignment(string name, int assignmentTypeId,  DateTime dueDate, string description = "") : base()
     {
         AssignmentName = name;
         AssignmentTypeId = assignmentTypeId;
         Description = description;
-        DueDate = dueDate;
-    }
-
-    public Assignment(string name, int assignmentTypeId, DateTime dueDate) : base()
-    {
-        AssignmentName = name;
-        AssignmentTypeId = assignmentTypeId;
         DueDate = dueDate;
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace SchoolManagementSystem.Data.Models;
+﻿using SchoolManagementSystem.Data.Models.Base;
+
+namespace SchoolManagementSystem.Data.Models;
 
 public class AssignmentType : BaseModel
 {

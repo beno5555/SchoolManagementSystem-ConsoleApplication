@@ -1,10 +1,13 @@
-﻿using SchoolManagementSystem.Data.HelperClasses;
+﻿using System.Text.Json.Serialization;
+using SchoolManagementSystem.Data.HelperClasses;
 
-namespace SchoolManagementSystem.Data.Models
+namespace SchoolManagementSystem.Data.Models.Base
 {
-    public class BaseModel
+    public abstract class BaseModel
     {
-        public int Id { get; set; }
+        // makes sure id is serialized first in the JSON
+        [JsonPropertyOrder(-1)]
+        public int Id { get; private init; }
 
         protected BaseModel()
         {

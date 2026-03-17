@@ -1,6 +1,6 @@
 ﻿namespace SchoolManagementSystem.Data.Models.UserProfiles;
 
-public class StudentProfile : User
+class StudentProfile : User
 {
     #region Properties
 

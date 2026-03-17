@@ -1,22 +1,47 @@
 ﻿using ProjectHelperLibrary.Utilities;
+using SchoolManagementSystem.Data.Config;
+using SchoolManagementSystem.Data.Models.Base;
 
 namespace SchoolManagementSystem.Data.Models;
 
 public class User : BaseModel
 {
 
-    public string FirstName { get; private set; }
-    public string LastName { get; private set; }
+    #region Properties
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
     public string FullName => $"{FirstName.ToCapitalized().Value} {LastName.ToCapitalized().Value}";
     public DateTime DateOfBirth { get; set; }
-    public string PrivateId { get; private set; }
+    public string PrivateId { get; set; }
+    
     public string Email { get; set; } 
     public string PasswordHash { get; set; }
     public DateTime RegisterDate { get; set; } = DateTime.Now;
-
-    public int RoleId { get; set; }
     
-    public User(string firstName, string lastName, DateTime dateOfBirth, string privateId, string email, string passwordHash, int roleId) : base()
+    #region Role-Specific
+    public int RoleId { get; set; }
+    public int? GroupId { get; set; } // mandatory for students, optional for teachers
+    public int? FinalGrade { get; set; } // student-specific
+    public int? OfficeRoomId { get; set; } // principal-specific
+    
+    #endregion
+    
+    #endregion
+    
+    #region Constructors
+    
+    public User(
+        string firstName, 
+        string lastName, 
+        DateTime dateOfBirth, 
+        string privateId, 
+        string email, 
+        string passwordHash, 
+        int roleId,
+        
+        int? groupId = null,
+        int? officeRoomId = null
+        )
     {
         FirstName = firstName;
         LastName = lastName;
@@ -25,5 +50,50 @@ public class User : BaseModel
         Email = email;
         PasswordHash = passwordHash;
         RoleId = roleId;
+        GroupId = groupId;
+        OfficeRoomId = officeRoomId;
     }
+
+    public static User CreateStudent(
+        string firstName,
+        string lastName,
+        DateTime dateOfBirth,
+        string privateId,
+        string email,
+        string passwordHash,
+        int groupId
+    )
+    {
+        return new User(firstName, lastName, dateOfBirth, privateId, email, passwordHash,
+            (int)SchoolEnums.RoleName.Student, groupId: groupId);
+    }
+
+    public static User CreateTeacher(
+        string firstName,
+        string lastName,
+        DateTime dateOfBirth,
+        string privateId,
+        string email,
+        string passwordHash,
+        int? groupId)
+    {
+        return new User(firstName, lastName, dateOfBirth, privateId, email, passwordHash,
+            (int)SchoolEnums.RoleName.Teacher, groupId: groupId);
+    }
+
+    public static User CreatePrincipal(
+        string firstName,
+        string lastName,
+        DateTime dateOfBirth,
+        string privateId,
+        string email,
+        string passwordHash,
+        int officeRoomId,
+        int? groupId)
+    {
+        return new User(firstName, lastName, dateOfBirth, privateId, email, passwordHash,
+            (int)SchoolEnums.RoleName.Principal, groupId: groupId, officeRoomId: officeRoomId);
+    }
+    
+    #endregion
 }

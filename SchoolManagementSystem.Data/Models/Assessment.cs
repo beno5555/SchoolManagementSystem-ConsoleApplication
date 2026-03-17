@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using SchoolManagementSystem.Data.Models.Base;
 
 namespace SchoolManagementSystem.Data.Models;
 

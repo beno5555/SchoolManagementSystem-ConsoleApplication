@@ -1,6 +1,6 @@
-
 [
   {
+    "Id": 1,
     "FirstName": "superadmin",
     "LastName": "superadmin",
     "FullName": "Superadmin Superadmin",
@@ -8,44 +8,10 @@
     "PrivateId": "01255339127",
     "Email": "superadmin@gmail.com",
     "PasswordHash": "123",
-    "RegisterDate": "2026-03-17T14:54:20.4182808+04:00",
+    "RegisterDate": "2026-03-17T23:20:23.7956284+04:00",
     "RoleId": 1,
-    "Id": 1
-  },
-  {
-    "FirstName": "TestUser",
-    "LastName": "testuserlastname",
-    "FullName": "TestUser Testuserlastname",
-    "DateOfBirth": "0001-01-01T00:00:00",
-    "PrivateId": "dddd",
-    "Email": "2@gmail.com",
-    "PasswordHash": "aaa",
-    "RegisterDate": "2026-03-17T17:30:25.6843883+04:00",
-    "RoleId": 5,
-    "Id": 2
-  },
-  {
-    "FirstName": "TestUser",
-    "LastName": "testuserlastname",
-    "FullName": "TestUser Testuserlastname",
-    "DateOfBirth": "0001-01-01T00:00:00",
-    "PrivateId": "dddd",
-    "Email": "2@gmail.com",
-    "PasswordHash": "aaa",
-    "RegisterDate": "2026-03-17T17:30:43.9293678+04:00",
-    "RoleId": 5,
-    "Id": 3
-  },
-  {
-    "FirstName": "TestUser",
-    "LastName": "testuserlastname",
-    "FullName": "TestUser Testuserlastname",
-    "DateOfBirth": "0001-01-01T00:00:00",
-    "PrivateId": "dddd",
-    "Email": "2@gmail.com",
-    "PasswordHash": "aaa",
-    "RegisterDate": "2026-03-17T17:30:58.3354095+04:00",
-    "RoleId": 5,
-    "Id": 4
+    "GroupId": null,
+    "FinalGrade": null,
+    "OfficeRoomId": null
   }
 ]

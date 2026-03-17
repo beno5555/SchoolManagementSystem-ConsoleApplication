@@ -1,8 +1,7 @@
-﻿using SchoolManagementSystem.Data.Constants;
+﻿using SchoolManagementSystem.Data.Config;
 using SchoolManagementSystem.Data.HelperClasses;
 using SchoolManagementSystem.Data.Models;
 using SchoolManagementSystem.Data.Models.JoinedModels;
-using SchoolManagementSystem.Data.Models.UserProfiles;
 
 namespace SchoolManagementSystem.Data;
 
@@ -13,56 +12,55 @@ public class SchoolContext
     #region Entities
     
     // main    
-    public List<User> Users { get; set; } = new(1000);
-    public List<Subject> Subjects { get; set; } = new(50);
-    public List<Room> Rooms { get; set; } = new(150);
-    public List<Role> Roles { get; set; } = new(10);
-    public List<Permission> Permissions { get; set; } = new(50);
-    public List<Laboratory> Laboratories { get; set; } = new(5);
-    public List<Group> Groups { get; set; } = new(100);
-
-    // profiles    
-    public List<StudentProfile> StudentProfiles { get; set; } = new();
-    public List<TeacherProfile> TeacherProfiles { get; set; } = new();
-    public List<PrincipalProfile> PrincipalProfiles { get; set; } = new(1);
-
-    // joined    
-    public List<TeacherSubject> TeacherSubjects { get; set; } = new();
-    public List<SubjectEnrollment> SubjectEnrollments { get; set; } = new(10_000); // need to specify capacity
-    public List<RolePermission> RolePermissions { get; set; } = new(50);
+    public List<User> Users { get; set; } = new(AppConstants.MaximumCount.Users);
+    public List<Subject> Subjects { get; set; } = new(AppConstants.MaximumCount.Subjects);
+    public List<Room> Rooms { get; set; } = new(AppConstants.MaximumCount.Rooms);
+    public List<Role> Roles { get; set; } = new(AppConstants.MaximumCount.Roles);
+    public List<Permission> Permissions { get; set; } = new(AppConstants.MaximumCount.Permissions);
+    public List<Group> Groups { get; set; } = new(AppConstants.MaximumCount.Groups);
     
     // academic    
-    public List<Assignment> Assignments { get; set; } = new();
-    public List<Assessment> Assessments { get; set; } = new();
-    public List<AssignmentType> AssignmentTypes { get; set; } = new(10);
+    public List<Assignment> Assignments { get; set; } = new(AppConstants.MaximumCount.Assignments);
+    public List<Assessment> Assessments { get; set; } = new(AppConstants.MaximumCount.Assessments);
+    public List<AssignmentType> AssignmentTypes { get; set; } = new(AppConstants.MaximumCount.AssignmentTypes);
+    
+    // joined    
+    public List<TeacherSubject> TeacherSubjects { get; set; } = new(AppConstants.MaximumCount.TeacherSubjects);
+    public List<SubjectEnrollment> SubjectEnrollments { get; set; } = new(AppConstants.MaximumCount.SubjectEnrollments); 
+    public List<RolePermission> RolePermissions { get; set; } = new(AppConstants.MaximumCount.RolePermissions);
     
     #endregion
-
-    #endregion
-    
-    #region Constructors
-
-
 
     #endregion
     
     #region Methods
     
-    #region After Initialization
+    #region Initialization
     
     public async Task InitializeAsync()
     {
-        await ForceStorage();
+        await FileManager.ForceStorage();
         await SeedData();
+        InitializeIds();
     }
-    private async Task ForceStorage()
-    {
-        Directory.CreateDirectory(FolderPaths.DataPath);
 
-        foreach (string jsonPath in FolderPaths.JsonPaths)
-        {
-            await FileManager.ForceFile(jsonPath);
-        }
+    // using for testing. might remove later
+    private void InitializeIds()
+    {
+        IdGenerator.InitializeId(Users);
+        IdGenerator.InitializeId(Subjects);
+        IdGenerator.InitializeId(Rooms);
+        IdGenerator.InitializeId(Roles);
+        IdGenerator.InitializeId(Permissions);
+        IdGenerator.InitializeId(Groups);
+        
+        // IdGenerator.InitializeId(StudentProfiles);
+        // IdGenerator.InitializeId(TeacherProfiles);
+        // IdGenerator.InitializeId(PrincipalProfiles);
+        
+        IdGenerator.InitializeId(Assessments);
+        IdGenerator.InitializeId(AssignmentTypes);
+        IdGenerator.InitializeId(Assignments);
     }
 
     #endregion
@@ -71,6 +69,8 @@ public class SchoolContext
 
     public async Task SeedData()
     {
+        await LoadEssentialCollections();
+        
         Seeder.SeedEnums(Roles, typeof(SchoolEnums.RoleName), name => new Role(name));
         Seeder.SeedEnums(Permissions, typeof(SchoolEnums.Permission), name => new Permission(name));
         Seeder.SeedEnums(Subjects, typeof(SchoolEnums.SubjectName), name => new Subject(name));
@@ -81,13 +81,23 @@ public class SchoolContext
         await SaveSeededData();
     }
 
+    private async Task LoadEssentialCollections()
+    {
+        await FileManager.LoadAsync(AppConstants.FolderPaths.RolePath, Roles);
+        await FileManager.LoadAsync(AppConstants.FolderPaths.PermissionPath, Permissions);
+        await FileManager.LoadAsync(AppConstants.FolderPaths.SubjectPath, Subjects);
+        await FileManager.LoadAsync(AppConstants.FolderPaths.AssignmentTypePath, AssignmentTypes);
+        await FileManager.LoadAsync(AppConstants.FolderPaths.UserPath, Users);
+    }
+
     public async Task SaveSeededData()
     {
-        await FileManager.SaveAsync(FolderPaths.GetFullPath(FolderPaths.RolePath), Roles);
-        await FileManager.SaveAsync(FolderPaths.GetFullPath(FolderPaths.PermissionPath), Permissions);
-        await FileManager.SaveAsync(FolderPaths.GetFullPath(FolderPaths.SubjectPath), Subjects);
-        await FileManager.SaveAsync(FolderPaths.GetFullPath(FolderPaths.AssignmentTypePath), AssignmentTypes);
-        await FileManager.SaveAsync(FolderPaths.GetFullPath(FolderPaths.UserPath), Users);
+        
+        await FileManager.SaveAsync(AppConstants.FolderPaths.RolePath, Roles);
+        await FileManager.SaveAsync(AppConstants.FolderPaths.PermissionPath, Permissions);
+        await FileManager.SaveAsync(AppConstants.FolderPaths.SubjectPath, Subjects);
+        await FileManager.SaveAsync(AppConstants.FolderPaths.AssignmentTypePath, AssignmentTypes);
+        await FileManager.SaveAsync(AppConstants.FolderPaths.UserPath, Users);
     }
     
     #endregion
@@ -122,6 +132,21 @@ public class SchoolContext
     //    await SaveAsync(UserPath, Users);
     //    // ..
     //}
+
+    
+    // public void Try()
+    // {
+    //     int? studentRoleId = Roles.FirstOrDefault(role => role.RoleName == nameof(SchoolEnums.RoleName.Student))?.Id;
+    //     if (studentRoleId is not null)
+    //     {
+    //         int finalStudentGrade = 0;
+    //         var student = Users.FirstOrDefault(user => user.RoleId == studentRoleId.Value);
+    //         var studentSubjectEnrollments = SubjectEnrollments.Where(enrollment => enrollment.StudentId == student.Id ).ToList();
+    //         var finalGrade = studentSubjectEnrollments.Average(sse => sse.GetAverageGrade());
+    //         finalStudentGrade = (int)Math.Round(finalGrade);
+    //     }
+    //     
+    // }
 
     #endregion
 

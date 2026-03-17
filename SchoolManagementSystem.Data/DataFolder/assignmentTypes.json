@@ -1,26 +1,26 @@
 [
   {
-    "Name": "Homework",
-    "Id": 1
+    "Id": 1,
+    "Name": "Homework"
   },
   {
-    "Name": "Classwork",
-    "Id": 2
+    "Id": 2,
+    "Name": "Classwork"
   },
   {
-    "Name": "Test",
-    "Id": 3
+    "Id": 3,
+    "Name": "Test"
   },
   {
-    "Name": "Exam",
-    "Id": 4
+    "Id": 4,
+    "Name": "Exam"
   },
   {
-    "Name": "Quiz",
-    "Id": 5
+    "Id": 5,
+    "Name": "Quiz"
   },
   {
-    "Name": "Project",
-    "Id": 6
+    "Id": 6,
+    "Name": "Project"
   }
 ]

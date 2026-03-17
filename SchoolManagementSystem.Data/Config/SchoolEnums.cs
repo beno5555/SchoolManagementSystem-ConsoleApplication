@@ -1,4 +1,4 @@
-﻿namespace SchoolManagementSystem.Data.Constants;
+﻿namespace SchoolManagementSystem.Data.Config;
 
 public static class SchoolEnums
 {
@@ -82,5 +82,20 @@ public static class SchoolEnums
         HealthEducation,
         
         
+    }
+
+    public enum RoomType
+    {
+        Classroom = 1,
+        Office,
+        Laboratory,
+        ItDepartment,
+        ConferenceRoom,
+        LectureHall,
+        Library,
+        Cafeteria,
+        Storage,
+        Gym,
+        Restroom
     }
 }

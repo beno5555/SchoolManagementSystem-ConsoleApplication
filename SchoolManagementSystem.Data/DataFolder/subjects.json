@@ -1,134 +1,116 @@
 [
   {
+    "Id": 1,
     "SubjectName": "Math",
     "Description": "",
-    "LaboratoryId": 0,
-    "Id": 1
+    "LaboratoryId": null
   },
   {
+    "Id": 2,
     "SubjectName": "Biology",
     "Description": "",
-    "LaboratoryId": 0,
-    "Id": 2
+    "LaboratoryId": null
   },
   {
+    "Id": 3,
     "SubjectName": "ForeignLanguageEnglish",
     "Description": "",
-    "LaboratoryId": 0,
-    "Id": 3
+    "LaboratoryId": null
   },
   {
+    "Id": 4,
     "SubjectName": "Georgian",
     "Description": "",
-    "LaboratoryId": 0,
-    "Id": 4
+    "LaboratoryId": null
   },
   {
+    "Id": 5,
     "SubjectName": "Literature",
     "Description": "",
-    "LaboratoryId": 0,
-    "Id": 5
+    "LaboratoryId": null
   },
   {
+    "Id": 6,
     "SubjectName": "ForeignLanguageRussian",
     "Description": "",
-    "LaboratoryId": 0,
-    "Id": 6
+    "LaboratoryId": null
   },
   {
+    "Id": 7,
     "SubjectName": "Physics",
     "Description": "",
-    "LaboratoryId": 0,
-    "Id": 7
+    "LaboratoryId": null
   },
   {
+    "Id": 8,
     "SubjectName": "Chemistry",
     "Description": "",
-    "LaboratoryId": 0,
-    "Id": 8
+    "LaboratoryId": null
   },
   {
+    "Id": 9,
     "SubjectName": "Geography",
     "Description": "",
-    "LaboratoryId": 0,
-    "Id": 9
+    "LaboratoryId": null
   },
   {
+    "Id": 10,
     "SubjectName": "History",
     "Description": "",
-    "LaboratoryId": 0,
-    "Id": 10
+    "LaboratoryId": null
   },
   {
+    "Id": 11,
     "SubjectName": "PhysicalEducation",
     "Description": "",
-    "LaboratoryId": 0,
-    "Id": 11
+    "LaboratoryId": null
   },
   {
+    "Id": 12,
     "SubjectName": "Art",
     "Description": "",
-    "LaboratoryId": 0,
-    "Id": 12
+    "LaboratoryId": null
   },
   {
+    "Id": 13,
     "SubjectName": "Music",
     "Description": "",
-    "LaboratoryId": 0,
-    "Id": 13
+    "LaboratoryId": null
   },
   {
+    "Id": 14,
     "SubjectName": "WorldHistory",
     "Description": "",
-    "LaboratoryId": 0,
-    "Id": 14
+    "LaboratoryId": null
   },
   {
+    "Id": 15,
     "SubjectName": "GeorgianHistory",
     "Description": "",
-    "LaboratoryId": 0,
-    "Id": 15
+    "LaboratoryId": null
   },
   {
+    "Id": 16,
     "SubjectName": "CivicEducation",
     "Description": "",
-    "LaboratoryId": 0,
-    "Id": 16
+    "LaboratoryId": null
   },
   {
+    "Id": 17,
     "SubjectName": "InformationTechnology",
     "Description": "",
-    "LaboratoryId": 0,
-    "Id": 17
+    "LaboratoryId": null
   },
   {
+    "Id": 18,
     "SubjectName": "Robotics",
     "Description": "",
-    "LaboratoryId": 0,
-    "Id": 18
+    "LaboratoryId": null
   },
   {
+    "Id": 19,
     "SubjectName": "HealthEducation",
     "Description": "",
-    "LaboratoryId": 0,
-    "Id": 19
-  },
-  {
-    "SubjectName": "TestCourse",
-    "Description": "",
-    "LaboratoryId": 0,
-    "Id": 20
-  },
-  {
-    "SubjectName": "TestCourse",
-    "Description": "",
-    "LaboratoryId": 0,
-    "Id": 21
-  },
-  {
-    "SubjectName": "TestCourse",
-    "Description": "",
-    "LaboratoryId": 0,
-    "Id": 22
+    "LaboratoryId": null
   }
 ]

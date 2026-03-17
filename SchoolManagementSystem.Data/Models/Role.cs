@@ -1,4 +1,4 @@
-﻿using SchoolManagementSystem.Data.Constants;
+﻿using SchoolManagementSystem.Data.Models.Base;
 
 namespace SchoolManagementSystem.Data.Models;
 

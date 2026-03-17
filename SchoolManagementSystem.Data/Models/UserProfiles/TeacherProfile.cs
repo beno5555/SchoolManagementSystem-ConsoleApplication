@@ -1,6 +1,6 @@
 ﻿namespace SchoolManagementSystem.Data.Models.UserProfiles;
 
-public class TeacherProfile : User
+class TeacherProfile : User
 {
     // group that is assigned to the teacher. (damrigebeli)
     public int? GroupId { get; set; }  

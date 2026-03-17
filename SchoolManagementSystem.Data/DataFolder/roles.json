@@ -1,22 +1,22 @@
 [
   {
-    "RoleName": "SuperAdmin",
-    "Id": 1
+    "Id": 1,
+    "RoleName": "SuperAdmin"
   },
   {
-    "RoleName": "Principal",
-    "Id": 2
+    "Id": 2,
+    "RoleName": "Principal"
   },
   {
-    "RoleName": "Teacher",
-    "Id": 3
+    "Id": 3,
+    "RoleName": "Teacher"
   },
   {
-    "RoleName": "Student",
-    "Id": 4
+    "Id": 4,
+    "RoleName": "Student"
   },
   {
-    "RoleName": "Guest",
-    "Id": 5
+    "Id": 5,
+    "RoleName": "Guest"
   }
 ]

@@ -1,6 +1,6 @@
 ﻿namespace SchoolManagementSystem.Data.Models.UserProfiles;
 
-public class PrincipalProfile : TeacherProfile
+class PrincipalProfile : TeacherProfile
 {
     public int OfficeRoomId { get; set; }
     

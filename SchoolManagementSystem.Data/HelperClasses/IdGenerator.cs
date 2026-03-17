@@ -1,4 +1,5 @@
 ﻿using SchoolManagementSystem.Data.Models;
+using SchoolManagementSystem.Data.Models.Base;
 
 namespace SchoolManagementSystem.Data.HelperClasses;
 
@@ -8,7 +9,7 @@ namespace SchoolManagementSystem.Data.HelperClasses;
 /// <remarks>this class can only be used in single-threaded applications like the console app. </remarks>
 public static class IdGenerator
 {
-    private static readonly Dictionary<Type, int> MaxIds = new(30);
+    public static readonly Dictionary<Type, int> MaxIds = new(30);
     public static void InitializeId<T>(IEnumerable<T> existingCollection) where T : BaseModel
     {
         var baseModels = existingCollection.ToList();
