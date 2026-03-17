@@ -112,5 +112,23 @@
     "Description": "",
     "LaboratoryId": 0,
     "Id": 19
+  },
+  {
+    "SubjectName": "TestCourse",
+    "Description": "",
+    "LaboratoryId": 0,
+    "Id": 20
+  },
+  {
+    "SubjectName": "TestCourse",
+    "Description": "",
+    "LaboratoryId": 0,
+    "Id": 21
+  },
+  {
+    "SubjectName": "TestCourse",
+    "Description": "",
+    "LaboratoryId": 0,
+    "Id": 22
   }
 ]
