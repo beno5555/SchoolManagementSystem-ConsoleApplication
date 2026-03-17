@@ -7,11 +7,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="DataFolder\" />
+        <Content Include="DataFolder\**\*.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+                
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="ProjectHelperLibrary" Version="1.0.5" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="DataFolder\" />
+    </ItemGroup>
+    
 
 </Project>

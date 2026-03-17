@@ -3,9 +3,11 @@
 public static class FolderPaths
 {
     public const string DataFolder = "DataFolder";
-    //private const string IdCounterPath = "idCounters.json";
     
-    #region Main
+    public static string DataPath => Path.Combine(
+        AppContext.BaseDirectory, 
+        @"..\..\..\..\SchoolManagementSystem.Data", 
+        DataFolder);        
     
     public const string UserPath = "users.json";
     public const string SubjectPath = "subjects.json";
@@ -15,29 +17,48 @@ public static class FolderPaths
     public const string LaboratoryPath = "laboratories.json";
     public const string GroupPath = "groups.json";
     
-    #endregion
- 
-    #region Academic
     
     public const string AssignmentPath = "assignments.json";
     public const string AssessmentPath = "assessments.json";
     public const string AssignmentTypePath = "assignmentTypes.json";
-    #endregion
     
-    #region Profiles
 
     public const string TeacherProfilePath = "teacherProfiles.json";
     public const string StudentProfilePath = "studentProfiles.json";
     public const string PrincipalProfilePath = "principalProfiles.json";
     
-    #endregion
     
-    #region Joined
 
     public const string TeacherSubjectPath = "teacherSubjects.json";
     public const string SubjectEnrollmentPath = "subjectEnrollments.json";
     public const string RolePermissionPath = "rolePermissions.json";
-    
-    #endregion
 
+
+    public static readonly string[] JsonPaths =
+    [
+        UserPath,
+        SubjectPath,
+        RoomPath,
+        RolePath,
+        PermissionPath,
+        LaboratoryPath,
+        GroupPath,
+        
+        AssignmentPath,
+        AssessmentPath,
+        AssignmentTypePath,
+        
+        TeacherProfilePath,
+        StudentProfilePath,
+        PrincipalProfilePath,
+        
+        TeacherSubjectPath,
+        SubjectEnrollmentPath,
+        RolePermissionPath
+    ];
+
+    public static string GetFullPath(string fileName)
+    {
+        return Path.Combine(DataPath, fileName);
+    }
 }

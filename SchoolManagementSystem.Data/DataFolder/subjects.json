@@ -1,0 +1,116 @@
+[
+  {
+    "SubjectName": "Math",
+    "Description": "",
+    "LaboratoryId": 0,
+    "Id": 1
+  },
+  {
+    "SubjectName": "Biology",
+    "Description": "",
+    "LaboratoryId": 0,
+    "Id": 2
+  },
+  {
+    "SubjectName": "ForeignLanguageEnglish",
+    "Description": "",
+    "LaboratoryId": 0,
+    "Id": 3
+  },
+  {
+    "SubjectName": "Georgian",
+    "Description": "",
+    "LaboratoryId": 0,
+    "Id": 4
+  },
+  {
+    "SubjectName": "Literature",
+    "Description": "",
+    "LaboratoryId": 0,
+    "Id": 5
+  },
+  {
+    "SubjectName": "ForeignLanguageRussian",
+    "Description": "",
+    "LaboratoryId": 0,
+    "Id": 6
+  },
+  {
+    "SubjectName": "Physics",
+    "Description": "",
+    "LaboratoryId": 0,
+    "Id": 7
+  },
+  {
+    "SubjectName": "Chemistry",
+    "Description": "",
+    "LaboratoryId": 0,
+    "Id": 8
+  },
+  {
+    "SubjectName": "Geography",
+    "Description": "",
+    "LaboratoryId": 0,
+    "Id": 9
+  },
+  {
+    "SubjectName": "History",
+    "Description": "",
+    "LaboratoryId": 0,
+    "Id": 10
+  },
+  {
+    "SubjectName": "PhysicalEducation",
+    "Description": "",
+    "LaboratoryId": 0,
+    "Id": 11
+  },
+  {
+    "SubjectName": "Art",
+    "Description": "",
+    "LaboratoryId": 0,
+    "Id": 12
+  },
+  {
+    "SubjectName": "Music",
+    "Description": "",
+    "LaboratoryId": 0,
+    "Id": 13
+  },
+  {
+    "SubjectName": "WorldHistory",
+    "Description": "",
+    "LaboratoryId": 0,
+    "Id": 14
+  },
+  {
+    "SubjectName": "GeorgianHistory",
+    "Description": "",
+    "LaboratoryId": 0,
+    "Id": 15
+  },
+  {
+    "SubjectName": "CivicEducation",
+    "Description": "",
+    "LaboratoryId": 0,
+    "Id": 16
+  },
+  {
+    "SubjectName": "InformationTechnology",
+    "Description": "",
+    "LaboratoryId": 0,
+    "Id": 17
+  },
+  {
+    "SubjectName": "Robotics",
+    "Description": "",
+    "LaboratoryId": 0,
+    "Id": 18
+  },
+  {
+    "SubjectName": "HealthEducation",
+    "Description": "",
+    "LaboratoryId": 0,
+    "Id": 19
+  }
+]

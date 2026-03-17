@@ -1,0 +1,14 @@
+[
+  {
+    "FirstName": "superadmin",
+    "LastName": "superadmin",
+    "FullName": "Superadmin Superadmin",
+    "DateOfBirth": "2009-04-17T00:00:00",
+    "PrivateId": "01255339127",
+    "Email": "superadmin@gmail.com",
+    "PasswordHash": "123",
+    "RegisterDate": "2026-03-17T14:54:20.4182808+04:00",
+    "RoleId": 1,
+    "Id": 1
+  }
+]

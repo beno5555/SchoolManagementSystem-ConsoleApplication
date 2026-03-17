@@ -4,7 +4,6 @@ public class StudentProfile : User
 {
     #region Properties
 
-    public List<Subject> Subjects { get; set; } = new(20);
     public int GroupId { get; set; }
     
     #endregion

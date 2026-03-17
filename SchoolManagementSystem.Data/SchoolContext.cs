@@ -50,41 +50,26 @@ public class SchoolContext
     
     #region After Initialization
     
-    public async Task OnInitializedAsync()
+    public async Task InitializeAsync()
     {
         await ForceStorage();
-        SeedData();
+        await SeedData();
     }
     private async Task ForceStorage()
     {
-        Directory.CreateDirectory(FolderPaths.DataFolder);
-        
-        await FileManager.ForceFile(FolderPaths.UserPath);
-        await FileManager.ForceFile(FolderPaths.SubjectPath);
-        await FileManager.ForceFile(FolderPaths.RoomPath);
-        await FileManager.ForceFile(FolderPaths.RolePath);
-        await FileManager.ForceFile(FolderPaths.PermissionPath);
-        await FileManager.ForceFile(FolderPaths.LaboratoryPath);
-        await FileManager.ForceFile(FolderPaths.GroupPath);
-        
-        await FileManager.ForceFile(FolderPaths.AssignmentPath);
-        await FileManager.ForceFile(FolderPaths.AssessmentPath);
-        await FileManager.ForceFile(FolderPaths.AssignmentTypePath);
-        await FileManager.ForceFile(FolderPaths.TeacherProfilePath);
-        await FileManager.ForceFile(FolderPaths.StudentProfilePath);
-        await FileManager.ForceFile(FolderPaths.PrincipalProfilePath);
+        Directory.CreateDirectory(FolderPaths.DataPath);
 
-        await FileManager.ForceFile(FolderPaths.TeacherSubjectPath);
-        await FileManager.ForceFile(FolderPaths.SubjectEnrollmentPath);
-        await FileManager.ForceFile(FolderPaths.RolePermissionPath);
-
+        foreach (string jsonPath in FolderPaths.JsonPaths)
+        {
+            await FileManager.ForceFile(jsonPath);
+        }
     }
 
     #endregion
 
     #region Seeding
 
-    public void SeedData()
+    public async Task SeedData()
     {
         Seeder.SeedEnums(Roles, typeof(SchoolEnums.RoleName), (id, name) => new Role(id, name));
         Seeder.SeedEnums(Permissions, typeof(SchoolEnums.Permission), (id, name) => new Permission(id, name));
@@ -92,6 +77,17 @@ public class SchoolContext
         Seeder.SeedEnums(AssignmentTypes, typeof(SchoolEnums.AssignmentType), (id, name) => new AssignmentType(id, name));
         
         Seeder.SeedSuperAdmin(Users, Roles);
+
+        await SaveSeededData();
+    }
+
+    public async Task SaveSeededData()
+    {
+        await FileManager.SaveAsync(FolderPaths.GetFullPath(FolderPaths.RolePath), Roles);
+        await FileManager.SaveAsync(FolderPaths.GetFullPath(FolderPaths.PermissionPath), Permissions);
+        await FileManager.SaveAsync(FolderPaths.GetFullPath(FolderPaths.SubjectPath), Subjects);
+        await FileManager.SaveAsync(FolderPaths.GetFullPath(FolderPaths.AssignmentTypePath), AssignmentTypes);
+        await FileManager.SaveAsync(FolderPaths.GetFullPath(FolderPaths.UserPath), Users);
     }
     
     #endregion
@@ -100,30 +96,30 @@ public class SchoolContext
 
     //public async Task LoadData()
     //{
-    //    Users = await Load<User>(UserPath);
-    //    Subjects = await Load<Subject>(SubjectPath);
-    //    Rooms = await Load<Room>(RoomPath);
-    //    Roles = await Load<Role>(RolePath);
-    //    Permissions = await Load<Permission>(PermissionPath);
-    //    Laboratories = await Load<Laboratory>(LaboratoryPath);
-    //    Groups = await Load<Group>(GroupPath);
+    //    Users = await LoadAsync<User>(UserPath);
+    //    Subjects = await LoadAsync<Subject>(SubjectPath);
+    //    Rooms = await LoadAsync<Room>(RoomPath);
+    //    Roles = await LoadAsync<Role>(RolePath);
+    //    Permissions = await LoadAsync<Permission>(PermissionPath);
+    //    Laboratories = await LoadAsync<Laboratory>(LaboratoryPath);
+    //    Groups = await LoadAsync<Group>(GroupPath);
 
-    //    Assignments = await Load<Assignment>(AssignmentPath);
-    //    Assessments = await Load<Assessment>(AssessmentPath);
+    //    Assignments = await LoadAsync<Assignment>(AssignmentPath);
+    //    Assessments = await LoadAsync<Assessment>(AssessmentPath);
 
-    //    TeacherProfiles = await Load<TeacherProfile>(TeacherProfilePath);
-    //    StudentProfiles = await Load<StudentProfile>(StudentProfilePath);
-    //    PrincipalProfiles = await Load<PrincipalProfile>(PrincipalProfilePath);
+    //    TeacherProfiles = await LoadAsync<TeacherProfile>(TeacherProfilePath);
+    //    StudentProfiles = await LoadAsync<StudentProfile>(StudentProfilePath);
+    //    PrincipalProfiles = await LoadAsync<PrincipalProfile>(PrincipalProfilePath);
 
-    //    TeacherSubjects = await Load<TeacherSubject>(TeacherSubjectPath);
-    //    SubjectEnrollments = await Load<SubjectEnrollment>(SubjectEnrollmentPath);
-    //    RolePermissions = await Load<RolePermission>(RolePermissionPath);
+    //    TeacherSubjects = await LoadAsync<TeacherSubject>(TeacherSubjectPath);
+    //    SubjectEnrollments = await LoadAsync<SubjectEnrollment>(SubjectEnrollmentPath);
+    //    RolePermissions = await LoadAsync<RolePermission>(RolePermissionPath);
 
     //}
 
     //public async Task SaveData()
     //{
-    //    await Save(UserPath, Users);
+    //    await SaveAsync(UserPath, Users);
     //    // ..
     //}
 

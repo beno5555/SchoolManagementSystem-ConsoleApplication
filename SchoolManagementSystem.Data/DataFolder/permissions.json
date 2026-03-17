@@ -1,0 +1,62 @@
+[
+  {
+    "PermissionName": "ViewGrade",
+    "Id": 1
+  },
+  {
+    "PermissionName": "ViewHomeworks",
+    "Id": 2
+  },
+  {
+    "PermissionName": "SubmitHomework",
+    "Id": 3
+  },
+  {
+    "PermissionName": "RateTeacher",
+    "Id": 4
+  },
+  {
+    "PermissionName": "GetOwnStudent",
+    "Id": 5
+  },
+  {
+    "PermissionName": "GetSubjects",
+    "Id": 6
+  },
+  {
+    "PermissionName": "UploadHomework",
+    "Id": 7
+  },
+  {
+    "PermissionName": "AssessStudent",
+    "Id": 8
+  },
+  {
+    "PermissionName": "ScheduleTest",
+    "Id": 9
+  },
+  {
+    "PermissionName": "GetAllMembers",
+    "Id": 10
+  },
+  {
+    "PermissionName": "GetAverageGradeOfAnyKind",
+    "Id": 11
+  },
+  {
+    "PermissionName": "AddMember",
+    "Id": 12
+  },
+  {
+    "PermissionName": "RemoveMember",
+    "Id": 13
+  },
+  {
+    "PermissionName": "GetMember",
+    "Id": 14
+  },
+  {
+    "PermissionName": "UpdateProfile",
+    "Id": 15
+  }
+]
