@@ -1,7 +1,9 @@
-﻿using SchoolManagementSystem.Data.Models.Base;
+﻿using SchoolManagementSystem.Data.HelperClasses;
+using SchoolManagementSystem.Data.Models.Base;
 
 namespace SchoolManagementSystem.Data.Models;
 
+[FileNamePrefix("groups")]
 public class Group : BaseModel
 {
     public string GroupName { get; set; } 

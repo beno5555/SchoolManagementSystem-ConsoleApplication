@@ -1,5 +1,8 @@
-﻿namespace SchoolManagementSystem.Data.Models.JoinedModels;
+﻿using SchoolManagementSystem.Data.HelperClasses;
 
+namespace SchoolManagementSystem.Data.Models.JoinedModels;
+
+[FileNamePrefix("teacherSubjects")]
 public class TeacherSubject
 {
     public int TeacherId { get; set; }

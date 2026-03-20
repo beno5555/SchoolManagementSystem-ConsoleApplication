@@ -20,13 +20,17 @@ public class SchoolContext
     // academic    
     public List<Assignment> Assignments { get; set; } = new(AppConstants.MaximumCount.Assignments);
     public List<Assessment> Assessments { get; set; } = new(AppConstants.MaximumCount.Assessments);
-    public List<AssignmentType> AssignmentTypes { get; set; } = new(AppConstants.MaximumCount.AssignmentTypes);
     
     // joined    
     public List<TeacherSubject> TeacherSubjects { get; set; } = new(AppConstants.MaximumCount.TeacherSubjects);
     public List<SubjectEnrollment> SubjectEnrollments { get; set; } = new(AppConstants.MaximumCount.SubjectEnrollments); 
     public List<RolePermission> RolePermissions { get; set; } = new(AppConstants.MaximumCount.RolePermissions);
-    
+    public List<Class> Classes { get; set; } = new();
+
+    // types
+    public List<RoomType> RoomTypes { get; set; } = new();
+    public List<AssignmentType> AssignmentTypes { get; set; } = new(AppConstants.MaximumCount.AssignmentTypes);
+
     #endregion
     
     #region Methods
@@ -35,7 +39,7 @@ public class SchoolContext
     
     public async Task InitializeAsync()
     {
-        await FileManager.ForceStorage();
+        await FileManager.EnsureFoldersExist();
         await SeedData();
         InitializeIds();
     }
@@ -79,21 +83,21 @@ public class SchoolContext
 
     private async Task LoadEssentialCollections()
     {
-        await FileManager.LoadAsync(AppConstants.FolderPaths.RolePath, Roles);
-        await FileManager.LoadAsync(AppConstants.FolderPaths.PermissionPath, Permissions);
-        await FileManager.LoadAsync(AppConstants.FolderPaths.SubjectPath, Subjects);
-        await FileManager.LoadAsync(AppConstants.FolderPaths.AssignmentTypePath, AssignmentTypes);
-        await FileManager.LoadAsync(AppConstants.FolderPaths.UserPath, Users);
+        await Roles.LoadAsync();
+        await Permissions.LoadAsync();
+        await Subjects.LoadAsync();
+        await AssignmentTypes.LoadAsync();
+        await Users.LoadAsync();
     }
 
     public async Task SaveSeededData()
     {
         
-        await FileManager.SaveAsync(AppConstants.FolderPaths.RolePath, Roles);
-        await FileManager.SaveAsync(AppConstants.FolderPaths.PermissionPath, Permissions);
-        await FileManager.SaveAsync(AppConstants.FolderPaths.SubjectPath, Subjects);
-        await FileManager.SaveAsync(AppConstants.FolderPaths.AssignmentTypePath, AssignmentTypes);
-        await FileManager.SaveAsync(AppConstants.FolderPaths.UserPath, Users);
+        await Roles.SaveAsync();
+        await Permissions.SaveAsync();
+        await Subjects.SaveAsync();
+        await AssignmentTypes.SaveAsync();
+        await Users.SaveAsync();
     }
     
     #endregion

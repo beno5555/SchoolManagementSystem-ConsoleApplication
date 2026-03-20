@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using SchoolManagementSystem.Data.HelperClasses;
 using SchoolManagementSystem.Data.Models.Base;
 
 namespace SchoolManagementSystem.Data.Models;
 
 // a single recorded assessment
+[FileNamePrefix("assessments")]
 public class Assessment : BaseModel
 {
     [Range(0, 10)]

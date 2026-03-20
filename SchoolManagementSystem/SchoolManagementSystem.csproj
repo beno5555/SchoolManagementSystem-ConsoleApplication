@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="ProjectHelperLibrary" Version="1.0.5" />
+      <PackageReference Include="ProjectHelperLibrary" Version="1.0.6.1" />
     </ItemGroup>
 
 </Project>

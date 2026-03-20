@@ -1,8 +1,10 @@
-﻿using SchoolManagementSystem.Data.Models.Base;
+﻿using SchoolManagementSystem.Data.HelperClasses;
+using SchoolManagementSystem.Data.Models.Base;
 
 namespace SchoolManagementSystem.Data.Models.JoinedModels;
 
 // student data in a specific subjects subjects
+[FileNamePrefix("subjectEnrollments")]
 public class SubjectEnrollment : BaseModel
 {
     public int StudentId { get; set; }

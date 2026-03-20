@@ -1,8 +1,9 @@
-﻿using SchoolManagementSystem.Data.Config;
+﻿using SchoolManagementSystem.Data.HelperClasses;
 using SchoolManagementSystem.Data.Models.Base;
 
 namespace SchoolManagementSystem.Data.Models;
 
+[FileNamePrefix("rooms")]
 public class Room : BaseModel
 {
     public string RoomName { get; set; }

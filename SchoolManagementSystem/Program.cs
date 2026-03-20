@@ -1,9 +1,5 @@
-﻿using ProjectHelperLibrary.Utilities;
-using SchoolManagementSystem.Data;
-using SchoolManagementSystem.Data.Config;
-using SchoolManagementSystem.Data.HelperClasses;
+﻿using SchoolManagementSystem.Data;
 using SchoolManagementSystem.Data.Models;
-using SchoolManagementSystem.Data.Models.UserProfiles;
 
 namespace SchoolManagementSystem;
 

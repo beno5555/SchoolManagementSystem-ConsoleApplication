@@ -1,16 +1,18 @@
 ﻿using ProjectHelperLibrary.Utilities;
 using SchoolManagementSystem.Data.Config;
+using SchoolManagementSystem.Data.HelperClasses;
 using SchoolManagementSystem.Data.Models.Base;
 
 namespace SchoolManagementSystem.Data.Models;
 
+[FileNamePrefix("users")]
 public class User : BaseModel
 {
 
     #region Properties
     public string FirstName { get; set; }
     public string LastName { get; set; }
-    public string FullName => $"{FirstName.ToCapitalized().Value} {LastName.ToCapitalized().Value}";
+    public string FullName => $"{FirstName.ToCapitalized()} {LastName.ToCapitalized()}";
     public DateTime DateOfBirth { get; set; }
     public string PrivateId { get; set; }
     
