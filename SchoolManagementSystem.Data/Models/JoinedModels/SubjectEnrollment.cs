@@ -1,18 +1,25 @@
-﻿namespace SchoolManagementSystem.Data.Models.JoinedModels;
+﻿using SchoolManagementSystem.Data.Models.Base;
+
+namespace SchoolManagementSystem.Data.Models.JoinedModels;
 
 // student data in a specific subjects subjects
-public class SubjectEnrollment
+public class SubjectEnrollment : BaseModel
 {
     public int StudentId { get; set; }
-    public int SubjectId { get; set; }
-    public int TeacherId { get; set; } // in that subject
-    
-    
-    public List<Assessment> Assessments { get; set; } = new(200);
-    public decimal FinalGrade => Math.Round(GetAverageGrade());
 
-    public decimal GetAverageGrade()
+    public int ClassId { get; set; }    
+    public decimal FinalGrade => Math.Round(AverageGrade);
+    public decimal AverageGrade { get; set; }
+    // public List<Assessment> Assessments { get; set; } = new(200);
+
+    public SubjectEnrollment()
     {
-        return Assessments.Any() ? Math.Round(Assessments.Average(grade => grade.GradeValue), 2) : 0;
+        
+    }
+
+    public SubjectEnrollment(int studentId, int classId)
+    {
+        StudentId = studentId;
+        ClassId = classId;
     }
 }

@@ -11,7 +11,8 @@ public class Assessment : BaseModel
     public DateTime DateAssessed { get; set; } = DateTime.Now;
     
     // reference to assignment the student was assessed for
-    public int AssignmentId { get; set; } 
+    public int AssignmentId { get; set; }
+    public int SubjectEnrollmentId { get; set; }
     [MaxLength(1000)]
     public string? Comment { get; set; }
 

@@ -6,6 +6,7 @@ public class Group : BaseModel
 {
     public string GroupName { get; set; } 
     
+    // damrigebeli
     public int TeacherId { get; set; }
     public int ClassroomId { get; set; }
 

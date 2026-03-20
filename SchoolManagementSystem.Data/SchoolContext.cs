@@ -9,8 +9,6 @@ public class SchoolContext
 {
     #region Properties
     
-    #region Entities
-    
     // main    
     public List<User> Users { get; set; } = new(AppConstants.MaximumCount.Users);
     public List<Subject> Subjects { get; set; } = new(AppConstants.MaximumCount.Subjects);
@@ -29,8 +27,6 @@ public class SchoolContext
     public List<SubjectEnrollment> SubjectEnrollments { get; set; } = new(AppConstants.MaximumCount.SubjectEnrollments); 
     public List<RolePermission> RolePermissions { get; set; } = new(AppConstants.MaximumCount.RolePermissions);
     
-    #endregion
-
     #endregion
     
     #region Methods

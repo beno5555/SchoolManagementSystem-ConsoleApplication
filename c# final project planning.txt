@@ -1,0 +1,57 @@
+project idea - school management system
+
+a console application that allows the students/teachers/principal and other school members to complete various operations for their school based on their user type (e.g. student cannot see information about other teacher, only principal can do that.)
+
+all of the data will be stored in files. 
+every model data will be stored in a separate file. File format will be json.
+
+since we are creating a school management system, signing up is a requirement, as we would only want school members to interact with our system. that is - users with guest status will not be able to use the system.
+
+incomplete list of models that we will use to build a "database" are: Student, Teacher, Principal, Classroom, Floor, Grade, Subject, StudentJournal, Role, UserRole, Laboratory, Assignment, Group 
+Enums: AssignmentStatus, UserStatus, 
+
+Operations for:
+students:
+Seeing their own journal;
+Seeing a grade of their specific subject;
+Seeing if there is any homework due in his class;
+submitting homework;
+rating a teacher;
+updating their own profile;
+
+teachers:
+getting information about any of their students by id;
+getting a list of all their students;
+getting a list of students from a specific group that they are teaching;
+getting a list of subjects they are teaching.
+uploading homework for one or more groups;
+assessing the assignment of a specific student that has submitted the assignment;
+writing verbal assessment for a specific student;
+Scheduling the test for a group;
+Assessing the test.
+
+principals:
+getting a list of all the students;
+getting a list of all students tied to a specific subject;
+getting a list of all students tied to a specific teacher;
+getting a list of all students in a specific group;
+getting a list of students within a specific grade range;
+getting average grade of the entire school;
+getting average grade of a specific subject (all students tied to that subject);
+getting average grade of a specific group (all/specific subjects);
+getting average grade of a specific student in all/specific subjects);
+adding a student;
+removing a student;
+getting a student by id;
+
+
+
+
+
+DisplayManager.cs - static class responsible for displaying text to console. DisplayManager will have a lineCounter which will be reset to 0 after printing a specific list of operations/data
+
+use Permissions to define if a user has a permission to complete a specific task.
+
+example: in user class:
+
+var hasAccess = this.UserRoles.Any(role => role.Permissions.Any(permissionId => permissionId == accessPermissionId));

@@ -14,7 +14,7 @@ public static class Seeder
         if (!collection.Any())
         {
             foreach (string name in Enum.GetNames(enumType))
-            {
+             {
                 collection.Add(create(name));
             }        
         }

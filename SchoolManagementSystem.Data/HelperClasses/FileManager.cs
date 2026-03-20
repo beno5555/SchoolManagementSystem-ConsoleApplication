@@ -75,4 +75,9 @@ public static class FileManager
             await FileManager.ForceFile(jsonPath);
         }
     }
+
+    public static string GetFileName(string collectionName)
+    {
+        return collectionName.ToLower() + ".json";
+    }
 }
