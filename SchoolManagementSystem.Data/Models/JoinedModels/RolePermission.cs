@@ -1,6 +1,7 @@
 ﻿using SchoolManagementSystem.Data.HelperClasses;
 
 namespace SchoolManagementSystem.Data.Models.JoinedModels;
+
 [FileNamePrefix("rolePermissions")]
 public class RolePermission
 {

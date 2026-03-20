@@ -22,7 +22,6 @@ public class SchoolContext
     public List<Assessment> Assessments { get; set; } = new(AppConstants.MaximumCount.Assessments);
     
     // joined    
-    public List<TeacherSubject> TeacherSubjects { get; set; } = new(AppConstants.MaximumCount.TeacherSubjects);
     public List<SubjectEnrollment> SubjectEnrollments { get; set; } = new(AppConstants.MaximumCount.SubjectEnrollments); 
     public List<RolePermission> RolePermissions { get; set; } = new(AppConstants.MaximumCount.RolePermissions);
     public List<Class> Classes { get; set; } = new();
@@ -41,26 +40,27 @@ public class SchoolContext
     {
         await FileManager.EnsureFoldersExist();
         await SeedData();
-        InitializeIds();
+        await InitializeIds();
     }
 
     // using for testing. might remove later
-    private void InitializeIds()
+    private async Task InitializeIds()
     {
-        IdGenerator.InitializeId(Users);
-        IdGenerator.InitializeId(Subjects);
-        IdGenerator.InitializeId(Rooms);
-        IdGenerator.InitializeId(Roles);
-        IdGenerator.InitializeId(Permissions);
-        IdGenerator.InitializeId(Groups);
+        await IdGenerator.InitializeId(Users);
+        await IdGenerator.InitializeId(Subjects);
+        await IdGenerator.InitializeId(Rooms);
+        await IdGenerator.InitializeId(Roles);
+        await IdGenerator.InitializeId(Permissions);
+        await IdGenerator.InitializeId(Groups);
         
-        // IdGenerator.InitializeId(StudentProfiles);
-        // IdGenerator.InitializeId(TeacherProfiles);
-        // IdGenerator.InitializeId(PrincipalProfiles);
+        await IdGenerator.InitializeId(Assessments);
+        await IdGenerator.InitializeId(Assignments);
         
-        IdGenerator.InitializeId(Assessments);
-        IdGenerator.InitializeId(AssignmentTypes);
-        IdGenerator.InitializeId(Assignments);
+        await IdGenerator.InitializeId(SubjectEnrollments);
+        await IdGenerator.InitializeId(Classes);
+        
+        await IdGenerator.InitializeId(AssignmentTypes);
+        await IdGenerator.InitializeId(RoomTypes);
     }
 
     #endregion
@@ -69,35 +69,13 @@ public class SchoolContext
 
     public async Task SeedData()
     {
-        await LoadEssentialCollections();
+        await Seeder.SeedEnums(Roles, typeof(SchoolEnums.RoleName), name => new Role(name));
+        await Seeder.SeedEnums(Permissions, typeof(SchoolEnums.PermissionName), name => new Permission(name));
+        await Seeder.SeedEnums(Subjects, typeof(SchoolEnums.SubjectName), name => new Subject(name));
+        await Seeder.SeedEnums(AssignmentTypes, typeof(SchoolEnums.AssignmentTypeName), name => new AssignmentType(name));
+        await Seeder.SeedEnums(RoomTypes, typeof(SchoolEnums.RoomTypeName), name => new RoomType(name));
         
-        Seeder.SeedEnums(Roles, typeof(SchoolEnums.RoleName), name => new Role(name));
-        Seeder.SeedEnums(Permissions, typeof(SchoolEnums.Permission), name => new Permission(name));
-        Seeder.SeedEnums(Subjects, typeof(SchoolEnums.SubjectName), name => new Subject(name));
-        Seeder.SeedEnums(AssignmentTypes, typeof(SchoolEnums.AssignmentType), name => new AssignmentType(name));
-        
-        Seeder.SeedSuperAdmin(Users, Roles);
-
-        await SaveSeededData();
-    }
-
-    private async Task LoadEssentialCollections()
-    {
-        await Roles.LoadAsync();
-        await Permissions.LoadAsync();
-        await Subjects.LoadAsync();
-        await AssignmentTypes.LoadAsync();
-        await Users.LoadAsync();
-    }
-
-    public async Task SaveSeededData()
-    {
-        
-        await Roles.SaveAsync();
-        await Permissions.SaveAsync();
-        await Subjects.SaveAsync();
-        await AssignmentTypes.SaveAsync();
-        await Users.SaveAsync();
+        await Seeder.SeedSuperAdmin(Users, Roles);
     }
     
     #endregion
@@ -110,7 +88,7 @@ public class SchoolContext
     //    Subjects = await LoadAsync<Subject>(SubjectPath);
     //    Rooms = await LoadAsync<Room>(RoomPath);
     //    Roles = await LoadAsync<Role>(RolePath);
-    //    Permissions = await LoadAsync<Permission>(PermissionPath);
+    //    Permissions = await LoadAsync<PermissionName>(PermissionPath);
     //    Laboratories = await LoadAsync<Laboratory>(LaboratoryPath);
     //    Groups = await LoadAsync<Group>(GroupPath);
 

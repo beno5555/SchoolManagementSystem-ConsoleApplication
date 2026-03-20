@@ -11,7 +11,7 @@ public static class SchoolEnums
         Guest
     }
 
-    public enum Permission
+    public enum PermissionName
     {
         ViewGrade,
         ViewHomeworks,
@@ -41,7 +41,7 @@ public static class SchoolEnums
         Reviewed
     }
     
-    public enum AssignmentType
+    public enum AssignmentTypeName
     {
         Homework = 1,
         Classwork,
@@ -84,7 +84,7 @@ public static class SchoolEnums
         
     }
 
-    public enum RoomType
+    public enum RoomTypeName
     {
         Classroom = 1,
         Office,

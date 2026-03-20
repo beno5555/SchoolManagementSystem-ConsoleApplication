@@ -1,1 +1,46 @@
-[]
+[
+  {
+    "Id": 1,
+    "RoomTypeName": "Classroom"
+  },
+  {
+    "Id": 2,
+    "RoomTypeName": "Office"
+  },
+  {
+    "Id": 3,
+    "RoomTypeName": "Laboratory"
+  },
+  {
+    "Id": 4,
+    "RoomTypeName": "ItDepartment"
+  },
+  {
+    "Id": 5,
+    "RoomTypeName": "ConferenceRoom"
+  },
+  {
+    "Id": 6,
+    "RoomTypeName": "LectureHall"
+  },
+  {
+    "Id": 7,
+    "RoomTypeName": "Library"
+  },
+  {
+    "Id": 8,
+    "RoomTypeName": "Cafeteria"
+  },
+  {
+    "Id": 9,
+    "RoomTypeName": "Storage"
+  },
+  {
+    "Id": 10,
+    "RoomTypeName": "Gym"
+  },
+  {
+    "Id": 11,
+    "RoomTypeName": "Restroom"
+  }
+]

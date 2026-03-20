@@ -1,4 +1,8 @@
-﻿using SchoolManagementSystem.Data.Models;
+﻿using System.Collections;
+using System.Text.Json;
+using ProjectHelperLibrary.Utilities;
+using SchoolManagementSystem.Data.Config;
+using SchoolManagementSystem.Data.Models;
 using SchoolManagementSystem.Data.Models.Base;
 
 namespace SchoolManagementSystem.Data.HelperClasses;
@@ -10,10 +14,13 @@ namespace SchoolManagementSystem.Data.HelperClasses;
 public static class IdGenerator
 {
     public static readonly Dictionary<Type, int> MaxIds = new(30);
-    public static void InitializeId<T>(IEnumerable<T> existingCollection) where T : BaseModel
+    public static async Task InitializeId<T>(List<T> existingCollection, bool loaded = true) where T : BaseModel
     {
-        var baseModels = existingCollection.ToList();
-        var maxId = baseModels.Any() ? baseModels.Max(item => item.Id) : 0;
+        if (!loaded)
+        {
+            await existingCollection.LoadAsync();
+        }
+        var maxId = existingCollection.Any() ? existingCollection.Max(item => item.Id) : 0;
         MaxIds[typeof(T)] = maxId;
     }
     
@@ -23,7 +30,12 @@ public static class IdGenerator
         int next = ++MaxIds[type];
         return next;
     }
-    
+
+    // generic wrapper
+    public static int Next<T>()
+    {
+        return Next(typeof(T));
+    }
     
 
 }
