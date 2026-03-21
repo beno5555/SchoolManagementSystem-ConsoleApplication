@@ -35,6 +35,7 @@ public static class AppConstants
 
         public static List<string> JsonPaths = [];
         
+        #region Get Full Path including project directory
         
         public static string GetFullPath(string fileName)
         {
@@ -43,6 +44,22 @@ public static class AppConstants
             Directory.CreateDirectory(directory);
             return path;
         }
+
+        public static string GetFullPath(Type type)
+        {
+            var fileName = GetFileName(type);
+            var path = GetFullPath(fileName);
+            return path;
+        }
+
+        public static string GetFullPath<T>()
+        {
+            return GetFullPath(typeof(T));
+        }
+        
+        #endregion
+        
+        #region Get File Name based on type
         
         public static string GetFileName<T>()
         {
@@ -55,6 +72,8 @@ public static class AppConstants
             string fileName = fileNamePrefix + ".json";
             return fileName;
         }
+        
+        #endregion
     }
 
     public static class Defaults

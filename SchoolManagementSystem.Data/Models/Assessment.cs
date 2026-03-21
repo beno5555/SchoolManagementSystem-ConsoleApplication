@@ -4,7 +4,6 @@ using SchoolManagementSystem.Data.Models.Base;
 
 namespace SchoolManagementSystem.Data.Models;
 
-// a single recorded assessment
 [FileNamePrefix("assessments")]
 public class Assessment : BaseModel
 {
@@ -18,7 +17,7 @@ public class Assessment : BaseModel
     [MaxLength(1000)]
     public string? Comment { get; set; }
 
-    public Assessment(decimal gradeValue, string? comment = null) : base() 
+    public Assessment(decimal gradeValue, string? comment = null) 
     {
         GradeValue = gradeValue;
         Comment = comment;

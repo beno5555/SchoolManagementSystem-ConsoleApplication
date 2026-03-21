@@ -8,8 +8,7 @@ public class Room : BaseModel
 {
     public string RoomName { get; set; }
     public int RoomTypeId { get; set; }
-    public RoomType RoomType { get; set; }
-    public Room(string roomName, int roomTypeId) : base()
+    public Room(string roomName, int roomTypeId) 
     {
         RoomName = roomName;
         RoomTypeId = roomTypeId;

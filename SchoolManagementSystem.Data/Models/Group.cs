@@ -12,7 +12,7 @@ public class Group : BaseModel
     public int TeacherId { get; set; }
     public int ClassroomId { get; set; }
 
-    public Group(string groupName) : base()
+    public Group(string groupName) 
     {
         GroupName = groupName;
     }

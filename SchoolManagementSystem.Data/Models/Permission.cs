@@ -7,7 +7,7 @@ namespace SchoolManagementSystem.Data.Models;
 public class Permission : BaseModel
 {
     public string PermissionName { get; set; } 
-    public Permission(string permissionName) : base()
+    public Permission(string permissionName) 
     {
         PermissionName = permissionName;
     }

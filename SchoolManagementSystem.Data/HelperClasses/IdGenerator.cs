@@ -1,9 +1,4 @@
-﻿using System.Collections;
-using System.Text.Json;
-using ProjectHelperLibrary.Utilities;
-using SchoolManagementSystem.Data.Config;
-using SchoolManagementSystem.Data.Models;
-using SchoolManagementSystem.Data.Models.Base;
+﻿using SchoolManagementSystem.Data.Models.Base;
 
 namespace SchoolManagementSystem.Data.HelperClasses;
 

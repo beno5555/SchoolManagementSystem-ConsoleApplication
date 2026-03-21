@@ -25,14 +25,13 @@ public class SchoolContext
     public List<SubjectEnrollment> SubjectEnrollments { get; set; } = new(AppConstants.MaximumCount.SubjectEnrollments); 
     public List<RolePermission> RolePermissions { get; set; } = new(AppConstants.MaximumCount.RolePermissions);
     public List<Class> Classes { get; set; } = new();
+    public List<GroupClass> GroupClasses { get; set; } = new();
 
     // types
     public List<RoomType> RoomTypes { get; set; } = new();
     public List<AssignmentType> AssignmentTypes { get; set; } = new(AppConstants.MaximumCount.AssignmentTypes);
 
     #endregion
-    
-    #region Methods
     
     #region Initialization
     
@@ -43,7 +42,7 @@ public class SchoolContext
         await InitializeIds();
     }
 
-    // using for testing. might remove later
+    // using for testing. might remove later if I come up with a way to dynamically initialize ids.
     private async Task InitializeIds()
     {
         await IdGenerator.InitializeId(Users);
@@ -67,7 +66,7 @@ public class SchoolContext
 
     #region Seeding
 
-    public async Task SeedData()
+    private async Task SeedData()
     {
         await Seeder.SeedEnums(Roles, typeof(SchoolEnums.RoleName), name => new Role(name));
         await Seeder.SeedEnums(Permissions, typeof(SchoolEnums.PermissionName), name => new Permission(name));
@@ -80,52 +79,96 @@ public class SchoolContext
     
     #endregion
     
-    #region Rubbish
+    #region Use examples
 
-    //public async Task LoadData()
-    //{
-    //    Users = await LoadAsync<User>(UserPath);
-    //    Subjects = await LoadAsync<Subject>(SubjectPath);
-    //    Rooms = await LoadAsync<Room>(RoomPath);
-    //    Roles = await LoadAsync<Role>(RolePath);
-    //    Permissions = await LoadAsync<PermissionName>(PermissionPath);
-    //    Laboratories = await LoadAsync<Laboratory>(LaboratoryPath);
-    //    Groups = await LoadAsync<Group>(GroupPath);
-
-    //    Assignments = await LoadAsync<Assignment>(AssignmentPath);
-    //    Assessments = await LoadAsync<Assessment>(AssessmentPath);
-
-    //    TeacherProfiles = await LoadAsync<TeacherProfile>(TeacherProfilePath);
-    //    StudentProfiles = await LoadAsync<StudentProfile>(StudentProfilePath);
-    //    PrincipalProfiles = await LoadAsync<PrincipalProfile>(PrincipalProfilePath);
-
-    //    TeacherSubjects = await LoadAsync<TeacherSubject>(TeacherSubjectPath);
-    //    SubjectEnrollments = await LoadAsync<SubjectEnrollment>(SubjectEnrollmentPath);
-    //    RolePermissions = await LoadAsync<RolePermission>(RolePermissionPath);
-
-    //}
-
-    //public async Task SaveData()
-    //{
-    //    await SaveAsync(UserPath, Users);
-    //    // ..
-    //}
-
+    #region Student Final Grade
     
-    // public void Try()
-    // {
-    //     int? studentRoleId = Roles.FirstOrDefault(role => role.RoleName == nameof(SchoolEnums.RoleName.Student))?.Id;
-    //     if (studentRoleId is not null)
-    //     {
-    //         int finalStudentGrade = 0;
-    //         var student = Users.FirstOrDefault(user => user.RoleId == studentRoleId.Value);
-    //         var studentSubjectEnrollments = SubjectEnrollments.Where(enrollment => enrollment.StudentId == student.Id ).ToList();
-    //         var finalGrade = studentSubjectEnrollments.Average(sse => sse.GetAverageGrade());
-    //         finalStudentGrade = (int)Math.Round(finalGrade);
-    //     }
-    //     
-    // }
+    public int GetStudentFinalGrade(int studentId)
+    {
+        int studentFinalGrade;
+        var user = Users.FirstOrDefault(user => user.Id == studentId);
+        if (user is not null)
+        {
+            var subjectEnrollmentIds = GetSubjectEnrollments(user.Id).Select(se => se.Id);
+            var subjectEnrollmentAssessments = GetSubjectEnrollmentAssessments(subjectEnrollmentIds);
 
+            var averageGradeForEachSubject = GetAverageGradePerSubject(subjectEnrollmentAssessments);
+            studentFinalGrade = GetStudentFinalGrade(averageGradeForEachSubject);
+        }
+        else
+        {
+            studentFinalGrade = -1;
+        }
+
+        return studentFinalGrade;
+    }
+
+    private IEnumerable<SubjectEnrollment> GetSubjectEnrollments(int studentId)
+    {
+        return SubjectEnrollments.Where(se => se.StudentId == studentId);
+    }
+
+    private List<IGrouping<int, Assessment>> GetSubjectEnrollmentAssessments(IEnumerable<int> subjectEnrollmentIds)
+    {
+        return Assessments
+            .Where(assessment => subjectEnrollmentIds
+                .Contains(assessment.Id))
+            .GroupBy(assessment => assessment.SubjectEnrollmentId)
+            .ToList();
+    }
+
+    private List<decimal> GetAverageGradePerSubject(List<IGrouping<int, Assessment>> subjectEnrollmentAssessments)
+    {
+        var averageGradePerSubject = subjectEnrollmentAssessments
+            .Select(seag => seag
+                .Average(sea => sea.GradeValue))
+            .ToList();
+        return averageGradePerSubject;
+    }
+
+    private int GetStudentFinalGrade(List<decimal> subjectAverageGrades)
+    {
+        var studentAverageGrade = subjectAverageGrades
+            .Select(ag => (int)Math.Round(ag))
+            .Average();
+        return (int)Math.Round(studentAverageGrade);
+    }
+        
+    #endregion
+    
+    #region Every teacher of the student
+
+    public List<User> GetStudentTeachers(int studentId)
+    {
+        List<User> studentTeachers = []; 
+        var student = Users.FirstOrDefault(user => user.Id == studentId);
+        if (student is not null)
+        {
+            var subjectEnrollments =  GetSubjectEnrollments(student.Id).ToList();
+            var subjectEnrollmentClasses = GetSubjectEnrollmentClasses(subjectEnrollments);
+            studentTeachers = GetClassTeachers(subjectEnrollmentClasses);
+        }
+
+        return studentTeachers;
+    }
+
+    private List<Class> GetSubjectEnrollmentClasses(List<SubjectEnrollment> subjectEnrollments)
+    {
+        return subjectEnrollments
+            .Select(se => Classes.FirstOrDefault(c => c.Id == se.ClassId))
+            // .Where(c => c is not null)
+            .OfType<Class>()
+            .ToList();
+    }
+
+    private List<User> GetClassTeachers(List<Class> classes)
+    {
+        return classes
+            .Select(c => Users.FirstOrDefault(user => user.Id == c.TeacherId))
+            // .Where(user => user is not null)
+            .OfType<User>()
+            .ToList();
+    }
     #endregion
 
     #endregion

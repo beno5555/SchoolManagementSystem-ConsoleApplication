@@ -1,8 +1,6 @@
-﻿using System.Reflection;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using SchoolManagementSystem.Data.Config;
-using SchoolManagementSystem.Data.Models;
 using SchoolManagementSystem.Data.Models.Base;
 
 namespace SchoolManagementSystem.Data.HelperClasses;
@@ -27,8 +25,7 @@ public static class FileManager
     /// </summary>
     public static async Task LoadAsync<T>(this List<T> collection) 
     {
-        string fileName = AppConstants.FolderPaths.GetFileName<T>();
-        var path = AppConstants.FolderPaths.GetFullPath(fileName);
+        var path = AppConstants.FolderPaths.GetFullPath<T>();
         var deserializedCollection = new List<T>();
         
         if (File.Exists(path))
@@ -51,11 +48,9 @@ public static class FileManager
     /// <summary>
     /// serialize singular collection set to JSON format and save to the file it belongs to
     /// </summary>
-    public static async Task SaveAsync<T>(this List<T> collection) where T : BaseModel
+    public static async Task SaveAsync<T>(this List<T> collection)
     {
-        var fileName = AppConstants.FolderPaths.GetFileName<T>();
-        var path = AppConstants.FolderPaths.GetFullPath(fileName);
-        
+        var path = AppConstants.FolderPaths.GetFullPath<T>();
         var json = JsonSerializer.Serialize(collection, Options);
         await File.WriteAllTextAsync(path, json);
     }
@@ -65,8 +60,7 @@ public static class FileManager
     #region Ensuring files exist
     public static async Task EnsureFileExists(Type type)
     {
-        var fileName = AppConstants.FolderPaths.GetFileName(type);
-        string path = AppConstants.FolderPaths.GetFullPath(fileName);
+        string path = AppConstants.FolderPaths.GetFullPath(type);
         if (!File.Exists(path))
         {
             await File.WriteAllTextAsync(path, "[]");
@@ -87,19 +81,12 @@ public static class FileManager
     {
         Directory.CreateDirectory(AppConstants.FolderPaths.DataPath);
 
-        var types = GetClassTypesWithAttributes<FileNamePrefixAttribute>();
+        var types = TypeManager.GetClassTypesWithAttributes<FileNamePrefixAttribute>();
         var tasks = types.Select(EnsureFileExists); 
         await Task.WhenAll(tasks);
     }
 
-    public static Type[] GetClassTypesWithAttributes<T>()
-    {
-        var types = typeof(User).Assembly.GetTypes()
-            .Where(type => !type.IsAbstract 
-                           && !type.IsInterface 
-                           && type.IsDefined(typeof(T)));
-        return types.ToArray();
-    }
+    
     
     #endregion
     

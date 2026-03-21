@@ -22,7 +22,7 @@ public class Assignment : BaseModel
     public DateTime UploadedAt { get; set; } = DateTime.Now;
     public DateTime DueDate { get; set; }
 
-    public Assignment(string name, int assignmentTypeId,  DateTime dueDate, string description = "") : base()
+    public Assignment(string name, int assignmentTypeId,  DateTime dueDate, string description = "")
     {
         AssignmentName = name;
         AssignmentTypeId = assignmentTypeId;

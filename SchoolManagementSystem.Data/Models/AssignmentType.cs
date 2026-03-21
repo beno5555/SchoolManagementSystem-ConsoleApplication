@@ -8,7 +8,7 @@ public class AssignmentType : BaseModel
 {
     public string Name { get; set; } 
 
-    public AssignmentType(string name) : base()
+    public AssignmentType(string name) 
     {
         Name = name;
     }
