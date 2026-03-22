@@ -1,4 +1,4 @@
-﻿namespace SchoolManagementSystem.Data.HelperClasses;
+﻿namespace SchoolManagementSystem.Data.Attributes;
 
 /// <summary>
 /// attributed used to dynamically create the JSON file names for each class
@@ -6,7 +6,7 @@
 [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
 public sealed class FileNamePrefixAttribute : Attribute
 {   
-    public string Name { get; set; }
+    public string Name { get; }
 
     public FileNamePrefixAttribute(string name)
     {

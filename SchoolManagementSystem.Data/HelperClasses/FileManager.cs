@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using SchoolManagementSystem.Data.Attributes;
 using SchoolManagementSystem.Data.Config;
 using SchoolManagementSystem.Data.Models.Base;
 

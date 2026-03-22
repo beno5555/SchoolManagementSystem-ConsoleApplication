@@ -1,4 +1,6 @@
-﻿using ProjectHelperLibrary.Response;
+﻿using System.Reflection;
+using ProjectHelperLibrary.Response;
+using SchoolManagementSystem.Data.Attributes;
 using SchoolManagementSystem.Data.HelperClasses;
 using SchoolManagementSystem.Data.Models.Base;
 
@@ -6,7 +8,7 @@ namespace SchoolManagementSystem.Data.Repositories.Base;
 
 public class BaseRepository<T> where T : BaseModel
 {
-    private readonly List<T> _collection;
+    protected readonly List<T> _collection;
     private bool _loaded;
     private bool _isDirty;
     
@@ -17,7 +19,7 @@ public class BaseRepository<T> where T : BaseModel
     
     #region Load & Save Helper 
 
-    private async Task EnsureLoadAsync()
+    protected async Task EnsureLoadAsync()
     {
         if (!_loaded)
         {
@@ -26,7 +28,7 @@ public class BaseRepository<T> where T : BaseModel
         }
     }
     
-    public async Task SaveAsync()
+    protected async Task SaveAsync()
     {
         if (_isDirty)
         {
@@ -138,6 +140,13 @@ public class BaseRepository<T> where T : BaseModel
         }
 
         return response;
+    }
+
+    public async Task<bool> ExistsAsync(int id)
+    {
+        await EnsureLoadAsync();
+        bool exists = _collection.Any(entity => entity.Id == id);
+        return exists;
     }
     
     #endregion

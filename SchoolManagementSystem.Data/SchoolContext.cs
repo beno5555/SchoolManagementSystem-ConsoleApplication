@@ -24,7 +24,7 @@ public class SchoolContext
     // joined    
     public List<SubjectEnrollment> SubjectEnrollments { get; set; } = new(AppConstants.MaximumCount.SubjectEnrollments); 
     public List<RolePermission> RolePermissions { get; set; } = new(AppConstants.MaximumCount.RolePermissions);
-    public List<Class> Classes { get; set; } = new();
+    public List<SchoolClass> SchoolClasses { get; set; } = new();
     public List<GroupClass> GroupClasses { get; set; } = new();
 
     // types
@@ -56,7 +56,8 @@ public class SchoolContext
         await IdGenerator.InitializeId(Assignments);
         
         await IdGenerator.InitializeId(SubjectEnrollments);
-        await IdGenerator.InitializeId(Classes);
+        await IdGenerator.InitializeId(SchoolClasses);
+        await IdGenerator.InitializeId(GroupClasses);
         
         await IdGenerator.InitializeId(AssignmentTypes);
         await IdGenerator.InitializeId(RoomTypes);
@@ -152,16 +153,16 @@ public class SchoolContext
         return studentTeachers;
     }
 
-    private List<Class> GetSubjectEnrollmentClasses(List<SubjectEnrollment> subjectEnrollments)
+    private List<SchoolClass> GetSubjectEnrollmentClasses(List<SubjectEnrollment> subjectEnrollments)
     {
         return subjectEnrollments
-            .Select(se => Classes.FirstOrDefault(c => c.Id == se.ClassId))
+            .Select(se => SchoolClasses.FirstOrDefault(c => c.Id == se.SchoolClassId))
             // .Where(c => c is not null)
-            .OfType<Class>()
+            .OfType<SchoolClass>()
             .ToList();
     }
 
-    private List<User> GetClassTeachers(List<Class> classes)
+    private List<User> GetClassTeachers(List<SchoolClass> classes)
     {
         return classes
             .Select(c => Users.FirstOrDefault(user => user.Id == c.TeacherId))

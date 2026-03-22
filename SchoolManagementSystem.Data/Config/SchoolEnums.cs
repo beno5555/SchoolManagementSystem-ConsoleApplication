@@ -8,7 +8,6 @@ public static class SchoolEnums
         Principal,
         Teacher,
         Student,
-        Guest
     }
 
     public enum PermissionName

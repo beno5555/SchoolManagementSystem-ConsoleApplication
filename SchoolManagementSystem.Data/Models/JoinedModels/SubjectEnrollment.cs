@@ -1,4 +1,5 @@
-﻿using SchoolManagementSystem.Data.HelperClasses;
+﻿using SchoolManagementSystem.Data.Attributes;
+using SchoolManagementSystem.Data.HelperClasses;
 using SchoolManagementSystem.Data.Models.Base;
 
 namespace SchoolManagementSystem.Data.Models.JoinedModels;
@@ -7,9 +8,11 @@ namespace SchoolManagementSystem.Data.Models.JoinedModels;
 [FileNamePrefix("subjectEnrollments")]
 public class SubjectEnrollment : BaseModel
 {
+    [Reference<User>]
     public int StudentId { get; set; }
-
-    public int ClassId { get; set; }    
+    
+    [Reference<SchoolClass>]
+    public int SchoolClassId { get; set; }    
     public decimal FinalGrade => Math.Round(AverageGrade);
     public decimal AverageGrade { get; set; }
     // public List<Assessment> Assessments { get; set; } = new(200);
@@ -19,9 +22,9 @@ public class SubjectEnrollment : BaseModel
         
     }
 
-    public SubjectEnrollment(int studentId, int classId)
+    public SubjectEnrollment(int studentId, int schoolClassId)
     {
         StudentId = studentId;
-        ClassId = classId;
+        SchoolClassId = schoolClassId;
     }
 }

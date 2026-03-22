@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using SchoolManagementSystem.Data.Attributes;
 using SchoolManagementSystem.Data.HelperClasses;
 
 namespace SchoolManagementSystem.Data.Config;

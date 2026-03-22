@@ -1,4 +1,5 @@
 ﻿using ProjectHelperLibrary.Utilities;
+using SchoolManagementSystem.Data.Attributes;
 using SchoolManagementSystem.Data.Config;
 using SchoolManagementSystem.Data.HelperClasses;
 using SchoolManagementSystem.Data.Models.Base;
@@ -8,7 +9,6 @@ namespace SchoolManagementSystem.Data.Models;
 [FileNamePrefix("users")]
 public class User : BaseModel
 {
-
     #region Properties
     public string FirstName { get; set; }
     public string LastName { get; set; }
@@ -21,12 +21,19 @@ public class User : BaseModel
     public DateTime RegisterDate { get; set; } = DateTime.Now;
     
     #region Role-Specific
+    [Reference<Role>]
     public int RoleId { get; set; }
+    
+    [Reference<Group>]
     public int? GroupId { get; set; } // mandatory for students, optional for teachers
+    
     public int? FinalGrade { get; set; } // student-specific
+    
+    [Reference<Room>]
     public int? OfficeRoomId { get; set; } // principal-specific
     
     #endregion
+    
     
     #endregion
     
