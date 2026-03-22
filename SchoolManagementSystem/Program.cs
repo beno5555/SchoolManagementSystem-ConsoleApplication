@@ -1,5 +1,7 @@
-﻿using SchoolManagementSystem.Data;
+﻿using ProjectHelperLibrary.Utilities;
+using SchoolManagementSystem.Data;
 using SchoolManagementSystem.Data.Models;
+using SchoolManagementSystem.Data.Repositories;
 
 namespace SchoolManagementSystem;
 
@@ -9,11 +11,42 @@ public class Program
     {
         SchoolContext schoolContext = new();
         await schoolContext.InitializeAsync();
+        
+        var userRepository = new UserRepository(schoolContext.Users);
+
+        // var student = User.CreateStudent(
+        //     "sandro",
+        //     "benashvili",
+        //     DateTime.Now,
+        //     "34343",
+        //     "aaa@gmail.com",
+        //     "3433",
+        //     2);
+        // await userRepository.AddAsync(student);
+
+        var studentResponse = await userRepository.GetById(2);
+        if (studentResponse.Success)
+        {
+            var deleteResponse = await userRepository.DeleteAsync(studentResponse.Value.Id);
+            if (deleteResponse.Success)
+            {
+                Console.WriteLine("Successfully deleted");
+            }
+            else
+            {
+                ConsoleUtilities.PrintError(deleteResponse.Message);
+            }
+        }
+        else
+        {
+            ConsoleUtilities.PrintError(studentResponse.Message);
+        }
+        
         // await FileManager.LoadAsync(AppConstants.FolderPaths.UserPath, schoolContext.Users);
         //
         // PrintCollection(schoolContext.Users);
         // ConsoleUtilities.WaitForKey(ConsoleKey.A);
-        // schoolContext.Users.Add(User.CreateStudent(
+        // schoolContext.Users.AddAsync(User.CreateStudent(
         //     "John", 
         //     "Doe", 
         //     new DateTime(2009, 08,16), 

@@ -17,7 +17,7 @@ public class Assignment : BaseModel
     [MaxLength(500)]
     public string Description { get; set; } = string.Empty;
     
-    public int GroupId { get; set; }
+    public int GroupClassId { get; set; }
 
     public DateTime UploadedAt { get; set; } = DateTime.Now;
     public DateTime DueDate { get; set; }

@@ -2,71 +2,120 @@
 using SchoolManagementSystem.Data.HelperClasses;
 using SchoolManagementSystem.Data.Models.Base;
 
-namespace SchoolManagementSystem.Data.Repositories;
+namespace SchoolManagementSystem.Data.Repositories.Base;
 
 public class BaseRepository<T> where T : BaseModel
 {
-    
-    private readonly SchoolContext _context;
     private readonly List<T> _collection;
+    private bool _loaded;
+    private bool _isDirty;
     
-    public BaseRepository(SchoolContext context, List<T> collection)
+    public BaseRepository(List<T> collection)
     {
-        _context = context;
         _collection = collection;
     }
     
-    #region Making changes
+    #region Load & Save Helper 
+
+    private async Task EnsureLoadAsync()
+    {
+        if (!_loaded)
+        {
+            await _collection.LoadAsync();
+            _loaded = true;
+        }
+    }
     
-    public async Task Add(T entity)
+    public async Task SaveAsync()
     {
-        await _collection.LoadAsync();
+        if (_isDirty)
+        {
+            await _collection.SaveAsync();
+            _isDirty = false;
+        }
+    }
+    
+    #endregion
+    
+    #region Modifying
+    
+    private void AddInternal(T entity)
+    {
+        entity.Id = IdGenerator.Next<T>();
         _collection.Add(entity);
-        await _collection.SaveAsync();
+        _isDirty = true;
+    }
+    
+    public async Task AddAsync(T entity)
+    {
+        await EnsureLoadAsync();
+        AddInternal(entity);
     }
 
-    public async Task AddRange(List<T> entities)
+    public async Task AddRangeAsync(IEnumerable<T> entities)
     {
-        await _collection.LoadAsync();
-        _collection.AddRange(entities);
-        await _collection.SaveAsync();
+        await EnsureLoadAsync();
+        foreach (var entity in entities)
+        {
+            AddInternal(entity);
+        }
     }
 
-    public async Task<BaseResponse> Update(T entity)
+    public async Task<BaseResponse> UpdateAsync(T entity)
     {
-        await _collection.LoadAsync();
+        var response = new BaseResponse();
+        await EnsureLoadAsync();
         
-        var index = _collection.FindIndex(e => e.Id == entity.Id);
-        var response = await RepoHelper.HandleIndex(index, _collection, () => _collection[index] = entity);
-
+        var entityFound = _collection.FirstOrDefault(e => e.Id == entity.Id);
+        if (entityFound is not null)
+        {
+            int index = _collection.IndexOf(entityFound);
+            _collection[index] = entity;
+            _isDirty = true;
+        }
+        else
+        {
+            response.SetStatus(false, $"{typeof(T).Name} entity not found");
+        }
+        
         return response;
     }
 
-    public async Task<BaseResponse> Delete(int id)
+    public async Task<BaseResponse> DeleteAsync(int id)
     {
-        await _collection.LoadAsync();
+        var response = new BaseResponse();
+        await EnsureLoadAsync();
 
-        var index = _collection.FindIndex(e => e.Id == id);
-        var response = await RepoHelper.HandleIndex(index, _collection, () => _collection.RemoveAt(index));
-
+        var entity = _collection.FirstOrDefault(e => e.Id == id);
+        if (entity is not null)
+        {
+            _collection.Remove(entity);
+            _isDirty = true;
+        }
+        else
+        {
+            response.SetStatus(false, $"{typeof(T).Name} entity not found");
+        }
+        
         return response;
     }
 
     #endregion
     
-    #region Fetching only
+    #region Reading only
     
     public async Task<DataResponse<List<T>>> GetAll()
     {
         var response = new DataResponse<List<T>>();
-        await _collection.LoadAsync();
-        if (!_collection.Any())
+        await EnsureLoadAsync();
+        
+        if (_collection.Any())
         {
-            response.SetStatus(false, $"{typeof(T).Name} collection is empty");
+            response.SetData(_collection.ToList()); // passing a copy
         }
         else
         {
-            response.SetData(_collection);
+            response.SetStatus(false, $"{typeof(T).Name} collection is empty");
         }
 
         return response;
@@ -75,17 +124,17 @@ public class BaseRepository<T> where T : BaseModel
     public async Task<DataResponse<T>> GetById(int id)
     {
         var response = new DataResponse<T>();
-        
-        await _collection.LoadAsync();
+
+        await EnsureLoadAsync();
         
         var entity = _collection.FirstOrDefault(entity => entity.Id == id);
-        if (entity is null)
+        if (entity is not null)
         {
-            response.SetStatus(false, $"Could not find {typeof(T).Name} with id: {id}");
+            response.SetData(entity);
         }
         else
         {
-            response.SetData(entity);
+            response.SetStatus(false, $"Could not find {typeof(T).Name} with id: {id}");
         }
 
         return response;

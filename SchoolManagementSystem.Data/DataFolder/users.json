@@ -13,5 +13,20 @@
     "GroupId": null,
     "FinalGrade": null,
     "OfficeRoomId": null
+  },
+  {
+    "Id": 2,
+    "FirstName": "sandro",
+    "LastName": "benashvili",
+    "FullName": "Sandro Benashvili",
+    "DateOfBirth": "2026-03-22T12:56:28.475761+04:00",
+    "PrivateId": "34343",
+    "Email": "aaa@gmail.com",
+    "PasswordHash": "3433",
+    "RegisterDate": "2026-03-22T12:56:28.4946433+04:00",
+    "RoleId": 4,
+    "GroupId": 2,
+    "FinalGrade": null,
+    "OfficeRoomId": null
   }
 ]

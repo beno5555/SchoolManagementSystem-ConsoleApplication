@@ -54,6 +54,11 @@ public class User : BaseModel
         RoleId = roleId;
         GroupId = groupId;
         OfficeRoomId = officeRoomId;
+
+        if (roleId.Equals((int)SchoolEnums.RoleName.Student))
+        {
+            FinalGrade = 0;
+        }
     }
 
     public static User CreateStudent(
@@ -66,6 +71,7 @@ public class User : BaseModel
         int groupId
     )
     {
+        
         return new User(firstName, lastName, dateOfBirth, privateId, email, passwordHash,
             (int)SchoolEnums.RoleName.Student, groupId: groupId);
     }

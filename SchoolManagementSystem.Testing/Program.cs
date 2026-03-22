@@ -50,7 +50,7 @@ class Program
     //     IdGenerator.InitializeId(context.Users);
     //     
     //     var newUser = new User("TestUser", "testuserlastname", new DateTime(), "dddd", "2@gmail.com", "aaa", 5); // automatically assigns next ID
-    //     context.Users.Add(newUser);
+    //     context.Users.AddAsync(newUser);
     //     Console.WriteLine($"Created new User: {newUser.FullName} with ID {newUser.Id}");
     //
     //     Console.WriteLine("after adding a new user:");
@@ -84,7 +84,7 @@ class Program
     //     await FileManager.SaveAsync(AppConstantsFolderPaths.SubjectPath, context.Subjects);
     //
     //     // --------------------------
-    //     // Add more model types here...
+    //     // AddAsync more model types here...
     //     // --------------------------
     // }
     

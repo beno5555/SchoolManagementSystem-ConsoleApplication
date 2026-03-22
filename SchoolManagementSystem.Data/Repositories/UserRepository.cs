@@ -1,12 +1,15 @@
-﻿using SchoolManagementSystem.Data.Models;
+﻿using ProjectHelperLibrary.Response;
+using SchoolManagementSystem.Data.Models;
+using SchoolManagementSystem.Data.Repositories.Base;
 
 namespace SchoolManagementSystem.Data.Repositories;
 
 public class UserRepository : BaseRepository<User>
 {
-    public UserRepository(SchoolContext context, List<User> collection) : base(context, collection)
+    public UserRepository(List<User> collection) : base(collection)
     {
         
     }
+
     
 }
