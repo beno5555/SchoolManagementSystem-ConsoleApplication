@@ -69,7 +69,7 @@ public static class AppConstants
 
         public static string GetFileName(Type type)
         {
-            string fileNamePrefix = type.GetCustomAttribute<FileNamePrefixAttribute>()?.Name ?? $"{type.Name}s";
+            string fileNamePrefix = type.GetCustomAttribute<FileNamePrefixAttribute>()?.Name ?? $"{type.Name.ToLower()}s";
             string fileName = fileNamePrefix + ".json";
             return fileName;
         }
