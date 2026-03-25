@@ -5,7 +5,7 @@ namespace SchoolManagementSystem.Data.Repositories;
 
 public class PermissionRepository : BaseRepository<Permission>
 {
-    public PermissionRepository(List<Permission> collection) : base(collection)
+    public PermissionRepository() : base(SchoolContext.Permissions)
     {
         
     }

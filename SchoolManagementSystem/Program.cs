@@ -1,4 +1,5 @@
-﻿using ProjectHelperLibrary.Utilities;
+﻿using ProjectHelperLibrary.Response;
+using ProjectHelperLibrary.Utilities;
 using SchoolManagementSystem.Data;
 using SchoolManagementSystem.Data.Models;
 using SchoolManagementSystem.Data.Repositories;
@@ -7,12 +8,63 @@ namespace SchoolManagementSystem;
 
 public class Program
 {
+    public class UserService
+    {
+        private readonly UserRepository _userRepository = new();
+        private readonly SubjectRepository _subjectRepository = new();
+        private readonly SubjectEnrollmentRepository _subjectEnrollmentRepository = new();
+        private readonly SchoolClassRepository _schoolClassRepository = new();
+        public async  Task<DataResponse<List<User>>> GetAllUsers()
+        {
+            var response = await _userRepository.GetAll();
+            if (!response.Success)
+            {
+                ConsoleUtilities.PrintError(response.Message);
+            }
+
+            return response;
+        }
+
+        public async Task<DataResponse<List<User>>> GetAllStudentsWithSubject(int subjectId)
+        {
+            var response = new DataResponse<List<User>>();
+            var classesResponse = _schoolClassRepository.GetClassesBySubjectId(subjectId);
+            
+            if (classesResponse.Success)
+            {
+                var classIds = classesResponse.Value.Select(c => c.Id).ToList();
+                var subjectEnrollments = _subjectEnrollmentRepository.GetSubjectEnrollmentsByClassIds(classIds);
+                if (subjectEnrollments.Success)
+                {
+                    var students = await _userRepository.GetStudentsBySubjectEnrollments(subjectEnrollments.Value);
+                    if (students.Success)
+                    {
+                        response.SetData(students.Value);
+                    }
+                    else
+                    {
+                        response.SetStatus(false, "No students found.");
+                    }
+                }
+                else
+                {
+                    response.SetStatus(false, subjectEnrollments.Message);
+                }
+            }
+            else
+            {
+                response.SetStatus(false, classesResponse.Message);
+            }
+
+            return response;
+        }
+        
+    }
     private static async Task Main()
     {
-        SchoolContext schoolContext = new();
-        await schoolContext.InitializeAsync();
-        
-        var userRepository = new UserRepository(schoolContext.Users);
+        await SchoolContext.InitializeAsync();
+        var userService = new UserService();        
+        // var userRepository = new UserRepository();
 
         // var student = User.CreateStudent(
         //     "sandro",
@@ -24,22 +76,35 @@ public class Program
         //     2);
         // await userRepository.AddAsync(student);
 
-        var studentResponse = await userRepository.GetById(2);
-        if (studentResponse.Success)
+        // var studentResponse = await userRepository.GetById(2);
+        // if (studentResponse.Success)
+        // {
+        //     var deleteResponse = await userRepository.DeleteAsync(studentResponse.Value.Id);
+        //     if (deleteResponse.Success)
+        //     {
+        //         Console.WriteLine("Successfully deleted");
+        //     }
+        //     else
+        //     {
+        //         ConsoleUtilities.PrintError(deleteResponse.Message);
+        //     }
+        // }
+        // else
+        // {
+        //     ConsoleUtilities.PrintError(studentResponse.Message);
+        // }
+
+
+        int subjectId = SchoolContext.Subjects.First().Id;
+        var studentsResponse = await userService.GetAllStudentsWithSubject(subjectId);
+        if (studentsResponse.Success)
         {
-            var deleteResponse = await userRepository.DeleteAsync(studentResponse.Value.Id);
-            if (deleteResponse.Success)
-            {
-                Console.WriteLine("Successfully deleted");
-            }
-            else
-            {
-                ConsoleUtilities.PrintError(deleteResponse.Message);
-            }
+            var students = studentsResponse.Value;
+            PrintCollection(students);
         }
         else
         {
-            ConsoleUtilities.PrintError(studentResponse.Message);
+            ConsoleUtilities.PrintError(studentsResponse.Message);
         }
         
         // await FileManager.LoadAsync(AppConstants.FolderPaths.UserPath, schoolContext.Users);

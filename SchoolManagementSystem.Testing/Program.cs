@@ -9,9 +9,7 @@ class Program
 {
     static async Task Main()
     {
-        var schoolContext = new SchoolContext();
-        await schoolContext.InitializeAsync();
-        
+        await SchoolContext.InitializeAsync();        
         // for (int i = 0; i < 10; i++)
         // {
         //     Console.WriteLine("Press any key to start testing...");

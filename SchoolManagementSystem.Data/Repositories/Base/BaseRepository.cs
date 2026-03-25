@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-using ProjectHelperLibrary.Response;
-using SchoolManagementSystem.Data.Attributes;
+﻿using ProjectHelperLibrary.Response;
 using SchoolManagementSystem.Data.HelperClasses;
 using SchoolManagementSystem.Data.Models.Base;
 
@@ -147,6 +145,45 @@ public class BaseRepository<T> where T : BaseModel
         await EnsureLoadAsync();
         bool exists = _collection.Any(entity => entity.Id == id);
         return exists;
+    }
+    
+    public async Task<DataResponse<T>> GetSingle(Func<T, bool> filter, string errorMessage)
+    {
+        await EnsureLoadAsync();
+        DataResponse<T> response = new();
+        var entity = _collection
+            .FirstOrDefault(filter)
+            ;
+        if (entity is not null)
+        {
+            response.SetData(entity);
+        }
+        else
+        {
+            response.SetStatus(false, errorMessage);
+        }
+
+        return response;
+    }
+
+    protected async Task<DataResponse<List<T>>> GetWhere(Func<T, bool> filter, string errorMessage)
+    {
+        await EnsureLoadAsync();
+        DataResponse<List<T>> response = new();
+        var entities = _collection
+            .Where(filter)
+            .DistinctBy(entity => entity.Id)
+            .ToList();
+        if (entities.Any())
+        {
+            response.SetData(entities);
+        }
+        else
+        {
+            response.SetStatus(false, errorMessage);
+        }
+
+        return response;
     }
     
     #endregion

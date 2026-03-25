@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="SchoolManagementSystem.Data/SchoolManagementSystem.Data.csproj" />
+  <Project Path="SchoolManagementSystem.Service/SchoolManagementSystem.Service.csproj" />
   <Project Path="SchoolManagementSystem.Testing/SchoolManagementSystem.Testing.csproj" />
   <Project Path="SchoolManagementSystem/SchoolManagementSystem.csproj" />
 </Solution>

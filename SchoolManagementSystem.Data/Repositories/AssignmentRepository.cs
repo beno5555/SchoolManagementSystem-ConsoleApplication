@@ -5,7 +5,7 @@ namespace SchoolManagementSystem.Data.Repositories;
 
 public class AssignmentRepository : BaseRepository<Assignment>
 {
-    public AssignmentRepository(List<Assignment> collection) : base(collection)
+    public AssignmentRepository() : base(SchoolContext.Assignments)
     {
         
     }

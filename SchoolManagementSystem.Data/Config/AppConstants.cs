@@ -33,6 +33,7 @@ public static class AppConstants
             AppContext.BaseDirectory, 
             @"..\..\..\..\SchoolManagementSystem.Data", 
             DataFolder);
+        
 
         public static List<string> JsonPaths = [];
         
@@ -69,7 +70,8 @@ public static class AppConstants
 
         public static string GetFileName(Type type)
         {
-            string fileNamePrefix = type.GetCustomAttribute<FileNamePrefixAttribute>()?.Name ?? $"{type.Name.ToLower()}s";
+            string fileNamePrefix = type.GetCustomAttribute<FileNamePrefixAttribute>()?.Name 
+                                    ?? $"{type.Name.ToLower()}s";
             string fileName = fileNamePrefix + ".json";
             return fileName;
         }
