@@ -7,7 +7,20 @@ every model data will be stored in a separate file. File format will be json.
 
 since we are creating a school management system, signing up is a requirement, as we would only want school members to interact with our system. that is - users with guest status will not be able to use the system.
 
-incomplete list of models that we will use to build a "database" are: Student, Teacher, Principal, Classroom, Floor, Grade, Subject, StudentJournal, Role, UserRole, Laboratory, Assignment, Group 
+incomplete list of models that we will use to build a "database" are: 
+Student, 
+Teacher, 
+Principal, 
+Classroom, 
+Grade, 
+Subject, 
+StudentJournal, 
+Role, 
+UserRole, 
+Laboratory, 
+Assignment, 
+Group 
+
 Enums: AssignmentStatus, UserStatus, 
 
 Operations for:

@@ -10,19 +10,37 @@ public class SchoolClassRepository : BaseRepository<SchoolClass>
     {
     }
 
-    public DataResponse<List<SchoolClass>> GetClassesBySubjectId(int subjectId)
+    public async Task<DataResponse<List<SchoolClass>>> GetClassesBySubjectId(int subjectId)
     {
-        var response = new DataResponse<List<SchoolClass>>();
-        var schoolClasses = _collection.Where(entity => entity.SubjectId == subjectId).ToList();
-        if (!schoolClasses.Any())
-        {
-            response.SetStatus(false, "Could not find any classes assigned to the subject");
-        }
-        else
-        {
-            response.SetData(schoolClasses);
-        }
+        var response = await GetWhere(
+            schoolClass => schoolClass.SubjectId == subjectId,
+            "Could not find any classes assigned to the subject");
+        return response;
+    }
+    
+    public async Task<DataResponse<List<SchoolClass>>> GetByTeacherId(int teacherId)
+    {
+        var response = await GetWhere(
+            schoolClass => schoolClass.TeacherId == teacherId,
+            "Could not find any classes assigned to the teacher");
+        return response;
+    }
 
+    public async Task<DataResponse<SchoolClass>> GetBySubjectAndTeacherId(int subjectId, int teacherId)
+    {
+        var response = await GetSingle(
+            schoolClass =>
+                schoolClass.SubjectId == subjectId &&
+                schoolClass.TeacherId == teacherId,
+            "Could not find a class assigned to the teacher and the subject");
+        return response;
+    }
+ 
+    public async Task<DataResponse<SchoolClass>> GetClassBySubjectId(int subjectId)
+    {
+        var response = await GetSingle(
+            schoolClass => schoolClass.SubjectId == subjectId,
+            "Class assigned to the teacher not found");
         return response;
     }
 }

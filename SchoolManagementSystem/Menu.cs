@@ -1,9 +1,13 @@
-﻿namespace SchoolManagementSystem;
+﻿using SchoolManagementSystem.Service;
+using SchoolManagementSystem.Service.Services;
 
-public class Menu
+namespace SchoolManagementSystem;
+
+public static class Menu
 {
-    public async Task Run()
+    private static UserService _userService = new();
+    public static async Task Run()
     {
-        await Task.Delay(300);
+        await Initializer.Execute();
     }
 }

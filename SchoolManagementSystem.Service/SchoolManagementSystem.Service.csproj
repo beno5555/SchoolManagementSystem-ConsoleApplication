@@ -14,4 +14,8 @@
       <PackageReference Include="ProjectHelperLibrary" Version="1.0.6.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Display\" />
+    </ItemGroup>
+
 </Project>

@@ -1,69 +1,16 @@
-﻿using ProjectHelperLibrary.Response;
-using ProjectHelperLibrary.Utilities;
-using SchoolManagementSystem.Data;
+﻿using ProjectHelperLibrary.Utilities;
 using SchoolManagementSystem.Data.Models;
-using SchoolManagementSystem.Data.Repositories;
+using SchoolManagementSystem.Service.Services;
 
 namespace SchoolManagementSystem;
 
 public class Program
 {
-    public class UserService
-    {
-        private readonly UserRepository _userRepository = new();
-        private readonly SubjectRepository _subjectRepository = new();
-        private readonly SubjectEnrollmentRepository _subjectEnrollmentRepository = new();
-        private readonly SchoolClassRepository _schoolClassRepository = new();
-        public async  Task<DataResponse<List<User>>> GetAllUsers()
-        {
-            var response = await _userRepository.GetAll();
-            if (!response.Success)
-            {
-                ConsoleUtilities.PrintError(response.Message);
-            }
-
-            return response;
-        }
-
-        public async Task<DataResponse<List<User>>> GetAllStudentsWithSubject(int subjectId)
-        {
-            var response = new DataResponse<List<User>>();
-            var classesResponse = _schoolClassRepository.GetClassesBySubjectId(subjectId);
-            
-            if (classesResponse.Success)
-            {
-                var classIds = classesResponse.Value.Select(c => c.Id).ToList();
-                var subjectEnrollments = _subjectEnrollmentRepository.GetSubjectEnrollmentsByClassIds(classIds);
-                if (subjectEnrollments.Success)
-                {
-                    var students = await _userRepository.GetStudentsBySubjectEnrollments(subjectEnrollments.Value);
-                    if (students.Success)
-                    {
-                        response.SetData(students.Value);
-                    }
-                    else
-                    {
-                        response.SetStatus(false, "No students found.");
-                    }
-                }
-                else
-                {
-                    response.SetStatus(false, subjectEnrollments.Message);
-                }
-            }
-            else
-            {
-                response.SetStatus(false, classesResponse.Message);
-            }
-
-            return response;
-        }
-        
-    }
     private static async Task Main()
     {
-        await SchoolContext.InitializeAsync();
-        var userService = new UserService();        
+        await Menu.Run();
+        // await SchoolContext.Execute();
+        var userService = new UserService();
         // var userRepository = new UserRepository();
 
         // var student = User.CreateStudent(
@@ -95,18 +42,18 @@ public class Program
         // }
 
 
-        int subjectId = SchoolContext.Subjects.First().Id;
-        var studentsResponse = await userService.GetAllStudentsWithSubject(subjectId);
+        // var subjectId = SchoolContext.Subjects.First().Id;
+        var studentsResponse = await userService.GetAllStudentsWithSubject(1);
         if (studentsResponse.Success)
         {
-            var students = studentsResponse.Value;
+            List<User> students = studentsResponse.Value;
             PrintCollection(students);
         }
         else
         {
             ConsoleUtilities.PrintError(studentsResponse.Message);
         }
-        
+
         // await FileManager.LoadAsync(AppConstants.FolderPaths.UserPath, schoolContext.Users);
         //
         // PrintCollection(schoolContext.Users);
@@ -134,18 +81,12 @@ public class Program
         Console.ReadKey();
     }
 
-    static void PrintCollection(List<User> collection) 
+    private static void PrintCollection(List<User> collection)
     {
         if (collection.Count == 0)
-        {
             Console.WriteLine("List is empty");
-        }
         else
-        {
             foreach (var item in collection)
-            {
                 Console.WriteLine($"{item.FullName}");
-            }
-        }
     }
 }

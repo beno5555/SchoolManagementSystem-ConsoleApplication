@@ -1,15 +1,9 @@
-﻿using System.Xml.Schema;
-using SchoolManagementSystem.Data;
-using SchoolManagementSystem.Data.HelperClasses;
-using SchoolManagementSystem.Data.Models;
-using SchoolManagementSystem.Data.Models.Base;
-
-namespace SchoolManagementSystem.Testing;
+﻿namespace SchoolManagementSystem.Testing;
 class Program
 {
     static async Task Main()
     {
-        await SchoolContext.InitializeAsync();        
+        // await SchoolContext.InitializeAsync();        
         // for (int i = 0; i < 10; i++)
         // {
         //     Console.WriteLine("Press any key to start testing...");
@@ -22,16 +16,16 @@ class Program
         Console.ReadKey(intercept: true);
     }
 
-    private static void PrintList<T>(List<T> list) where T : BaseModel
-    {
-        if (list.Any())
-        {
-            foreach (var item in list)
-            {
-                Console.WriteLine($"Id: {item.Id}");
-            }
-        }
-    }
+    // private static void PrintList<T>(List<T> list) where T : BaseModel
+    // {
+    //     if (list.Any())
+    //     {
+    //         foreach (var item in list)
+    //         {
+    //             Console.WriteLine($"Id: {item.Id}");
+    //         }
+    //     }
+    // }
     // public static async Task TestDeserializedJsonCollections()
     // {
     //     Console.WriteLine("=== JSON Deserialization ID Test ===");
