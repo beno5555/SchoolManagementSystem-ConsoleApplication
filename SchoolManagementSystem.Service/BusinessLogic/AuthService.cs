@@ -17,7 +17,9 @@ public class AuthService
         var user = await _mapper.RegisterDTOToUser(userToRegister);
         if (user is not null)
         {
+            user.GroupId = 5;
             await _userRepository.AddAsync(user);
+            await _userRepository.SaveAsync();
         }
         else
         {

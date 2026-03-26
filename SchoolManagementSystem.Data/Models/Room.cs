@@ -7,11 +7,6 @@ namespace SchoolManagementSystem.Data.Models;
 [FileNamePrefix("rooms")]
 public class Room : NamedModel
 {
-    
     [Reference<RoomType>]
     public int RoomTypeId { get; set; }
-    public Room(string roomName, int roomTypeId) : base(roomName) 
-    {
-        RoomTypeId = roomTypeId;
-    }
 }

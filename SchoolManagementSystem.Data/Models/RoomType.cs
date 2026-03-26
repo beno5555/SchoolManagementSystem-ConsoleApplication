@@ -7,13 +7,4 @@ namespace SchoolManagementSystem.Data.Models;
 [FileNamePrefix("roomTypes")]
 public class RoomType : NamedModel
 {
-    public RoomType(string roomTypeName) : base(roomTypeName)
-    {
-        
-    }
-
-    public RoomType()
-    {
-        
-    }
 }

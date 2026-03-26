@@ -8,13 +8,4 @@ namespace SchoolManagementSystem.Data.Models;
 public class AssignmentType : NamedModel
 {
 
-    public AssignmentType(string name) : base(name) 
-    {
-        
-    }
-
-    public AssignmentType()
-    {
-        
-    }
 }

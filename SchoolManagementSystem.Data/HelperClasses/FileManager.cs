@@ -33,7 +33,7 @@ public static class FileManager
             var json = await File.ReadAllTextAsync(path);
             bool isValid = !string.IsNullOrWhiteSpace(json);
             deserializedCollection = isValid
-                ? JsonSerializer.Deserialize<List<T>>(json, Options) ?? []
+                ? JsonSerializer.Deserialize<List<T>>(json) ?? []
                 : [];
         }
         else

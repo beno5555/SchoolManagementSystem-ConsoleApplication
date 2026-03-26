@@ -14,14 +14,4 @@ public class Group : NamedModel
     
     [Reference<Room>]
     public int ClassroomId { get; set; }
-
-    public Group(string groupName) : base(groupName) 
-    {
-        
-    }
-
-    public Group()
-    {
-        
-    }
 }

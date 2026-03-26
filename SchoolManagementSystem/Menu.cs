@@ -1,21 +1,22 @@
 ﻿using ProjectHelperLibrary.Utilities;
 using SchoolManagementSystem.Service;
 using SchoolManagementSystem.Service.BusinessLogic;
+using SchoolManagementSystem.Service.Display;
 using SchoolManagementSystem.Service.DTOs.User.Auth;
 
 namespace SchoolManagementSystem;
 
 public static class Menu
 {
-    private static readonly UserService _userService = new();
-    private static readonly AuthService _authService = new();
+    private static readonly UserService UserService = new();
+    private static readonly AuthService AuthService = new();
     public static async Task Run()
     {
         await Initializer.Execute();
 
         var user = new RegisterDTO
         {
-            FirstName = "sandro",
+            FirstName = "meore sandro",
             LastName = "benashvili",
             Address = "yvelgan",
             Email = "abc@gmail.com",
@@ -23,10 +24,11 @@ public static class Menu
             Password = "123456",
             PhoneNumber = "4343",
             PrivateId = "45434343",
-            RoleId = 4
+            RoleId = 4,
+            
         };
 
-        var registerResponse = await _authService.RegisterUser(user);
+        var registerResponse = await AuthService.RegisterUser(user);
         if (registerResponse.Success)
         {
             Console.WriteLine("User successfully registered");
@@ -38,8 +40,10 @@ public static class Menu
 
         ConsoleUtilities.ResetMenu();
 
-
-
-
+        var getUserResponse = await UserService.GetUserById(1);
+        if (getUserResponse.Success)
+        {
+            DisplayManager.Print(getUserResponse.Value);
+        }
     }
 }

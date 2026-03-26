@@ -8,6 +8,6 @@ namespace SchoolManagementSystem.Data.Models.Base
     {
         // makes sure id is serialized first in the JSON
         [JsonPropertyOrder(-1)]
-        public int Id { get; internal set; }
+        public int Id { get; set; }
     }
 }

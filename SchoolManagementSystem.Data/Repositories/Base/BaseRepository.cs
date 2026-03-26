@@ -26,7 +26,7 @@ public class BaseRepository<T> where T : BaseModel
         }
     }
     
-    protected async Task SaveAsync()
+    public async Task SaveAsync()
     {
         if (_isDirty)
         {

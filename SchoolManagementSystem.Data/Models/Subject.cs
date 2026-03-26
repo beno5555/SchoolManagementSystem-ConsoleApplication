@@ -12,12 +12,4 @@ public class Subject : NamedModel
     
     [Reference<Room>]
     public int? LaboratoryId { get; set; }
-    public Subject(string subjectName) : base(subjectName) 
-    {
-        
-    }
-    public Subject()
-    {
-        
-    }
 }

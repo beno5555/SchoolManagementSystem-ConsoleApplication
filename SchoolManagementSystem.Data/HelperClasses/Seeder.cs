@@ -35,12 +35,11 @@ public static class Seeder
     /// <summary>
     /// adds a superadmin to the users list if there already is not one. (superadmin data is hardcoded)
     /// </summary>
-    public static async Task SeedSuperAdmin(List<User> users, List<Role> roles, bool loaded = true)
+    public static async Task SeedSuperAdmin(List<User> users, List<Role> roles, bool loaded = false)
     {
         if (!loaded)
         {
             await users.LoadAsync();
-            await roles.LoadAsync();
         }
         if(users.Count == 0)
         {

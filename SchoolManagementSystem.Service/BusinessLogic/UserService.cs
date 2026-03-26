@@ -16,6 +16,35 @@ public class UserService
     private readonly AssessmentRepository _assessmentRepository = new();
     private readonly Mapper _mapper = new();
     
+    #region User
+
+    public async Task<DataResponse<UserDisplayDto>> GetUserById(int id)
+    {
+        DataResponse<UserDisplayDto> response = new();
+        var userResponse = await _userRepository.GetById(id);
+        
+        if (userResponse.Success)
+        {
+            var userDisplay = await _mapper.UserToDisplayDTO(userResponse.Value);
+            if (userDisplay is not null)
+            {
+                response.SetData(userDisplay);
+            }
+            else
+            {
+                response.SetStatus(false,"Could not map to display format");
+            }
+        }
+        else
+        {
+            response.SetStatus(false, userResponse.Message);
+        }
+
+        return response;
+    }
+    
+    #endregion
+    
     #region Grade
 
     public async Task<DataResponse<decimal>> GetAverageSubjectGrade(int studentId, int subjectId)
