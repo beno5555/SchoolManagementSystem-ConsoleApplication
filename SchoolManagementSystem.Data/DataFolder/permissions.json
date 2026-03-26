@@ -1,62 +1,62 @@
 [
   {
     "Id": 1,
-    "PermissionName": "ViewGrade"
+    "Name": "ViewGrade"
   },
   {
     "Id": 2,
-    "PermissionName": "ViewHomeworks"
+    "Name": "ViewHomeworks"
   },
   {
     "Id": 3,
-    "PermissionName": "SubmitHomework"
+    "Name": "SubmitHomework"
   },
   {
     "Id": 4,
-    "PermissionName": "RateTeacher"
+    "Name": "RateTeacher"
   },
   {
     "Id": 5,
-    "PermissionName": "GetOwnStudent"
+    "Name": "GetOwnStudent"
   },
   {
     "Id": 6,
-    "PermissionName": "GetSubjects"
+    "Name": "GetSubjects"
   },
   {
     "Id": 7,
-    "PermissionName": "UploadHomework"
+    "Name": "UploadHomework"
   },
   {
     "Id": 8,
-    "PermissionName": "AssessStudent"
+    "Name": "AssessStudent"
   },
   {
     "Id": 9,
-    "PermissionName": "ScheduleTest"
+    "Name": "ScheduleTest"
   },
   {
     "Id": 10,
-    "PermissionName": "GetAllMembers"
+    "Name": "GetAllMembers"
   },
   {
     "Id": 11,
-    "PermissionName": "GetAverageGradeOfAnyKind"
+    "Name": "GetAverageGradeOfAnyKind"
   },
   {
     "Id": 12,
-    "PermissionName": "AddMember"
+    "Name": "AddMember"
   },
   {
     "Id": 13,
-    "PermissionName": "RemoveMember"
+    "Name": "RemoveMember"
   },
   {
     "Id": 14,
-    "PermissionName": "GetMember"
+    "Name": "GetMember"
   },
   {
     "Id": 15,
-    "PermissionName": "UpdateProfile"
+    "Name": "UpdateProfile"
   }
 ]

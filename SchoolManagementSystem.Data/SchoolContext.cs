@@ -69,11 +69,11 @@ public static class SchoolContext
 
     private static async Task SeedData()
     {
-        await Seeder.SeedEnums(Roles, typeof(SchoolEnums.RoleName), name => new Role(name));
-        await Seeder.SeedEnums(Permissions, typeof(SchoolEnums.PermissionName), name => new Permission(name));
-        await Seeder.SeedEnums(Subjects, typeof(SchoolEnums.SubjectName), name => new Subject(name));
-        await Seeder.SeedEnums(AssignmentTypes, typeof(SchoolEnums.AssignmentTypeName), name => new AssignmentType(name));
-        await Seeder.SeedEnums(RoomTypes, typeof(SchoolEnums.RoomTypeName), name => new RoomType(name));
+        await Seeder.SeedEnums<SchoolEnums.RoleName, Role>(Roles);
+        await Seeder.SeedEnums<SchoolEnums.PermissionName, Permission>(Permissions);
+        await Seeder.SeedEnums<SchoolEnums.SubjectName, Subject>(Subjects);
+        await Seeder.SeedEnums<SchoolEnums.AssignmentTypeName, AssignmentType>(AssignmentTypes);
+        await Seeder.SeedEnums<SchoolEnums.RoomTypeName, RoomType>(RoomTypes);
         
         await Seeder.SeedSuperAdmin(Users, Roles);
     }

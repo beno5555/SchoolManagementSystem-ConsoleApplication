@@ -24,9 +24,8 @@ public static class FileManager
     /// <summary>
     /// deserialize singular collection data from JSON file and set it to the list it belongs to
     /// </summary>
-    public static async Task LoadAsync<T>(this List<T> collection) 
+    public static async Task LoadAsync<T>(this List<T> collection, string path) where T : class
     {
-        var path = AppConstants.FolderPaths.GetFullPath<T>();
         var deserializedCollection = new List<T>();
         
         if (File.Exists(path))
@@ -44,6 +43,13 @@ public static class FileManager
         
         collection.Clear();
         collection.AddRange(deserializedCollection);
+    }
+
+    public static async Task LoadAsync<T>(this List<T> collection) where T : BaseModel
+    {
+        var path = AppConstants.FolderPaths.GetFullPath<T>();
+        await collection.LoadAsync(path);
+        await IdGenerator.InitializeId(collection);
     }
     
     /// <summary>

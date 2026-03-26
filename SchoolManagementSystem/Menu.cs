@@ -1,4 +1,5 @@
-﻿using SchoolManagementSystem.Service;
+﻿using ProjectHelperLibrary.Utilities;
+using SchoolManagementSystem.Service;
 using SchoolManagementSystem.Service.Services;
 
 namespace SchoolManagementSystem;
@@ -9,5 +10,6 @@ public static class Menu
     public static async Task Run()
     {
         await Initializer.Execute();
+        ConsoleUtilities.ResetMenu();
     }
 }

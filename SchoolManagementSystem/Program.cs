@@ -1,5 +1,5 @@
 ﻿using ProjectHelperLibrary.Utilities;
-using SchoolManagementSystem.Data.Models;
+using SchoolManagementSystem.Service.DTOs.User.Display;
 using SchoolManagementSystem.Service.Services;
 
 namespace SchoolManagementSystem;
@@ -43,16 +43,16 @@ public class Program
 
 
         // var subjectId = SchoolContext.Subjects.First().Id;
-        var studentsResponse = await userService.GetAllStudentsWithSubject(1);
-        if (studentsResponse.Success)
-        {
-            List<User> students = studentsResponse.Value;
-            PrintCollection(students);
-        }
-        else
-        {
-            ConsoleUtilities.PrintError(studentsResponse.Message);
-        }
+        // var studentsResponse = await userService.GetAllStudentsWithSubject(1);
+        // if (studentsResponse.Success)
+        // {
+        //     List<UserDisplayDto> students = studentsResponse.Value;
+        //     // DisplayManager.PrintCollection(students);
+        // }
+        // else
+        // {
+        //     ConsoleUtilities.PrintError(studentsResponse.Message);
+        // }
 
         // await FileManager.LoadAsync(AppConstants.FolderPaths.UserPath, schoolContext.Users);
         //
@@ -81,12 +81,5 @@ public class Program
         Console.ReadKey();
     }
 
-    private static void PrintCollection(List<User> collection)
-    {
-        if (collection.Count == 0)
-            Console.WriteLine("List is empty");
-        else
-            foreach (var item in collection)
-                Console.WriteLine($"{item.FullName}");
-    }
+    
 }

@@ -6,15 +6,18 @@ using SchoolManagementSystem.Data.Models.Base;
 namespace SchoolManagementSystem.Data.Models;
 
 [FileNamePrefix("subjects")]
-public class Subject : BaseModel
+public class Subject : NamedModel
 {
-    [MaxLength(100)] public string SubjectName { get; set; }  
     public string Description { get; set; } = string.Empty;
     
     [Reference<Room>]
     public int? LaboratoryId { get; set; }
-    public Subject(string subjectName) 
+    public Subject(string subjectName) : base(subjectName) 
     {
-        SubjectName = subjectName;
+        
+    }
+    public Subject()
+    {
+        
     }
 }

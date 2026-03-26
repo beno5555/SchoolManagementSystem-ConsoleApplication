@@ -10,19 +10,21 @@ namespace SchoolManagementSystem.Data.Models;
 public class User : BaseModel
 {
     #region Properties
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
+
+    public string FirstName { get; set; } = string.Empty;
+    public string LastName { get; set; } = string.Empty;
     public string FullName => $"{FirstName.ToCapitalized()} {LastName.ToCapitalized()}";
-    public DateTime DateOfBirth { get; set; }
-    public string PrivateId { get; set; }
-    
-    public string Email { get; set; } 
-    public string PasswordHash { get; set; }
+    public string PhoneNumber { get; set; } = string.Empty;
+    public string Address { get; set; } = string.Empty;
+    public string PrivateId { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string PasswordHash { get; set; } = string.Empty;
+    public DateTime DateOfBirth { get; set; } 
     public DateTime RegisterDate { get; set; } = DateTime.Now;
     
     #region Role-Specific
-    [Reference<Role>]
-    public int RoleId { get; set; }
+
+    [Reference<Role>] public int RoleId { get; set; } = (int)SchoolEnums.RoleName.Student;
     
     [Reference<Group>]
     public int? GroupId { get; set; } // mandatory for students, optional for teachers
@@ -34,14 +36,19 @@ public class User : BaseModel
     
     #endregion
     
-    
     #endregion
     
     #region Constructors
-    
+
+    public User()
+    {
+        
+    }
     public User(
         string firstName, 
         string lastName, 
+        string phoneNumber,
+        string address,
         DateTime dateOfBirth, 
         string privateId, 
         string email, 
@@ -54,6 +61,8 @@ public class User : BaseModel
     {
         FirstName = firstName;
         LastName = lastName;
+        PhoneNumber = phoneNumber;
+        Address = address;
         DateOfBirth = dateOfBirth;
         PrivateId = privateId;
         Email = email;
@@ -71,6 +80,8 @@ public class User : BaseModel
     public static User CreateStudent(
         string firstName,
         string lastName,
+        string phoneNumber,
+        string address,
         DateTime dateOfBirth,
         string privateId,
         string email,
@@ -79,26 +90,30 @@ public class User : BaseModel
     )
     {
         
-        return new User(firstName, lastName, dateOfBirth, privateId, email, passwordHash,
+        return new User(firstName, lastName, phoneNumber, address, dateOfBirth, privateId, email, passwordHash,
             (int)SchoolEnums.RoleName.Student, groupId: groupId);
     }
 
     public static User CreateTeacher(
         string firstName,
         string lastName,
+        string phoneNumber, 
+        string address,
         DateTime dateOfBirth,
         string privateId,
         string email,
         string passwordHash,
         int? groupId)
     {
-        return new User(firstName, lastName, dateOfBirth, privateId, email, passwordHash,
+        return new User(firstName, lastName, phoneNumber,address, dateOfBirth, privateId, email, passwordHash,
             (int)SchoolEnums.RoleName.Teacher, groupId: groupId);
     }
 
     public static User CreatePrincipal(
         string firstName,
         string lastName,
+        string phoneNumber,
+        string address,
         DateTime dateOfBirth,
         string privateId,
         string email,
@@ -106,7 +121,7 @@ public class User : BaseModel
         int officeRoomId,
         int? groupId)
     {
-        return new User(firstName, lastName, dateOfBirth, privateId, email, passwordHash,
+        return new User(firstName, lastName, phoneNumber, address, dateOfBirth, privateId, email, passwordHash,
             (int)SchoolEnums.RoleName.Principal, groupId: groupId, officeRoomId: officeRoomId);
     }
     

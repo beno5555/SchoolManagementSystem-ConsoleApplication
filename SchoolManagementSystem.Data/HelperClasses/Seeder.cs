@@ -9,7 +9,9 @@ public static class Seeder
     /// <summary>
     /// adds T type objects to List of type T collection with predefined enum names given that collection has 0 items
     /// </summary>
-    public static async Task SeedEnums<T>(List<T> collection, Type enumType, Func<string, T> create, bool loaded = false) where T : BaseModel
+    public static async Task SeedEnums<TEnum, T>(List<T> collection, bool loaded = false) 
+        where T : NamedModel, new()
+        where TEnum : struct, Enum
     {
         if (!loaded)
         {
@@ -17,7 +19,15 @@ public static class Seeder
         }
         if (!collection.Any())
         {
-            var results = Enum.GetNames(enumType).Select(create);
+            var results = Enum.GetNames<TEnum>().Select(enumName =>
+            {
+                T newObject = new T
+                {
+                    Id = IdGenerator.Next<T>(),
+                    Name = enumName,
+                };
+                return newObject;
+            });
             collection.AddRange(results);
             await collection.SaveAsync();
         }
@@ -33,21 +43,26 @@ public static class Seeder
         }
         if(users.Count == 0)
         {
-            int? adminRoleId = roles.FirstOrDefault(role => role.RoleName == nameof(SchoolEnums.RoleName.SuperAdmin))?.Id;
+            int? adminRoleId = roles.FirstOrDefault(role => role.Name == nameof(SchoolEnums.RoleName.SuperAdmin))?.Id;
             bool adminExists = users
                 .Any(user => user.RoleId == adminRoleId);
-            if (!adminExists)
+            if (!adminExists && adminRoleId.HasValue)
             {
-                users.Add(new(
+                User admin = new(
                     "superadmin",
                     "superadmin",
+                    "5914343433",
+                    "Tbilisi, GE",
                     new DateTime(2009, 04, 17),
                     "01255339127",
                     "superadmin@gmail.com",
                     "123",
-                    (int)adminRoleId));
+                    (int)adminRoleId);
+                admin.Id = IdGenerator.Next<User>();
+                users.Add(admin);
             }
 
+            
             await users.SaveAsync();
         }
 

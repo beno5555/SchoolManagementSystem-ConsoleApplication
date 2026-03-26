@@ -1,46 +1,46 @@
 [
   {
     "Id": 1,
-    "RoomTypeName": "Classroom"
+    "Name": "Classroom"
   },
   {
     "Id": 2,
-    "RoomTypeName": "Office"
+    "Name": "Office"
   },
   {
     "Id": 3,
-    "RoomTypeName": "Laboratory"
+    "Name": "Laboratory"
   },
   {
     "Id": 4,
-    "RoomTypeName": "ItDepartment"
+    "Name": "ItDepartment"
   },
   {
     "Id": 5,
-    "RoomTypeName": "ConferenceRoom"
+    "Name": "ConferenceRoom"
   },
   {
     "Id": 6,
-    "RoomTypeName": "LectureHall"
+    "Name": "LectureHall"
   },
   {
     "Id": 7,
-    "RoomTypeName": "Library"
+    "Name": "Library"
   },
   {
     "Id": 8,
-    "RoomTypeName": "Cafeteria"
+    "Name": "Cafeteria"
   },
   {
     "Id": 9,
-    "RoomTypeName": "Storage"
+    "Name": "Storage"
   },
   {
     "Id": 10,
-    "RoomTypeName": "Gym"
+    "Name": "Gym"
   },
   {
     "Id": 11,
-    "RoomTypeName": "Restroom"
+    "Name": "Restroom"
   }
 ]

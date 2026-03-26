@@ -5,9 +5,8 @@ using SchoolManagementSystem.Data.Models.Base;
 namespace SchoolManagementSystem.Data.Models;
 
 [FileNamePrefix("groups")]
-public class Group : BaseModel
+public class Group : NamedModel
 {
-    public string GroupName { get; set; } 
     
     // damrigebeli
     [Reference<User>]
@@ -16,8 +15,13 @@ public class Group : BaseModel
     [Reference<Room>]
     public int ClassroomId { get; set; }
 
-    public Group(string groupName) 
+    public Group(string groupName) : base(groupName) 
     {
-        GroupName = groupName;
+        
+    }
+
+    public Group()
+    {
+        
     }
 }

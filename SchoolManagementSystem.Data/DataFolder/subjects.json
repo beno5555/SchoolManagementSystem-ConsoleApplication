@@ -1,116 +1,116 @@
 [
   {
     "Id": 1,
-    "SubjectName": "Math",
     "Description": "",
-    "LaboratoryId": null
+    "LaboratoryId": null,
+    "Name": "Math"
   },
   {
     "Id": 2,
-    "SubjectName": "Biology",
     "Description": "",
-    "LaboratoryId": null
+    "LaboratoryId": null,
+    "Name": "Biology"
   },
   {
     "Id": 3,
-    "SubjectName": "ForeignLanguageEnglish",
     "Description": "",
-    "LaboratoryId": null
+    "LaboratoryId": null,
+    "Name": "ForeignLanguageEnglish"
   },
   {
     "Id": 4,
-    "SubjectName": "Georgian",
     "Description": "",
-    "LaboratoryId": null
+    "LaboratoryId": null,
+    "Name": "Georgian"
   },
   {
     "Id": 5,
-    "SubjectName": "Literature",
     "Description": "",
-    "LaboratoryId": null
+    "LaboratoryId": null,
+    "Name": "Literature"
   },
   {
     "Id": 6,
-    "SubjectName": "ForeignLanguageRussian",
     "Description": "",
-    "LaboratoryId": null
+    "LaboratoryId": null,
+    "Name": "ForeignLanguageRussian"
   },
   {
     "Id": 7,
-    "SubjectName": "Physics",
     "Description": "",
-    "LaboratoryId": null
+    "LaboratoryId": null,
+    "Name": "Physics"
   },
   {
     "Id": 8,
-    "SubjectName": "Chemistry",
     "Description": "",
-    "LaboratoryId": null
+    "LaboratoryId": null,
+    "Name": "Chemistry"
   },
   {
     "Id": 9,
-    "SubjectName": "Geography",
     "Description": "",
-    "LaboratoryId": null
+    "LaboratoryId": null,
+    "Name": "Geography"
   },
   {
     "Id": 10,
-    "SubjectName": "History",
     "Description": "",
-    "LaboratoryId": null
+    "LaboratoryId": null,
+    "Name": "History"
   },
   {
     "Id": 11,
-    "SubjectName": "PhysicalEducation",
     "Description": "",
-    "LaboratoryId": null
+    "LaboratoryId": null,
+    "Name": "PhysicalEducation"
   },
   {
     "Id": 12,
-    "SubjectName": "Art",
     "Description": "",
-    "LaboratoryId": null
+    "LaboratoryId": null,
+    "Name": "Art"
   },
   {
     "Id": 13,
-    "SubjectName": "Music",
     "Description": "",
-    "LaboratoryId": null
+    "LaboratoryId": null,
+    "Name": "Music"
   },
   {
     "Id": 14,
-    "SubjectName": "WorldHistory",
     "Description": "",
-    "LaboratoryId": null
+    "LaboratoryId": null,
+    "Name": "WorldHistory"
   },
   {
     "Id": 15,
-    "SubjectName": "GeorgianHistory",
     "Description": "",
-    "LaboratoryId": null
+    "LaboratoryId": null,
+    "Name": "GeorgianHistory"
   },
   {
     "Id": 16,
-    "SubjectName": "CivicEducation",
     "Description": "",
-    "LaboratoryId": null
+    "LaboratoryId": null,
+    "Name": "CivicEducation"
   },
   {
     "Id": 17,
-    "SubjectName": "InformationTechnology",
     "Description": "",
-    "LaboratoryId": null
+    "LaboratoryId": null,
+    "Name": "InformationTechnology"
   },
   {
     "Id": 18,
-    "SubjectName": "Robotics",
     "Description": "",
-    "LaboratoryId": null
+    "LaboratoryId": null,
+    "Name": "Robotics"
   },
   {
     "Id": 19,
-    "SubjectName": "HealthEducation",
     "Description": "",
-    "LaboratoryId": null
+    "LaboratoryId": null,
+    "Name": "HealthEducation"
   }
 ]

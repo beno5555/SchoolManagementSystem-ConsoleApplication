@@ -31,8 +31,7 @@ public static class IdGenerator
     {
         return Next(typeof(T));
     }
-
-
+    
     public static void Track(Type type, int id)
     {
         if (MaxIds.ContainsKey(type) || MaxIds[type] < id)

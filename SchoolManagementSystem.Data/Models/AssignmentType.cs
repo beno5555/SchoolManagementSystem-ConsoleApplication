@@ -5,12 +5,16 @@ using SchoolManagementSystem.Data.Models.Base;
 namespace SchoolManagementSystem.Data.Models;
 
 [FileNamePrefix("assignmentTypes")]
-public class AssignmentType : BaseModel
+public class AssignmentType : NamedModel
 {
-    public string Name { get; set; } 
 
-    public AssignmentType(string name) 
+    public AssignmentType(string name) : base(name) 
     {
-        Name = name;
+        
+    }
+
+    public AssignmentType()
+    {
+        
     }
 }

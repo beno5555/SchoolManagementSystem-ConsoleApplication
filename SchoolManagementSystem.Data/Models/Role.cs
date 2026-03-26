@@ -5,12 +5,14 @@ using SchoolManagementSystem.Data.Models.Base;
 namespace SchoolManagementSystem.Data.Models;
 
 [FileNamePrefix("roles")]
-public class Role : BaseModel
+public class Role : NamedModel
 {
-    public string RoleName { get; set; } 
-
-    public Role(string roleName) 
+    public Role(string roleName) : base(roleName) 
     {
-        RoleName = roleName;
+    }
+
+    public Role()
+    {
+        
     }
 }

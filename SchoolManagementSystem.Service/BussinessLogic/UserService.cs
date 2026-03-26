@@ -2,6 +2,7 @@
 using SchoolManagementSystem.Data.Models;
 using SchoolManagementSystem.Data.Models.JoinedModels;
 using SchoolManagementSystem.Data.Repositories;
+using SchoolManagementSystem.Service.DTOs.User.Display;
 
 namespace SchoolManagementSystem.Service.Services;
 
@@ -72,7 +73,7 @@ public class UserService
 
     #region Subject
 
-    public async Task<DataResponse<List<User>>> GetAllStudentsWithSubject(int subjectId)
+    public async Task<DataResponse<List<UserDisplayDto>>> GetAllStudentsWithSubject(int subjectId)
     {
         var response = new DataResponse<List<User>>();
         var classesResponse = await _schoolClassRepository.GetClassesBySubjectId(subjectId);
@@ -103,7 +104,8 @@ public class UserService
             response.SetStatus(false, classesResponse.Message);
         }
 
-        return response;
+        // return response;
+        return null;
     }
 
     #endregion

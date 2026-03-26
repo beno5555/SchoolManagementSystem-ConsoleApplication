@@ -8,11 +8,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SchoolManagementSystem.Service\SchoolManagementSystem.Service.csproj"/>
+        <PackageReference Include="ProjectHelperLibrary" Version="1.0.6.1"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="ProjectHelperLibrary" Version="1.0.6.1"/>
+      <ProjectReference Include="..\SchoolManagementSystem.Service\SchoolManagementSystem.Service.csproj" />
     </ItemGroup>
 
 </Project>

@@ -5,11 +5,15 @@ using SchoolManagementSystem.Data.Models.Base;
 namespace SchoolManagementSystem.Data.Models;
 
 [FileNamePrefix("roomTypes")]
-public class RoomType : BaseModel
+public class RoomType : NamedModel
 {
-    public string RoomTypeName { get; set; }
-    public RoomType(string roomTypeName)
+    public RoomType(string roomTypeName) : base(roomTypeName)
     {
-        RoomTypeName = roomTypeName;
+        
+    }
+
+    public RoomType()
+    {
+        
     }
 }

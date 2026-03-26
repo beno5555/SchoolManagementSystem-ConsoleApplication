@@ -7,15 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SchoolManagementSystem.Data\SchoolManagementSystem.Data.csproj" />
+      <ProjectReference Include="..\SchoolManagementSystem.Data\SchoolManagementSystem.Data.csproj" PrivateAssets="all"/>
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="ProjectHelperLibrary" Version="1.0.6.1" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Display\" />
     </ItemGroup>
 
 </Project>
