@@ -1,19 +1,21 @@
 ﻿using ProjectHelperLibrary.Response;
-using SchoolManagementSystem.Data.Models;
 using SchoolManagementSystem.Data.Models.JoinedModels;
 using SchoolManagementSystem.Data.Repositories;
 using SchoolManagementSystem.Service.DTOs.User.Display;
+using SchoolManagementSystem.Service.Mapping;
 
-namespace SchoolManagementSystem.Service.Services;
+namespace SchoolManagementSystem.Service.BusinessLogic;
 
 public class UserService
 {
     private readonly UserRepository _userRepository = new();
     private readonly SubjectRepository _subjectRepository = new();
+    private readonly RoleRepository _roleRepository = new();
     private readonly SubjectEnrollmentRepository _subjectEnrollmentRepository = new();
     private readonly SchoolClassRepository _schoolClassRepository = new();
     private readonly AssessmentRepository _assessmentRepository = new();
-
+    private readonly Mapper _mapper = new();
+    
     #region Grade
 
     public async Task<DataResponse<decimal>> GetAverageSubjectGrade(int studentId, int subjectId)
@@ -75,19 +77,30 @@ public class UserService
 
     public async Task<DataResponse<List<UserDisplayDto>>> GetAllStudentsWithSubject(int subjectId)
     {
-        var response = new DataResponse<List<User>>();
+        var response = new DataResponse<List<UserDisplayDto>>();
         var classesResponse = await _schoolClassRepository.GetClassesBySubjectId(subjectId);
 
         if (classesResponse.Success)
         {
             var classIds = classesResponse.Value.Select(c => c.Id).ToList();
             var subjectEnrollments = await _subjectEnrollmentRepository.GetByClassIds(classIds);
+            
             if (subjectEnrollments.Success)
             {
                 var studentsResponse = await _userRepository.GetStudentsBySubjectEnrollments(subjectEnrollments.Value);
+                
                 if (studentsResponse.Success)
                 {
-                    response.SetData(studentsResponse.Value);
+                    var dtosResponse = await _mapper.UsersToDisplayDTOs(studentsResponse.Value);
+                    
+                    if (dtosResponse.Success)
+                    {
+                        response.SetData(dtosResponse.Value);
+                    }
+                    else
+                    {
+                        response.SetStatus(false, dtosResponse.Message);
+                    }
                 }
                 else
                 {
@@ -104,8 +117,7 @@ public class UserService
             response.SetStatus(false, classesResponse.Message);
         }
 
-        // return response;
-        return null;
+        return response;
     }
 
     #endregion

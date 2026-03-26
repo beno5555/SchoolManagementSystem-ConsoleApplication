@@ -1,6 +1,4 @@
-﻿using ProjectHelperLibrary.Utilities;
-using SchoolManagementSystem.Service.DTOs.User.Display;
-using SchoolManagementSystem.Service.Services;
+﻿using SchoolManagementSystem.Service.BusinessLogic;
 
 namespace SchoolManagementSystem;
 
@@ -10,7 +8,7 @@ public class Program
     {
         await Menu.Run();
         // await SchoolContext.Execute();
-        var userService = new UserService();
+        // var userService = new UserService();
         // var userRepository = new UserRepository();
 
         // var student = User.CreateStudent(

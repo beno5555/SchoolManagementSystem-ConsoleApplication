@@ -10,7 +10,7 @@ public class BaseRepository<T> where T : BaseModel
     private bool _loaded;
     private bool _isDirty;
     
-    public BaseRepository(List<T> collection)
+    protected BaseRepository(List<T> collection)
     {
         _collection = collection;
     }
@@ -109,7 +109,7 @@ public class BaseRepository<T> where T : BaseModel
         var response = new DataResponse<List<T>>();
         await EnsureLoadAsync();
         
-        if (_collection.Any())
+        if (_collection.Count != 0)
         {
             response.SetData(_collection.ToList()); // passing a copy
         }
@@ -123,20 +123,9 @@ public class BaseRepository<T> where T : BaseModel
 
     public async Task<DataResponse<T>> GetById(int id)
     {
-        var response = new DataResponse<T>();
-
-        await EnsureLoadAsync();
-        
-        var entity = _collection.FirstOrDefault(entity => entity.Id == id);
-        if (entity is not null)
-        {
-            response.SetData(entity);
-        }
-        else
-        {
-            response.SetStatus(false, $"Could not find {typeof(T).Name} with id: {id}");
-        }
-
+        var response = await GetSingle(
+            filter: entity => entity.Id == id, 
+            $"Could not find {typeof(T).Name} with id: {id}"); 
         return response;
     }
 
@@ -174,7 +163,7 @@ public class BaseRepository<T> where T : BaseModel
             .Where(filter)
             .DistinctBy(entity => entity.Id)
             .ToList();
-        if (entities.Any())
+        if (entities.Count != 0)
         {
             response.SetData(entities);
         }

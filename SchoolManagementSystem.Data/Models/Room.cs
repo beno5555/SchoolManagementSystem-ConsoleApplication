@@ -5,15 +5,13 @@ using SchoolManagementSystem.Data.Models.Base;
 namespace SchoolManagementSystem.Data.Models;
 
 [FileNamePrefix("rooms")]
-public class Room : BaseModel
+public class Room : NamedModel
 {
-    public string RoomName { get; set; }
     
     [Reference<RoomType>]
     public int RoomTypeId { get; set; }
-    public Room(string roomName, int roomTypeId) 
+    public Room(string roomName, int roomTypeId) : base(roomName) 
     {
-        RoomName = roomName;
         RoomTypeId = roomTypeId;
     }
 }

@@ -3,7 +3,7 @@
 /// <summary>
 /// register from administration
 /// </summary>
-public class RegisterDto
+public class RegisterDTO
 {
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;

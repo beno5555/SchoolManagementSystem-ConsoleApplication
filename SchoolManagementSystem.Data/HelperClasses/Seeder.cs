@@ -7,10 +7,10 @@ namespace SchoolManagementSystem.Data.HelperClasses;
 public static class Seeder
 {
     /// <summary>
-    /// adds T type objects to List of type T collection with predefined enum names given that collection has 0 items
+    /// adds T type objects to List of type T collection with predefined enum names (given that collection has 0 items)
     /// </summary>
-    public static async Task SeedEnums<TEnum, T>(List<T> collection, bool loaded = false) 
-        where T : NamedModel, new()
+    public static async Task SeedEnums<TEnum, TModel>(List<TModel> collection, bool loaded = false) 
+        where TModel : NamedModel, new()
         where TEnum : struct, Enum
     {
         if (!loaded)
@@ -21,9 +21,9 @@ public static class Seeder
         {
             var results = Enum.GetNames<TEnum>().Select(enumName =>
             {
-                T newObject = new T
+                TModel newObject = new TModel
                 {
-                    Id = IdGenerator.Next<T>(),
+                    Id = IdGenerator.Next<TModel>(),
                     Name = enumName,
                 };
                 return newObject;
@@ -35,11 +35,12 @@ public static class Seeder
     /// <summary>
     /// adds a superadmin to the users list if there already is not one. (superadmin data is hardcoded)
     /// </summary>
-    public static async Task SeedSuperAdmin(List<User> users, List<Role> roles, bool loaded = false)
+    public static async Task SeedSuperAdmin(List<User> users, List<Role> roles, bool loaded = true)
     {
         if (!loaded)
         {
             await users.LoadAsync();
+            await roles.LoadAsync();
         }
         if(users.Count == 0)
         {
@@ -61,8 +62,6 @@ public static class Seeder
                 admin.Id = IdGenerator.Next<User>();
                 users.Add(admin);
             }
-
-            
             await users.SaveAsync();
         }
 

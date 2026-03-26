@@ -34,39 +34,14 @@ public static class SchoolContext
     #endregion
     
     #region Initialization
-    
     public static async Task InitializeAsync()
     {
         await FileManager.EnsureFoldersExist();
         await SeedData();
-        await InitializeIds();
     }
-
-    // using for testing. might remove later if I come up with a way to dynamically initialize ids.
-    private static async Task InitializeIds()
-    {
-        await IdGenerator.InitializeId(Users);
-        await IdGenerator.InitializeId(Subjects);
-        await IdGenerator.InitializeId(Rooms);
-        await IdGenerator.InitializeId(Roles);
-        await IdGenerator.InitializeId(Permissions);
-        await IdGenerator.InitializeId(Groups);
-        
-        await IdGenerator.InitializeId(Assessments);
-        await IdGenerator.InitializeId(Assignments);
-        
-        await IdGenerator.InitializeId(SubjectEnrollments);
-        await IdGenerator.InitializeId(SchoolClasses);
-        await IdGenerator.InitializeId(GroupClasses);
-        
-        await IdGenerator.InitializeId(AssignmentTypes);
-        await IdGenerator.InitializeId(RoomTypes);
-    }
-
     #endregion
 
     #region Seeding
-
     private static async Task SeedData()
     {
         await Seeder.SeedEnums<SchoolEnums.RoleName, Role>(Roles);
@@ -77,7 +52,6 @@ public static class SchoolContext
         
         await Seeder.SeedSuperAdmin(Users, Roles);
     }
-    
     #endregion
     
     #region Use examples

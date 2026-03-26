@@ -20,7 +20,7 @@ public class User : BaseModel
     public string Email { get; set; } = string.Empty;
     public string PasswordHash { get; set; } = string.Empty;
     public DateTime DateOfBirth { get; set; } 
-    public DateTime RegisterDate { get; set; } = DateTime.Now;
+    public DateTime RegistrationDate { get; set; } = DateTime.Now;
     
     #region Role-Specific
 

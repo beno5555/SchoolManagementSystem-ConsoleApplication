@@ -9,13 +9,9 @@ namespace SchoolManagementSystem.Data.HelperClasses;
 public static class IdGenerator
 {
     public static readonly Dictionary<Type, int> MaxIds = new(30);
-    public static async Task InitializeId<T>(List<T> existingCollection, bool loaded = true) where T : BaseModel
+    public static async Task InitializeId<T>(List<T> existingCollection) where T : BaseModel
     {
-        if (!loaded)
-        {
-            await existingCollection.LoadAsync();
-        }
-        var maxId = existingCollection.Any() ? existingCollection.Max(item => item.Id) : 0;
+        var maxId = existingCollection.Count != 0 ? existingCollection.Max(item => item.Id) : 0;
         MaxIds[typeof(T)] = maxId;
     }
     
