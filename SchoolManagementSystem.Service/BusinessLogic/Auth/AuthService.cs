@@ -11,7 +11,6 @@ namespace SchoolManagementSystem.Service.BusinessLogic.Auth;
 public class AuthService
 {
     private readonly UserRepository _userRepository = new();
-    private readonly GroupRepository _groupRepository = new();
     private readonly RoleRepository _roleRepository = new();
     private readonly CredentialService _credentialService = new();
     
@@ -64,12 +63,12 @@ public class AuthService
     where T : BaseRegisterDTO
     {
         BaseResponse response = new();
-        var validationResponse = await _credentialService.ValidateRegisterCredentials(registerDTO);
+        var prepareResponse = await _credentialService.PrepareForRegistration(registerDTO);
 
-        if (validationResponse.Success)
+        if (prepareResponse.Success)
         {
-            var userToRegister = validationResponse.Value;
-            var specificsSuccess = await assignSpecifics(userToRegister);
+            User userToRegister = prepareResponse.Value;
+            bool specificsSuccess = await assignSpecifics(userToRegister);
             
             if (specificsSuccess)
             {
@@ -82,7 +81,7 @@ public class AuthService
         }
         else
         {
-            response.SetStatus(false, validationResponse.Message);
+            response.SetStatus(false, prepareResponse.Message);
         }
 
         return response;
@@ -105,7 +104,7 @@ public class AuthService
         {
             response.SetStatus(false, userResponse.Message);
         }
-
+        
         return response;
     }
     

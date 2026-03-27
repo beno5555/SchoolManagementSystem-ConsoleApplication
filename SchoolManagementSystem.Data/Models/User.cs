@@ -56,7 +56,8 @@ public class User : BaseModel
         DateTime dateOfBirth, 
         string privateId, 
         string email, 
-        string passwordHash, 
+        string passwordHash,
+        string passwordSalt,
         int roleId,
         
         int? groupId = null,
@@ -71,6 +72,7 @@ public class User : BaseModel
         PrivateId = privateId;
         Email = email;
         PasswordHash = passwordHash;
+        PasswordSalt = passwordSalt;
         RoleId = roleId;
         GroupId = groupId;
         OfficeRoomId = officeRoomId;
@@ -90,11 +92,12 @@ public class User : BaseModel
         string privateId,
         string email,
         string passwordHash,
+        string passwordSalt,
         int groupId
     )
     {
         
-        return new User(firstName, lastName, phoneNumber, address, dateOfBirth, privateId, email, passwordHash,
+        return new User(firstName, lastName, phoneNumber, address, dateOfBirth, privateId, email, passwordHash, passwordSalt,
             (int)SchoolEnums.RoleName.Student, groupId: groupId);
     }
 
@@ -107,9 +110,10 @@ public class User : BaseModel
         string privateId,
         string email,
         string passwordHash,
+        string passwordSalt,
         int? groupId)
     {
-        return new User(firstName, lastName, phoneNumber,address, dateOfBirth, privateId, email, passwordHash,
+        return new User(firstName, lastName, phoneNumber,address, dateOfBirth, privateId, email, passwordHash, passwordSalt,
             (int)SchoolEnums.RoleName.Teacher, groupId: groupId);
     }
 
@@ -122,10 +126,11 @@ public class User : BaseModel
         string privateId,
         string email,
         string passwordHash,
+        string passwordSalt,
         int officeRoomId,
         int? groupId)
     {
-        return new User(firstName, lastName, phoneNumber, address, dateOfBirth, privateId, email, passwordHash,
+        return new User(firstName, lastName, phoneNumber, address, dateOfBirth, privateId, email, passwordHash, passwordSalt,
             (int)SchoolEnums.RoleName.Principal, groupId: groupId, officeRoomId: officeRoomId);
     }
     

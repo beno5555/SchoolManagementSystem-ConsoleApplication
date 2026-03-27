@@ -7,6 +7,7 @@ public class Program
     private static async Task Main()
     {
         await Menu.Run();
+
         // await SchoolContext.Execute();
         // var userService = new UserService();
         // var userRepository = new UserRepository();

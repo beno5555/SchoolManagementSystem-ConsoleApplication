@@ -13,30 +13,40 @@ public class CredentialService
     private readonly UserRepository _userRepository = new();
     private readonly Mapper _mapper = new();
     private readonly PasswordHasher _passwordHasher = new();
-    
     #region Methods
     
-    public async Task<DataResponse<User>> ValidateRegisterCredentials(BaseRegisterDTO registerDTO)
+    public async Task<DataResponse<User>> PrepareForRegistration(BaseRegisterDTO registerDTO)
     {
         DataResponse<User> response = new();
-        bool existsByEmail = await _userRepository.ExistsByEmail(registerDTO.Email);
-        if (!existsByEmail)
-        {
-            bool existsByPrivateId = await _userRepository.ExistsByPrivateId(registerDTO.PrivateId);
+        var credentialValidationResponse = await AreCredentialsUnique(registerDTO.Email, registerDTO.PrivateId);
 
-            if (!existsByPrivateId)
-            {
-                var userToRegister = _mapper.RegisterDTOToUser(registerDTO);
-                response.SetData(userToRegister);
-            }
-            else
-            {
-                response.SetStatus(false, $"User with {nameof(registerDTO.PrivateId).ToSpaced()} - '{registerDTO.PrivateId}' already exists");
-            } 
+        if (credentialValidationResponse.Success)
+        {
+            var userToRegister = _mapper.RegisterDTOToUser(registerDTO);
+            response.SetData(userToRegister);
         }
         else
         {
-            response.SetStatus(false, $"User with {nameof(registerDTO.Email)} - '{registerDTO.Email}' already exists'");
+            response.SetStatus(false, credentialValidationResponse.Message);
+        }
+        return response;
+    }
+
+    private async Task<BaseResponse> AreCredentialsUnique(string email, string privateId)
+    {
+        BaseResponse response = new();
+        bool existsByEmail = await _userRepository.ExistsByEmail(email);
+        if (existsByEmail)
+        {
+            response.SetStatus(false, "Email is already taken");
+        }
+        else
+        {
+            bool existsByPrivateId = await _userRepository.ExistsByPrivateId(privateId);
+            if (existsByPrivateId)
+            {
+                response.SetStatus(false, "User with private id is already in the database");
+            }
         }
 
         return response;
@@ -65,7 +75,7 @@ public class CredentialService
         }
         else
         {
-            response.SetStatus(false, $"{validPasswordResponse.Message} for email: {userToAuthenticate.Email}");
+            response.SetStatus(false, $"{validPasswordResponse.Message} or email");
         }
 
         return response;
@@ -93,3 +103,4 @@ public class CredentialService
     
     #endregion
 }
+

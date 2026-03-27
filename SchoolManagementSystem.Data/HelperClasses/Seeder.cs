@@ -56,7 +56,8 @@ public static class Seeder
                     new DateTime(2009, 04, 17),
                     "01255339127",
                     "superadmin@gmail.com",
-                    "123",
+                    "ncE/vkagQZft0U5DxV0Z4IbHNBWgVkt/1RC/haf3nPg=",
+                    "oNsJmAzkVehBjvRvQta4DtP3DveFpzniZ50nST4F2Pg=",
                     (int)adminRoleId);
                 admin.Id = IdGenerator.Next<User>();
                 users.Add(admin);

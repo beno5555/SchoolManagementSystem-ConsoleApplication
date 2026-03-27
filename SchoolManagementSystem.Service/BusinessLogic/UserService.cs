@@ -168,4 +168,33 @@ public class UserService
     }
 
     #endregion
+    
+    #region Test
+
+    public async Task<DataResponse<UserDisplayDTO>> GetUserByEmail(string email)
+    {
+        DataResponse<UserDisplayDTO> response = new();
+        var userByEmailResponse = await _userRepository.GetByEmail(email);
+
+        if (userByEmailResponse.Success)
+        {
+            var dto = await _mapper.UserToDisplayDTO(userByEmailResponse.Value);
+            if (dto is not null)
+            {
+                response.SetData(dto);
+            }
+            else
+            {
+                response.SetStatus(false, "Could not map to display dto");
+            }
+        }
+        else
+        {
+            response.SetStatus(false, userByEmailResponse.Message);
+        }
+
+        return response;
+    }
+    
+    #endregion
 }

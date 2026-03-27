@@ -1,0 +1,116 @@
+[
+  {
+    "Id": 1,
+    "Description": "",
+    "LaboratoryId": null,
+    "Name": "Math"
+  },
+  {
+    "Id": 2,
+    "Description": "",
+    "LaboratoryId": null,
+    "Name": "Biology"
+  },
+  {
+    "Id": 3,
+    "Description": "",
+    "LaboratoryId": null,
+    "Name": "ForeignLanguageEnglish"
+  },
+  {
+    "Id": 4,
+    "Description": "",
+    "LaboratoryId": null,
+    "Name": "Georgian"
+  },
+  {
+    "Id": 5,
+    "Description": "",
+    "LaboratoryId": null,
+    "Name": "Literature"
+  },
+  {
+    "Id": 6,
+    "Description": "",
+    "LaboratoryId": null,
+    "Name": "ForeignLanguageRussian"
+  },
+  {
+    "Id": 7,
+    "Description": "",
+    "LaboratoryId": null,
+    "Name": "Physics"
+  },
+  {
+    "Id": 8,
+    "Description": "",
+    "LaboratoryId": null,
+    "Name": "Chemistry"
+  },
+  {
+    "Id": 9,
+    "Description": "",
+    "LaboratoryId": null,
+    "Name": "Geography"
+  },
+  {
+    "Id": 10,
+    "Description": "",
+    "LaboratoryId": null,
+    "Name": "History"
+  },
+  {
+    "Id": 11,
+    "Description": "",
+    "LaboratoryId": null,
+    "Name": "PhysicalEducation"
+  },
+  {
+    "Id": 12,
+    "Description": "",
+    "LaboratoryId": null,
+    "Name": "Art"
+  },
+  {
+    "Id": 13,
+    "Description": "",
+    "LaboratoryId": null,
+    "Name": "Music"
+  },
+  {
+    "Id": 14,
+    "Description": "",
+    "LaboratoryId": null,
+    "Name": "WorldHistory"
+  },
+  {
+    "Id": 15,
+    "Description": "",
+    "LaboratoryId": null,
+    "Name": "GeorgianHistory"
+  },
+  {
+    "Id": 16,
+    "Description": "",
+    "LaboratoryId": null,
+    "Name": "CivicEducation"
+  },
+  {
+    "Id": 17,
+    "Description": "",
+    "LaboratoryId": null,
+    "Name": "InformationTechnology"
+  },
+  {
+    "Id": 18,
+    "Description": "",
+    "LaboratoryId": null,
+    "Name": "Robotics"
+  },
+  {
+    "Id": 19,
+    "Description": "",
+    "LaboratoryId": null,
+    "Name": "HealthEducation"
+  }
+]

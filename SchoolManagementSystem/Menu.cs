@@ -15,39 +15,101 @@ public static class Menu
     {
         await Initializer.Execute();
 
+        var loginRequestDTO = new LoginDTO
+        {
+            Email = "superadmin@gmail.com",
+            PrivateId = null,
+            Password = "admin123"
+        };
+        var loginResponse = await AuthService.Login(loginRequestDTO);
+        if (loginResponse.Success)
+        {
+            Console.WriteLine("Login successful");
+            DisplayManager.Print(loginResponse.Value, " - ");
+        }
+        else
+        {
+            Console.WriteLine($"Log in failed. {loginResponse.Message}");
+        }
+        
         var user = new AdminRegisterDTO
         {
             FirstName = "meore sandro",
             LastName = "benashvili",
             Address = "yvelgan",
-            Email = "abc@gmail.com",
+            Email = "abg@gmail.com",
             DateOfBirth = new DateTime(1980, 1, 1),
             Password = "123456",
             PhoneNumber = "4343",
-            PrivateId = "45434343",
+            PrivateId = "esec nagdi",
             RoleId = 4,
             
         };
 
-        var registerResponse = await AuthService.RegisterUser(user);
-        if (registerResponse.Success)
+        var student = new StudentRegisterDTO
         {
-            Console.WriteLine("User successfully registered");
+            FirstName = "student",
+            LastName = "student but last name",
+            Address = "malawi",
+            Email = "apk@gmail.com",
+            DateOfBirth = new DateTime(2001, 4, 19),
+            Password = "securePassword",
+            PhoneNumber = "454343",
+            PrivateId = "nagdiId",
+        };
+
+        var userRegisterResponse = await AuthService.RegisterUser(user);
+        var studentRegisterResponse = await AuthService.RegisterStudent(student);
+        
+        ConsoleUtilities.ResetMenu();
+        
+        if (userRegisterResponse.Success)
+        {
+            var registeredUserResponse = await UserService.GetUserByEmail(user.Email);
+            if (registeredUserResponse.Success)
+            {
+                var registeredUser = registeredUserResponse.Value;
+                Console.WriteLine($"User {registeredUser.FullName} successfully registered. (privateId: {registeredUser.PrivateId})");
+            }
+            else
+            {
+                Console.WriteLine(registeredUserResponse.Message);
+            }
         }
         else
         {
-            Console.WriteLine(registerResponse.Message);
-        }
-
-        ConsoleUtilities.ResetMenu();
-
-        var getUserResponse = await UserService.GetUserById(3);
-        if (getUserResponse.Success)
-        {
-            Console.WriteLine("User successfully retrieved");
-            DisplayManager.Print(getUserResponse.Value, " - ");
+            Console.WriteLine(userRegisterResponse.Message);
         }
         
+        ConsoleUtilities.ResetMenu();
+        
+        if (studentRegisterResponse.Success)
+        {
+            var registeredUserResponse = await UserService.GetUserByEmail(student.Email);
+            if (registeredUserResponse.Success)
+            {
+                var registeredStudent = registeredUserResponse.Value;
+                Console.WriteLine(
+                    $"Student - {registeredStudent.FullName} - successfully registered. PrivateId: {registeredStudent.PrivateId}");
+            }
+            else
+            {
+                Console.WriteLine(registeredUserResponse.Message);
+            }
+        }
+        else
+        {
+            Console.WriteLine(studentRegisterResponse.Message);
+        }
+
+
+        // var getUserResponse = await UserService.GetUserById(3);
+        // if (getUserResponse.Success)
+        // {
+        //     Console.WriteLine("User successfully retrieved");
+        //     DisplayManager.Print(getUserResponse.Value, " - ");
+        // }
+        //
         ConsoleUtilities.ResetMenu(userMessage: "Press any key to exit menu...");
     }
 }

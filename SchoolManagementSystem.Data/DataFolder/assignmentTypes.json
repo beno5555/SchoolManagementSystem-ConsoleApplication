@@ -1,0 +1,26 @@
+[
+  {
+    "Id": 1,
+    "Name": "Homework"
+  },
+  {
+    "Id": 2,
+    "Name": "Classwork"
+  },
+  {
+    "Id": 3,
+    "Name": "Test"
+  },
+  {
+    "Id": 4,
+    "Name": "Exam"
+  },
+  {
+    "Id": 5,
+    "Name": "Quiz"
+  },
+  {
+    "Id": 6,
+    "Name": "Project"
+  }
+]
