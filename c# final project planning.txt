@@ -1,3 +1,6 @@
+!DISCLAIMER - this is the plan that I came up with at the start of my project.
+some of the things may not match the current state of the projects and this file is not meant to serve as a guide to this project)
+
 project idea - school management system
 
 a console application that allows the students/teachers/principal and other school members to complete various operations for their school based on their user type (e.g. student cannot see information about other teacher, only principal can do that.)
