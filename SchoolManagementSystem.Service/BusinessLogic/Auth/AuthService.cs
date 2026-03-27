@@ -13,9 +13,7 @@ public class AuthService
     private readonly UserRepository _userRepository = new();
     private readonly GroupRepository _groupRepository = new();
     private readonly RoleRepository _roleRepository = new();
-    private readonly PasswordHasher _passwordHasher = new();
-    private readonly CredentialValidator _credentialValidator = new();
-    private readonly Mapper _mapper = new();
+    private readonly CredentialService _credentialService = new();
     
     #region Registration
     
@@ -66,7 +64,7 @@ public class AuthService
     where T : BaseRegisterDTO
     {
         BaseResponse response = new();
-        var validationResponse = await _credentialValidator.ValidateRegisterCredentials(registerDTO);
+        var validationResponse = await _credentialService.ValidateRegisterCredentials(registerDTO);
 
         if (validationResponse.Success)
         {
@@ -97,49 +95,19 @@ public class AuthService
     public async Task<DataResponse<UserDisplayDTO>> Login(LoginDTO loginDTO)
     {
         DataResponse<UserDisplayDTO> response = new();
-
-        if (loginDTO.Email is not null)
+        var userResponse = await _credentialService.GetUserByUniqueIdentifier(loginDTO);
+        
+        if (userResponse.Success)
         {
-            var userResponse = await _userRepository.GetByEmail(loginDTO.Email);
-            if (userResponse.Success)
-            {
-                var userToLogin = userResponse.Value;
-                var validPasswordResponse = _passwordHasher.VerifyPassword(
-                    loginDTO.Password, 
-                    userToLogin.PasswordHash, 
-                    userToLogin.PasswordSalt);
-                
-                if (validPasswordResponse.Success)
-                {
-                    var userDisplayDTO = await _mapper.UserToDisplayDTO(userToLogin);
-                    if (userDisplayDTO is not null)
-                    {
-                        response.SetData(userDisplayDTO);
-                    }
-                    else
-                    {
-                        response.SetStatus(false, "Could not identify role (temporary message)");
-                    }
-                }
-                else
-                {
-                    response.SetStatus(false, $"{validPasswordResponse.Message} for email: {userToLogin.Email}");
-                }
-            }
-        }
-        else if (loginDTO.PrivateId is not null)
-        {
-            
+            response = await _credentialService.AuthenticateUser(userResponse.Value, loginDTO.Password);
         }
         else
         {
-            response.SetStatus(false, 
-                $"Missing unique identifier ({nameof(loginDTO.Email)} or {nameof(loginDTO.PrivateId)})");
+            response.SetStatus(false, userResponse.Message);
         }
 
         return response;
     }
     
     #endregion
-    // private async Task<DataResponse<User>> ValidateBy(Func)
 }
