@@ -146,8 +146,8 @@ public class BaseRepository<T> where T : BaseModel
         await EnsureLoadAsync();
         DataResponse<T> response = new();
         var entity = _collection
-            .FirstOrDefault(filter)
-            ;
+            .FirstOrDefault(filter);
+        
         if (entity is not null)
         {
             response.SetData(entity);

@@ -9,12 +9,14 @@ namespace SchoolManagementSystem;
 
 public static class Menu
 {
-    private static readonly UserService UserService = new();
+    private static readonly RepositoryFactory Repos = new ();
+    private static readonly UserService UserService = new(Repos);
     private static readonly AuthService AuthService = new();
     public static async Task Run()
     {
         await Initializer.Execute();
 
+        // test
         var loginRequestDTO = new LoginDTO
         {
             Email = "superadmin@gmail.com",

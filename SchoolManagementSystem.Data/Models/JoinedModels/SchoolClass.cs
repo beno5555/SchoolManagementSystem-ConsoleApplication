@@ -1,6 +1,6 @@
 ﻿using SchoolManagementSystem.Data.Attributes;
 using SchoolManagementSystem.Data.Models.Base;
-using SchoolManagementSystem.Data.HelperClasses;
+
 namespace SchoolManagementSystem.Data.Models.JoinedModels;
 
 [FileNamePrefix("schoolClasses")]

@@ -1,5 +1,4 @@
 ﻿using ProjectHelperLibrary.Response;
-using ProjectHelperLibrary.Utilities;
 using SchoolManagementSystem.Data.Models;
 using SchoolManagementSystem.Data.Repositories;
 using SchoolManagementSystem.Service.DTOs.User.Auth;
@@ -13,6 +12,7 @@ public class CredentialService
     private readonly UserRepository _userRepository = new();
     private readonly Mapper _mapper = new();
     private readonly PasswordHasher _passwordHasher = new();
+
     #region Methods
     
     public async Task<DataResponse<User>> PrepareForRegistration(BaseRegisterDTO registerDTO)
@@ -52,7 +52,7 @@ public class CredentialService
         return response;
     }
 
-    public async Task<DataResponse<UserDisplayDTO>> AuthenticateUser(User userToAuthenticate, string password)
+    public async Task<DataResponse<UserDisplayDTO>> Authenticate(User userToAuthenticate, string password)
     {
         DataResponse<UserDisplayDTO> response = new();
 
@@ -103,4 +103,3 @@ public class CredentialService
     
     #endregion
 }
-

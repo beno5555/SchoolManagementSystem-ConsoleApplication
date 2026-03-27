@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-using SchoolManagementSystem.Data.HelperClasses;
+﻿using System.Text.Json.Serialization;
 
 namespace SchoolManagementSystem.Data.Models.Base
 {

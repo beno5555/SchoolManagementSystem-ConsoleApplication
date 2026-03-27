@@ -1,5 +1,4 @@
 ﻿using SchoolManagementSystem.Data.Attributes;
-using SchoolManagementSystem.Data.HelperClasses;
 
 namespace SchoolManagementSystem.Data.Models.JoinedModels;
 

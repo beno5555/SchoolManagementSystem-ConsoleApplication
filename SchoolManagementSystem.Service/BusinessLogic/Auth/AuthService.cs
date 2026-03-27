@@ -4,7 +4,6 @@ using SchoolManagementSystem.Data.Models;
 using SchoolManagementSystem.Data.Repositories;
 using SchoolManagementSystem.Service.DTOs.User.Auth;
 using SchoolManagementSystem.Service.DTOs.User.Display;
-using SchoolManagementSystem.Service.Mapping;
 
 namespace SchoolManagementSystem.Service.BusinessLogic.Auth;
 
@@ -98,7 +97,7 @@ public class AuthService
         
         if (userResponse.Success)
         {
-            response = await _credentialService.AuthenticateUser(userResponse.Value, loginDTO.Password);
+            response = await _credentialService.Authenticate(userResponse.Value, loginDTO.Password);
         }
         else
         {

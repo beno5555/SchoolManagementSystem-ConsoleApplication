@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-using ProjectHelperLibrary.Helpers;
-using ProjectHelperLibrary.Response;
+﻿using ProjectHelperLibrary.Response;
 using SchoolManagementSystem.Data.Config;
 using SchoolManagementSystem.Data.HelperClasses;
 using SchoolManagementSystem.Data.Models;

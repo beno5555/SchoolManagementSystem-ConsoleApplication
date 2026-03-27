@@ -1,31 +1,27 @@
 ﻿using ProjectHelperLibrary.Response;
 using SchoolManagementSystem.Data.Models.JoinedModels;
-using SchoolManagementSystem.Data.Repositories;
 using SchoolManagementSystem.Service.DTOs.User.Display;
-using SchoolManagementSystem.Service.Mapping;
 
 namespace SchoolManagementSystem.Service.BusinessLogic;
 
 public class UserService
 {
-    private readonly UserRepository _userRepository = new();
-    private readonly SubjectRepository _subjectRepository = new();
-    private readonly RoleRepository _roleRepository = new();
-    private readonly SubjectEnrollmentRepository _subjectEnrollmentRepository = new();
-    private readonly SchoolClassRepository _schoolClassRepository = new();
-    private readonly AssessmentRepository _assessmentRepository = new();
-    private readonly Mapper _mapper = new();
+    private readonly RepositoryFactory _repos;
+    public UserService(RepositoryFactory repos)
+    {
+        _repos = repos;
+    }
     
     #region User
 
     public async Task<DataResponse<UserDisplayDTO>> GetUserById(int id)
     {
         DataResponse<UserDisplayDTO> response = new();
-        var userResponse = await _userRepository.GetById(id);
+        var userResponse = await _repos.UserRepository.GetById(id);
         
         if (userResponse.Success)
         {
-            var userDisplay = await _mapper.UserToDisplayDTO(userResponse.Value);
+            var userDisplay = await _repos.Mapper.UserToDisplayDTO(userResponse.Value);
             if (userDisplay is not null)
             {
                 response.SetData(userDisplay);
@@ -50,16 +46,16 @@ public class UserService
     public async Task<DataResponse<decimal>> GetAverageSubjectGrade(int studentId, int subjectId)
     {
         DataResponse<decimal> response = new();
-        var classesResponse = await _schoolClassRepository.GetClassesBySubjectId(subjectId);
+        var classesResponse = await _repos.SchoolClassRepository.GetClassesBySubjectId(subjectId);
         if (classesResponse.Success)
         {
             var schoolClass = classesResponse.Value[0];
             var subjectEnrollmentResponse =
-                await _subjectEnrollmentRepository.GetByStudentAndClassIds(studentId, schoolClass.Id);
+                await _repos.SubjectEnrollmentRepository.GetByStudentAndClassIds(studentId, schoolClass.Id);
             if (subjectEnrollmentResponse.Success)
             {
                 var assessmentsResponse =
-                    await _assessmentRepository.GetBySubjectEnrollmentId(subjectEnrollmentResponse.Value.Id);
+                    await _repos.AssessmentRepository.GetBySubjectEnrollmentId(subjectEnrollmentResponse.Value.Id);
                 if (assessmentsResponse.Success)
                 {
                     var gradeValues = assessmentsResponse.Value.Select(assessment => assessment.GradeValue);
@@ -107,20 +103,21 @@ public class UserService
     public async Task<DataResponse<List<UserDisplayDTO>>> GetAllStudentsWithSubject(int subjectId)
     {
         var response = new DataResponse<List<UserDisplayDTO>>();
-        var classesResponse = await _schoolClassRepository.GetClassesBySubjectId(subjectId);
+        
+        var classesResponse = await _repos.SchoolClassRepository.GetClassesBySubjectId(subjectId);
 
         if (classesResponse.Success)
         {
             var classIds = classesResponse.Value.Select(c => c.Id).ToList();
-            var subjectEnrollments = await _subjectEnrollmentRepository.GetByClassIds(classIds);
+            var subjectEnrollments = await _repos.SubjectEnrollmentRepository.GetByClassIds(classIds);
             
             if (subjectEnrollments.Success)
             {
-                var studentsResponse = await _userRepository.GetStudentsBySubjectEnrollments(subjectEnrollments.Value);
+                var studentsResponse = await _repos.UserRepository.GetStudentsBySubjectEnrollments(subjectEnrollments.Value);
                 
                 if (studentsResponse.Success)
                 {
-                    var dtosResponse = await _mapper.UsersToDisplayDTOs(studentsResponse.Value);
+                    var dtosResponse = await _repos.Mapper.UsersToDisplayDTOs(studentsResponse.Value);
                     
                     if (dtosResponse.Success)
                     {
@@ -156,12 +153,12 @@ public class UserService
     private async Task<DataResponse<SubjectEnrollment>> GetSubjectEnrollment(int studentId, int subjectId)
     {
         DataResponse<SubjectEnrollment> response = new();
-        var classesResponse = await _schoolClassRepository.GetClassesBySubjectId(subjectId);
+        var classesResponse = await _repos.SchoolClassRepository.GetClassesBySubjectId(subjectId);
         if (classesResponse.Success)
         {
             var schoolClass = classesResponse.Value[0];
             var subjectEnrollmentResponse =
-                await _subjectEnrollmentRepository.GetByStudentAndClassIds(studentId, schoolClass.Id);
+                await _repos.SubjectEnrollmentRepository.GetByStudentAndClassIds(studentId, schoolClass.Id);
         }
         
         return response;
@@ -174,11 +171,11 @@ public class UserService
     public async Task<DataResponse<UserDisplayDTO>> GetUserByEmail(string email)
     {
         DataResponse<UserDisplayDTO> response = new();
-        var userByEmailResponse = await _userRepository.GetByEmail(email);
+        var userByEmailResponse = await _repos.UserRepository.GetByEmail(email);
 
         if (userByEmailResponse.Success)
         {
-            var dto = await _mapper.UserToDisplayDTO(userByEmailResponse.Value);
+            var dto = await _repos.Mapper.UserToDisplayDTO(userByEmailResponse.Value);
             if (dto is not null)
             {
                 response.SetData(dto);

@@ -1,7 +1,7 @@
 ﻿using ProjectHelperLibrary.Response;
 using SchoolManagementSystem.Data.Models;
 using SchoolManagementSystem.Data.Repositories;
-using SchoolManagementSystem.Service.BusinessLogic;
+using SchoolManagementSystem.Service.BusinessLogic.Auth;
 using SchoolManagementSystem.Service.DTOs.User.Auth;
 using SchoolManagementSystem.Service.DTOs.User.Display;
 

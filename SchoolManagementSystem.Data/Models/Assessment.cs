@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using SchoolManagementSystem.Data.Attributes;
-using SchoolManagementSystem.Data.HelperClasses;
 using SchoolManagementSystem.Data.Models.Base;
 using SchoolManagementSystem.Data.Models.JoinedModels;
 

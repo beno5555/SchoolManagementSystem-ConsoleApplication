@@ -1,6 +1,4 @@
-﻿using SchoolManagementSystem.Data.Models;
-
-namespace SchoolManagementSystem.Service.Display;
+﻿namespace SchoolManagementSystem.Service.Display;
 
 public static class DisplayManager
 {

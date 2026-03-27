@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using SchoolManagementSystem.Data.Attributes;
 using SchoolManagementSystem.Data.Config;
-using SchoolManagementSystem.Data.HelperClasses;
 using SchoolManagementSystem.Data.Models.Base;
 using SchoolManagementSystem.Data.Models.JoinedModels;
 
@@ -26,6 +26,9 @@ public class Assignment : BaseModel
 
     public DateTime UploadedAt { get; set; } = DateTime.Now;
     public DateTime DueDate { get; set; }
+    
+    [JsonIgnore]
+    public bool IsOverdue => AssignmentStatus == SchoolEnums.AssignmentStatus.Pending && DueDate < DateTime.Now;
 
     public Assignment(string name, int assignmentTypeId,  DateTime dueDate, string description = "")
     {
