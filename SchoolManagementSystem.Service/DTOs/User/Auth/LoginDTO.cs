@@ -1,6 +1,6 @@
 ﻿namespace SchoolManagementSystem.Service.DTOs.User.Auth;
 
-public class LoginDto
+public class LoginDTO
 {
     public string? Email { get; set; } = string.Empty;
     public string? PrivateId { get; set; } = string.Empty;

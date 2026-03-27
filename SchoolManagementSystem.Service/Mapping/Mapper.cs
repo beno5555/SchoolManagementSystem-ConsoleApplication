@@ -1,6 +1,7 @@
 ﻿using ProjectHelperLibrary.Response;
 using SchoolManagementSystem.Data.Models;
 using SchoolManagementSystem.Data.Repositories;
+using SchoolManagementSystem.Service.BusinessLogic;
 using SchoolManagementSystem.Service.DTOs.User.Auth;
 using SchoolManagementSystem.Service.DTOs.User.Display;
 
@@ -11,16 +12,14 @@ public class Mapper
     private readonly RoleRepository _roleRepository = new();
     private readonly GroupRepository _groupRepository = new();
     private readonly RoomRepository _roomRepository = new();
+    private readonly PasswordHasher _passwordHasher = new();
     
-    private async Task<bool> ValidRoleId(int id)
-    {
-        return await _roleRepository.ExistsAsync(id);
-    }
     #region Singles
     
-    public async Task<UserDisplayDto?> UserToDisplayDTO(User user)
+    #region Users
+    public async Task<UserDisplayDTO?> UserToDisplayDTO(User user)
     {
-        UserDisplayDto? result = null;
+        UserDisplayDTO? result = null;
 
         string? groupName = null;
         string? officeRoomName = null;
@@ -40,7 +39,7 @@ public class Mapper
         var roleResponse = await _roleRepository.GetById(user.RoleId);
         if (roleResponse.Success)
         {
-            var dto = new UserDisplayDto
+            var dto = new UserDisplayDTO
             {
                 FullName = user.FullName,
                 Email = user.Email,
@@ -58,41 +57,41 @@ public class Mapper
         return result;
     }
 
-    public async Task<User?> RegisterDTOToUser(RegisterDTO registerDTO)
+    public User RegisterDTOToUser(BaseRegisterDTO registerDTO)
     {
-        User? result = null;
+        var (hash, salt) = _passwordHasher.HashPassword(registerDTO.Password);
 
-        if (await ValidRoleId(registerDTO.RoleId))
+        var result = new User
         {
-            result = new User
-            {
-                FirstName =  registerDTO.FirstName,
-                LastName =  registerDTO.LastName,
-                Email =  registerDTO.Email,
-                PhoneNumber =  registerDTO.PhoneNumber,
-                PasswordHash = registerDTO.Password,
-                Address = registerDTO.Address,
-                PrivateId =  registerDTO.PrivateId,
-                
-                DateOfBirth = registerDTO.DateOfBirth,
-                RegistrationDate = registerDTO.RegistrationDate,
-                RoleId = registerDTO.RoleId,
-            };
-        }
+            FirstName =  registerDTO.FirstName,
+            LastName =  registerDTO.LastName,
+            Email =  registerDTO.Email,
+            PhoneNumber =  registerDTO.PhoneNumber,
+            PasswordHash = hash,
+            PasswordSalt = salt,
+            Address = registerDTO.Address,
+            PrivateId =  registerDTO.PrivateId,
+            
+            DateOfBirth = registerDTO.DateOfBirth,
+            RegistrationDate = registerDTO.RegistrationDate,
+        };
         
         return result;
     }
+    
+    #endregion
+    
     #endregion
     
     #region Collections
-    public async Task<DataResponse<List<UserDisplayDto>>> UsersToDisplayDTOs(List<User> users)
+    public async Task<DataResponse<List<UserDisplayDTO>>> UsersToDisplayDTOs(List<User> users)
     {
-        DataResponse<List<UserDisplayDto>> response = new();
+        DataResponse<List<UserDisplayDTO>> response = new();
 
         var tasks = users.Select(UserToDisplayDTO);
         var mappingResult = await Task.WhenAll(tasks);
         
-        List<UserDisplayDto> userDisplayDTOs = mappingResult.OfType<UserDisplayDto>().ToList();
+        List<UserDisplayDTO> userDisplayDTOs = mappingResult.OfType<UserDisplayDTO>().ToList();
         if (userDisplayDTOs.Any())
         {
             if (userDisplayDTOs.Count == users.Count)

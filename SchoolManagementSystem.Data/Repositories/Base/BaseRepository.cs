@@ -8,7 +8,6 @@ public class BaseRepository<T> where T : BaseModel
 {
     protected readonly List<T> _collection;
     private bool _loaded;
-    private bool _isDirty;
     
     protected BaseRepository(List<T> collection)
     {
@@ -26,30 +25,21 @@ public class BaseRepository<T> where T : BaseModel
         }
     }
     
-    public async Task SaveAsync()
-    {
-        if (_isDirty)
-        {
-            await _collection.SaveAsync();
-            _isDirty = false;
-        }
-    }
-    
     #endregion
     
     #region Modifying
     
-    private void AddInternal(T entity)
+    private async Task AddInternal(T entity)
     {
         entity.Id = IdGenerator.Next<T>();
         _collection.Add(entity);
-        _isDirty = true;
     }
     
     public async Task AddAsync(T entity)
     {
         await EnsureLoadAsync();
-        AddInternal(entity);
+        await AddInternal(entity);
+        await _collection.SaveAsync();
     }
 
     public async Task AddRangeAsync(IEnumerable<T> entities)
@@ -57,8 +47,9 @@ public class BaseRepository<T> where T : BaseModel
         await EnsureLoadAsync();
         foreach (var entity in entities)
         {
-            AddInternal(entity);
+            await AddInternal(entity);
         }
+        await _collection.SaveAsync();
     }
 
     public async Task<BaseResponse> UpdateAsync(T entity)
@@ -71,7 +62,7 @@ public class BaseRepository<T> where T : BaseModel
         {
             int index = _collection.IndexOf(entityFound);
             _collection[index] = entity;
-            _isDirty = true;
+            await _collection.SaveAsync();
         }
         else
         {
@@ -90,7 +81,7 @@ public class BaseRepository<T> where T : BaseModel
         if (entity is not null)
         {
             _collection.Remove(entity);
-            _isDirty = true;
+            await _collection.SaveAsync();
         }
         else
         {
@@ -135,8 +126,22 @@ public class BaseRepository<T> where T : BaseModel
         bool exists = _collection.Any(entity => entity.Id == id);
         return exists;
     }
+
+    public async Task<bool> ExistsAsync(Func<T, bool> filter)
+    {
+        await EnsureLoadAsync();
+        bool exists = _collection.Any(filter);
+        return exists;
+    }
+
+    public async Task<int> GetIdBy(Func<T, bool> filter)
+    {
+        var entityResponse = await GetSingle(filter);
+        var result = entityResponse.Success ? entityResponse.Value.Id : -1;
+        return result;
+    }
     
-    public async Task<DataResponse<T>> GetSingle(Func<T, bool> filter, string errorMessage)
+    public async Task<DataResponse<T>> GetSingle(Func<T, bool> filter, string errorMessage = "")
     {
         await EnsureLoadAsync();
         DataResponse<T> response = new();

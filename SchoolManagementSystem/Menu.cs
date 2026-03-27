@@ -1,6 +1,7 @@
 ﻿using ProjectHelperLibrary.Utilities;
 using SchoolManagementSystem.Service;
 using SchoolManagementSystem.Service.BusinessLogic;
+using SchoolManagementSystem.Service.BusinessLogic.Auth;
 using SchoolManagementSystem.Service.Display;
 using SchoolManagementSystem.Service.DTOs.User.Auth;
 
@@ -14,7 +15,7 @@ public static class Menu
     {
         await Initializer.Execute();
 
-        var user = new RegisterDTO
+        var user = new AdminRegisterDTO
         {
             FirstName = "meore sandro",
             LastName = "benashvili",
@@ -40,10 +41,13 @@ public static class Menu
 
         ConsoleUtilities.ResetMenu();
 
-        var getUserResponse = await UserService.GetUserById(1);
+        var getUserResponse = await UserService.GetUserById(3);
         if (getUserResponse.Success)
         {
-            DisplayManager.Print(getUserResponse.Value);
+            Console.WriteLine("User successfully retrieved");
+            DisplayManager.Print(getUserResponse.Value, " - ");
         }
+        
+        ConsoleUtilities.ResetMenu(userMessage: "Press any key to exit menu...");
     }
 }

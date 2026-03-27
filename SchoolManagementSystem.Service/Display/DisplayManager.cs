@@ -19,7 +19,7 @@ public static class DisplayManager
     }
     
 
-    public static void Print<T>(T objectToPrint) where T : class
+    public static void Print<T>(T objectToPrint, string divider = ": ") where T : class
     {
         var properties = objectToPrint.GetType().GetProperties();
         foreach (var property in properties)
@@ -28,7 +28,7 @@ public static class DisplayManager
             var value = property.GetValue(objectToPrint);
             if (value is not null)
             {
-                Console.WriteLine($"{name}: {value}");
+                Console.WriteLine($"{name}{divider}{value}");
             }
         }
     }

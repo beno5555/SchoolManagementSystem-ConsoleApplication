@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using SchoolManagementSystem.Data.Models;
+﻿using SchoolManagementSystem.Data.Models;
+using System.Reflection;
 
 namespace SchoolManagementSystem.Data.HelperClasses;
 

@@ -58,6 +58,14 @@ public class UserRepository : BaseRepository<User>
         return response;
     }
 
+    public async Task<DataResponse<User>> GetByPrivateId(string privateId)
+    {
+        var response = await GetSingle(
+            user => user.PrivateId.Equals(privateId, StringComparison.OrdinalIgnoreCase),
+            $"User with privateId: {privateId} not found");
+        return response;
+    }
+
     public async Task<DataResponse<User>> GetByOfficeRoomId(int officeRoomId)
     {
         var response = await GetSingle(
@@ -76,6 +84,20 @@ public class UserRepository : BaseRepository<User>
                 user.HasRole(SchoolEnums.RoleName.Teacher),
             "Could not find the teacher with this group");
         return response;
+    }
+    
+    #endregion
+    
+    #region Exists by
+
+    public async Task<bool> ExistsByEmail(string email)
+    {
+        return await ExistsAsync(user => user.Email.Equals(email));
+    }
+
+    public async Task<bool> ExistsByPrivateId(string privateId)
+    {
+        return await ExistsAsync(user => user.PrivateId.Equals(privateId));
     }
     
     #endregion

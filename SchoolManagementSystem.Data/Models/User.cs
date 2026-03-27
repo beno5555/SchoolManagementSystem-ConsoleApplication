@@ -1,4 +1,5 @@
-﻿using ProjectHelperLibrary.Utilities;
+﻿using System.Text.Json.Serialization;
+using ProjectHelperLibrary.Utilities;
 using SchoolManagementSystem.Data.Attributes;
 using SchoolManagementSystem.Data.Config;
 using SchoolManagementSystem.Data.HelperClasses;
@@ -13,12 +14,15 @@ public class User : BaseModel
 
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
+    
+    [JsonIgnore]
     public string FullName => $"{FirstName.ToCapitalized()} {LastName.ToCapitalized()}";
     public string PhoneNumber { get; set; } = string.Empty;
     public string Address { get; set; } = string.Empty;
     public string PrivateId { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
     public string PasswordHash { get; set; } = string.Empty;
+    public string PasswordSalt { get; set; } = string.Empty;
     public DateTime DateOfBirth { get; set; } 
     public DateTime RegistrationDate { get; set; } = DateTime.Now;
     

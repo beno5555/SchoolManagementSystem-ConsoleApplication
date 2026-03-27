@@ -44,7 +44,7 @@ public class Program
         // var studentsResponse = await userService.GetAllStudentsWithSubject(1);
         // if (studentsResponse.Success)
         // {
-        //     List<UserDisplayDto> students = studentsResponse.Value;
+        //     List<UserDisplayDTO> students = studentsResponse.Value;
         //     // DisplayManager.PrintCollection(students);
         // }
         // else

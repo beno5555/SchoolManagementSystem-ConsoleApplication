@@ -18,9 +18,9 @@ public class UserService
     
     #region User
 
-    public async Task<DataResponse<UserDisplayDto>> GetUserById(int id)
+    public async Task<DataResponse<UserDisplayDTO>> GetUserById(int id)
     {
-        DataResponse<UserDisplayDto> response = new();
+        DataResponse<UserDisplayDTO> response = new();
         var userResponse = await _userRepository.GetById(id);
         
         if (userResponse.Success)
@@ -104,9 +104,9 @@ public class UserService
 
     #region Subject
 
-    public async Task<DataResponse<List<UserDisplayDto>>> GetAllStudentsWithSubject(int subjectId)
+    public async Task<DataResponse<List<UserDisplayDTO>>> GetAllStudentsWithSubject(int subjectId)
     {
-        var response = new DataResponse<List<UserDisplayDto>>();
+        var response = new DataResponse<List<UserDisplayDTO>>();
         var classesResponse = await _schoolClassRepository.GetClassesBySubjectId(subjectId);
 
         if (classesResponse.Success)

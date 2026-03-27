@@ -1,9 +1,9 @@
 ﻿namespace SchoolManagementSystem.Service.DTOs.User.Auth;
 
 /// <summary>
-/// register from administration
+/// for self register
 /// </summary>
-public class RegisterDTO
+public class BaseRegisterDTO
 {
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
@@ -14,6 +14,4 @@ public class RegisterDTO
     public string Password { get; set; } = string.Empty;
     public DateTime DateOfBirth { get; set; }
     public DateTime RegistrationDate { get; set; } = DateTime.Now;
-
-    public int RoleId { get; set; }
 }
