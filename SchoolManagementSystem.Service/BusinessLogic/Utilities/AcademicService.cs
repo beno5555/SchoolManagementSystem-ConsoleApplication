@@ -3,9 +3,10 @@ using SchoolManagementSystem.Data.Models;
 using SchoolManagementSystem.Data.Models.Academic;
 using SchoolManagementSystem.Data.Models.Named;
 using SchoolManagementSystem.Data.Models.JoinedModels;
-using SchoolManagementSystem.Service.BusinessLogic.Factories;
-using SchoolManagementSystem.Service.DTOs.StudentJournal;
+using SchoolManagementSystem.Service.DTOs.Academic.Assessments;
 using SchoolManagementSystem.Service.DTOs.User.Display;
+using SchoolManagementSystem.Service.BusinessLogic.Factories;
+using SchoolManagementSystem.Service.DTOs.Academic.Submissions;
 
 namespace SchoolManagementSystem.Service.BusinessLogic.Utilities;
 
@@ -23,24 +24,79 @@ public class AcademicService
     }
     
     #region Assessments & Grades
-    
-    public async Task<BaseResponse> CreateAssessment(SubjectEnrollment subjectEnrollment, AssessmentDTO assessmentDTO)
+    public async Task<BaseResponse> CreateSubmission(SubjectEnrollment subjectEnrollment, SubmissionDTO submissionDTO)
     {
         var response = new BaseResponse();
-        var toAssessmentResponse = await _mapperService.ToAssessment(assessmentDTO, subjectEnrollment.Id);
-            
-        if (toAssessmentResponse.Success)
+
+        bool submissionExists =
+            await _repos.SubmissionRepository.ExistsByAssignmentAndSubjectEnrollmentIds(submissionDTO.AssignmentId,
+                subjectEnrollment.Id);
+        if (!submissionExists)
         {
-            response = await ApplyAssessment(subjectEnrollment, toAssessmentResponse.Value);
+            var toSubmissionResponse = await _mapperService.ToSubmission(submissionDTO, subjectEnrollment.Id);
+            
+            if (toSubmissionResponse.Success)
+            {
+                response = await ApplySubmission(toSubmissionResponse.Value);
+            }
+            else
+            {
+                response.SetStatus(false, toSubmissionResponse.Message);
+            }
         }
         else
         {
-            response.SetStatus(false, toAssessmentResponse.Message);
+            response.SetStatus(false, "Assignment has already been submitted by the student");
         }
 
         return response;
     }
-    private async Task<BaseResponse> ApplyAssessment(SubjectEnrollment subjectEnrollment, Assessment newAssessment)
+    private async Task<BaseResponse> ApplySubmission(Submission submission)
+    {
+        var response = new BaseResponse();
+        var assignmentResponse = await _repos.AssignmentRepository.GetById(submission.AssignmentId);
+        if (assignmentResponse.Success)
+        {
+            var assignment = assignmentResponse.Value;
+            submission.MarkSubmitted(assignment.IsOverdue);
+            
+            await _repos.SubmissionRepository.AddAsync(submission);
+        }
+        else
+        {
+            response.SetStatus(false, assignmentResponse.Message);
+        }
+
+        return response;
+    }
+
+    public async Task<BaseResponse> CreateAssessment(SubjectEnrollment subjectEnrollment, AssessmentDTO assessmentDTO)
+    {
+        var response = new BaseResponse();
+        var submissionResponse = await _repos.SubmissionRepository.GetById(assessmentDTO.SubmissionId);
+
+        if (submissionResponse.Success)
+        {
+            var submission = submissionResponse.Value;
+            var toAssessmentResponse = await _mapperService.ToAssessment(assessmentDTO, submission); // reroute to assignmentId
+                
+            if (toAssessmentResponse.Success)
+            {
+                response = await ApplyAssessment(subjectEnrollment, toAssessmentResponse.Value, submission);
+            }
+            else
+            {
+                response.SetStatus(false, toAssessmentResponse.Message);
+            }
+        }
+        else
+        {
+            response.SetStatus(false, submissionResponse.Message);
+        }
+
+        return response;
+    }
+    private async Task<BaseResponse> ApplyAssessment(SubjectEnrollment subjectEnrollment, Assessment newAssessment, Submission assessedSubmission)
     {
         return await _methodHelper.Execute<BaseResponse, BaseResponse>(async _ =>
         {
@@ -48,6 +104,8 @@ public class AcademicService
             
             if (updateSubject.Success)
             {
+                assessedSubmission.MarkReviewed();
+                await _repos.SubmissionRepository.UpdateAsync(assessedSubmission);
                 await _repos.AssessmentRepository.AddAsync(newAssessment);
             }
             
@@ -74,6 +132,7 @@ public class AcademicService
                 
                 if (subjectUpdatedResponse.Success)
                 {
+                    // success
                     var studentUpdateResponse = await UpdateStudentGrade(studentResponse.Value, newGrade);
                     
                     if (!studentUpdateResponse.Success)

@@ -1,20 +1,16 @@
 ﻿using ProjectHelperLibrary.Response;
 using SchoolManagementSystem.Data.Models;
 using SchoolManagementSystem.Data.Models.Academic;
-using SchoolManagementSystem.Service.BusinessLogic.Factories;
-using SchoolManagementSystem.Service.DTOs.StudentJournal;
+using SchoolManagementSystem.Service.DTOs.Academic.Assessments;
 using SchoolManagementSystem.Service.DTOs.User.Auth;
 using SchoolManagementSystem.Service.DTOs.User.Display;
+using SchoolManagementSystem.Service.BusinessLogic.Factories;
+using SchoolManagementSystem.Service.DTOs.Academic.Submissions;
 
 namespace SchoolManagementSystem.Service.BusinessLogic.Utilities;
 
 public class MapperService
 {
-    // private readonly RoleRepository _roleRepository = new();
-    // private readonly GroupRepository _groupRepository = new();
-    // private readonly RoomRepository _roomRepository = new();
-    // private readonly PasswordHasher _passwordHasher = new();
-
     private readonly RepositoryFactory _repos;
     private readonly PasswordHasher _passwordHasher;
     private readonly MethodHelper _helper;
@@ -128,34 +124,43 @@ public class MapperService
     }
     #endregion
 
-    public async Task<DataResponse<Assessment>> ToAssessment(AssessmentDTO assessmentDTO, int subjectEnrollmentId)
+    public async Task<DataResponse<Assessment>> ToAssessment(AssessmentDTO assessmentDTO, Submission submission)
     {
         var response = new DataResponse<Assessment>();
+        var assessment = new Assessment
+        {
+            GradeValue = assessmentDTO.NewGradeValue,
+            VerbalAssessment = assessmentDTO.VerbalAssessment,
+            
+            SubmissionId = assessmentDTO.SubmissionId,
+            AssignmentId = submission.AssignmentId
+        };
+        response.SetData(assessment);
 
-        var assignmentExists = await _repos.AssignmentRepository.ExistsAsync(assessmentDTO.SubmissionId);
-        
+        return response;
+    }
+
+    public async Task<DataResponse<Submission>> ToSubmission(SubmissionDTO submissionDTO, int subjectEnrollmentId)
+    {
+        var response = new DataResponse<Submission>();
+        var assignmentExists = await _repos.AssignmentRepository.ExistsAsync(submissionDTO.AssignmentId);
+
         if (assignmentExists)
         {
-            var submissionResponse = await _repos.SubmissionRepository.GetById(assessmentDTO.SubmissionId);
-            
-            if (submissionResponse.Success)
+            var submission = new Submission
             {
-                var assessment = new Assessment
-                {
-                    GradeValue = assessmentDTO.NewGradeValue,
-                    VerbalAssessment = assessmentDTO.VerbalAssessment,
-                    
-                    SubmissionId = assessmentDTO.SubmissionId,
-                    AssignmentId = submissionResponse.Value.AssignmentId
-                };
-                response.SetData(assessment);
-            }
+                SubmissionContent = submissionDTO.SubmissionContent,
+                StudentComment = submissionDTO.StudentComment,
+                AssignmentId =  submissionDTO.AssignmentId,
+                SubjectEnrollmentId = subjectEnrollmentId
+            };
+            response.SetData(submission);
         }
         else
         {
             response.SetStatus(false, "Assignment not found");
         }
-
+        
         return response;
     }
 }

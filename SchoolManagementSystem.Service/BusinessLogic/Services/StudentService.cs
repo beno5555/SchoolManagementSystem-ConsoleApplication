@@ -3,7 +3,8 @@ using ProjectHelperLibrary.Response;
 using SchoolManagementSystem.Data.Models;
 using SchoolManagementSystem.Data.Models.JoinedModels;
 using SchoolManagementSystem.Service.BusinessLogic.Factories;
-using SchoolManagementSystem.Service.DTOs.StudentJournal;
+using SchoolManagementSystem.Service.DTOs.Academic.Assessments;
+using SchoolManagementSystem.Service.DTOs.Academic.Submissions;
 using SchoolManagementSystem.Service.DTOs.User.Display;
 
 namespace SchoolManagementSystem.Service.BusinessLogic.Services;
@@ -122,13 +123,12 @@ public class StudentService
     
     #endregion
 
-    #region New Assessment
+    #region New Assessment, Submissions, Assignments...
     public async Task<BaseResponse> AssessStudent(int studentId, int subjectId, AssessmentDTO assessmentDTO)
     {
         var response = new BaseResponse();
 
         var subjectEnrollmentResponse = await _utilities.AcademicService.GetSubjectEnrollment(studentId, subjectId);
-        
         if (subjectEnrollmentResponse.Success)
         {
             var subjectEnrollment = subjectEnrollmentResponse.Value;
@@ -142,6 +142,18 @@ public class StudentService
         return response;
     }
 
+    public async Task<BaseResponse> SubmitWork(int studentId, int subjectId, SubmissionDTO submissionDTO)
+    {
+        var response = new BaseResponse();
+        var subjectEnrollmentResponse = await _utilities.AcademicService.GetSubjectEnrollment(studentId, subjectId);
+
+        if (subjectEnrollmentResponse.Success)
+        {
+            response = await _utilities.AcademicService.CreateSubmission(subjectEnrollmentResponse.Value, submissionDTO);
+        }
+
+        return response;
+    }
     #endregion
     
     #endregion

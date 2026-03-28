@@ -30,4 +30,20 @@ public class SubmissionRepository : BaseRepository<Submission>
             submission => assignmentIds.Contains(submission.AssignmentId),
             "Submissions associated with these assignments were not found");
     }
+
+    public async Task<DataResponse<Submission>> GetByAssignmentAndSubjectEnrollmentIds(int assignmentId,
+        int subjectEnrollmentId)
+    {
+        return await GetSingle(
+            submission => submission.AssignmentId == assignmentId &&
+                          submission.SubjectEnrollmentId == subjectEnrollmentId,
+            "Submission linked to the assignment and enrollment were not found");
+    }
+
+    public async Task<bool> ExistsByAssignmentAndSubjectEnrollmentIds(int assignmentId,
+        int subjectEnrollmentId)
+    {
+        return await ExistsAsync(submission => submission.AssignmentId == assignmentId &&
+                                               submission.SubjectEnrollmentId == subjectEnrollmentId);
+    }
 }

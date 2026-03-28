@@ -1,4 +1,4 @@
-﻿namespace SchoolManagementSystem.Service.DTOs.StudentJournal;
+﻿namespace SchoolManagementSystem.Service.DTOs.Academic.Assessments;
 
 public class AssessmentDTO
 {

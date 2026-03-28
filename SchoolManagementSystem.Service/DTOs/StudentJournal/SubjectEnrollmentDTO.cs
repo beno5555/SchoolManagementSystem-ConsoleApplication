@@ -1,4 +1,5 @@
-﻿using SchoolManagementSystem.Service.DTOs.Assignments;
+﻿using SchoolManagementSystem.Service.DTOs.Academic.Assessments;
+using SchoolManagementSystem.Service.DTOs.Assignments;
 
 namespace SchoolManagementSystem.Service.DTOs.StudentJournal;
 

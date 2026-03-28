@@ -35,9 +35,8 @@ public static class SchoolEnums
     public enum AssignmentStatus
     {
         Pending = 0,
-        Submitted,
         OverDue,
-        Reviewed
+        Submitted,
     }
     
     public enum AssignmentTypeName
@@ -96,5 +95,13 @@ public static class SchoolEnums
         Storage,
         Gym,
         Restroom
+    }
+
+    public enum SubmissionStatus
+    {
+        Submitted = 1,
+        SubmittedLate,
+        Reviewed,
+        ReviewedLate
     }
 }
