@@ -35,23 +35,25 @@ Seeing their final grade (all subjects combined) - DONE
 Seeing their own journal;
 Seeing if there is any homework due in his class;
 submitting homework;
-rating a teacher;
 updating their own profile;
 
 teachers:
+assessing the assignment of a specific student that has submitted the assignment - DONE
+
+
+
 getting information about any of their students by id;
 getting a list of all their students;
 getting a list of students from a specific group that they are teaching;
 getting a list of subjects they are teaching.
 uploading homework for one or more groups;
-assessing the assignment of a specific student that has submitted the assignment;
-writing verbal assessment for a specific student;
 Scheduling the test for a group;
-Assessing the test.
 
 principals:
-getting a list of all the students;
 getting a list of all students tied to a specific subject;
+getting a list of all the students;
+
+
 getting a list of all students tied to a specific teacher;
 getting a list of all students in a specific group;
 getting a list of students within a specific grade range;

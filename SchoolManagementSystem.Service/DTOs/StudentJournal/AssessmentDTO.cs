@@ -2,7 +2,7 @@
 
 public class AssessmentDTO
 {
-    public decimal NewGrade { get; set; }
-    public int AssignmentId { get; set; }
-    public string? Comment { get; set; } 
+    public decimal NewGradeValue { get; set; }
+    public int SubmissionId { get; set; }
+    public string? VerbalAssessment { get; set; } 
 }

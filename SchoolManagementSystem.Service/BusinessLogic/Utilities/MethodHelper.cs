@@ -1,5 +1,7 @@
 ﻿using System.Numerics;
 using ProjectHelperLibrary.Response;
+using SchoolManagementSystem.Data.Models.Base;
+using SchoolManagementSystem.Data.Models.JoinedModels;
 
 namespace SchoolManagementSystem.Service.BusinessLogic.Utilities;
 
@@ -48,5 +50,10 @@ public class MethodHelper
         }
 
         return response;
+    }
+
+    public List<int> GetIds<T>(List<T> entities) where T : BaseModel
+    {
+        return entities.Select(e => e.Id).ToList();
     }
 }

@@ -1,7 +1,9 @@
 ﻿using SchoolManagementSystem.Data.Config;
 using SchoolManagementSystem.Data.HelperClasses;
 using SchoolManagementSystem.Data.Models;
+using SchoolManagementSystem.Data.Models.Academic;
 using SchoolManagementSystem.Data.Models.JoinedModels;
+using SchoolManagementSystem.Data.Models.Named;
 
 namespace SchoolManagementSystem.Data;
 
@@ -30,6 +32,7 @@ public static class SchoolContext
     // types
     public static List<RoomType> RoomTypes { get; set; } = new();
     public static List<AssignmentType> AssignmentTypes { get; set; } = new(AppConstants.MaximumCount.AssignmentTypes);
+    public static List<Submission> Submissions { get; set; } = new();
 
     #endregion
     
@@ -85,11 +88,12 @@ public static class SchoolContext
 
     private static List<IGrouping<int, Assessment>> GetSubjectEnrollmentAssessments(IEnumerable<int> subjectEnrollmentIds)
     {
-        return Assessments
-            .Where(assessment => subjectEnrollmentIds
-                .Contains(assessment.Id))
-            .GroupBy(assessment => assessment.SubjectEnrollmentId)
-            .ToList();
+        return null;
+        // return Assessments
+        //     .Where(assessment => subjectEnrollmentIds
+        //         .Contains(assessment.Id))
+        //     .GroupBy(assessment => assessment.)
+        //     .ToList();
     }
 
     private static List<decimal> GetAverageGradePerSubject(List<IGrouping<int, Assessment>> subjectEnrollmentAssessments)

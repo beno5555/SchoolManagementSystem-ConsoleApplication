@@ -1,4 +1,4 @@
-﻿using SchoolManagementSystem.Data.Models;
+﻿using SchoolManagementSystem.Data.Models.Named;
 using SchoolManagementSystem.Data.Repositories.Base;
 
 namespace SchoolManagementSystem.Data.Repositories;

@@ -4,21 +4,20 @@ using SchoolManagementSystem.Data.Attributes;
 using SchoolManagementSystem.Data.Config;
 using SchoolManagementSystem.Data.Models.Base;
 using SchoolManagementSystem.Data.Models.JoinedModels;
+using SchoolManagementSystem.Data.Models.Named;
 
-namespace SchoolManagementSystem.Data.Models;
+namespace SchoolManagementSystem.Data.Models.Academic;
 
 [FileNamePrefix("assignments")]
 public class Assignment : BaseModel
 
 {
-    [MaxLength(70)]
     public string AssignmentName { get; set; } 
 
     [Reference<AssignmentType>]
     public int AssignmentTypeId { get; set; }
     
     public SchoolEnums.AssignmentStatus AssignmentStatus { get; set; } = SchoolEnums.AssignmentStatus.Pending;
-    [MaxLength(500)]
     public string Description { get; set; } = string.Empty;
     
     [Reference<GroupClass>]

@@ -1,8 +1,7 @@
-﻿using System.Runtime.CompilerServices;
-using ProjectHelperLibrary.Response;
-using ProjectHelperLibrary.Utilities;
+﻿using ProjectHelperLibrary.Response;
 using SchoolManagementSystem.Data.Models;
-using SchoolManagementSystem.Data.Models.Base;
+using SchoolManagementSystem.Data.Models.Academic;
+using SchoolManagementSystem.Data.Models.Named;
 using SchoolManagementSystem.Data.Models.JoinedModels;
 using SchoolManagementSystem.Service.BusinessLogic.Factories;
 using SchoolManagementSystem.Service.DTOs.StudentJournal;
@@ -14,13 +13,13 @@ public class AcademicService
 {
     private readonly RepositoryFactory _repos;
     private readonly MapperService _mapperService;
-    private readonly MethodHelper _helper;
+    private readonly MethodHelper _methodHelper;
 
-    public AcademicService(RepositoryFactory repos, MapperService mapperService, MethodHelper helper)
+    public AcademicService(RepositoryFactory repos, MapperService mapperService, MethodHelper methodHelper)
     {
         _repos = repos;
         _mapperService = mapperService;
-        _helper = helper;
+        _methodHelper = methodHelper;
     }
     
     #region Assessments & Grades
@@ -41,10 +40,9 @@ public class AcademicService
 
         return response;
     }
-
     private async Task<BaseResponse> ApplyAssessment(SubjectEnrollment subjectEnrollment, Assessment newAssessment)
     {
-        return await _helper.Execute<BaseResponse, BaseResponse>(async _ =>
+        return await _methodHelper.Execute<BaseResponse, BaseResponse>(async _ =>
         {
             var updateSubject = await UpdateSubjectGrade(subjectEnrollment, newAssessment.GradeValue);
             
@@ -52,31 +50,32 @@ public class AcademicService
             {
                 await _repos.AssessmentRepository.AddAsync(newAssessment);
             }
-
+            
             return updateSubject;
         });
     }
-
+    
     public async Task<BaseResponse> UpdateSubjectGrade(SubjectEnrollment subjectEnrollment, decimal newGrade)
     {
         var response = new BaseResponse();
-        var assessmentsResponse =
-            await _repos.AssessmentRepository.GetBySubjectEnrollmentId(subjectEnrollment.Id);
+        var assessmentsResponse = await GetAssessments(subjectEnrollment.Id);
         
         if (assessmentsResponse.Success)
         {
-            decimal newAverage = GetNewAverageGrade(assessmentsResponse.Value, newGrade);
-            subjectEnrollment.AverageGrade = newAverage;
-
             var studentResponse = await _repos.UserRepository.GetById(subjectEnrollment.StudentId);
 
             if (studentResponse.Success)
             {
+                decimal newAverage = GetNewAverageGrade(assessmentsResponse.Value, newGrade);
+                subjectEnrollment.AverageGrade = newAverage;
+                
                 var subjectUpdatedResponse = await _repos.SubjectEnrollmentRepository
                     .UpdateAsync(subjectEnrollment);
+                
                 if (subjectUpdatedResponse.Success)
                 {
                     var studentUpdateResponse = await UpdateStudentGrade(studentResponse.Value, newGrade);
+                    
                     if (!studentUpdateResponse.Success)
                     {
                         response.SetStatus(false, studentUpdateResponse.Message);
@@ -99,12 +98,11 @@ public class AcademicService
 
         return response;
     }
-
     private async Task<BaseResponse> UpdateStudentGrade(User studentToUpdate, decimal newGrade)
     {
-        return await _helper.Execute<BaseResponse, DataResponse<List<Assessment>>>(async response =>
+        return await _methodHelper.Execute<BaseResponse, DataResponse<List<Assessment>>>(async response =>
         {
-            var assessmentsResponse = await GetAssessments(studentToUpdate.Id);
+            var assessmentsResponse = await GetAssessmentsByStudent(studentToUpdate.Id);
             
             if (assessmentsResponse.Success)
             {
@@ -120,22 +118,6 @@ public class AcademicService
             return assessmentsResponse;
         });
     }
-
-    private async Task<DataResponse<List<Assessment>>> GetAssessments(int studentId)
-    {
-        var response = new DataResponse<List<Assessment>>();
-        var subjectEnrollmentsResponse = await _repos.SubjectEnrollmentRepository.GetByStudentId(studentId);
-
-        if (subjectEnrollmentsResponse.Success)
-        {
-            var ids = await _repos.SubjectEnrollmentRepository.GetIds(subjectEnrollmentsResponse.Value);
-            response = await _repos.AssessmentRepository.GetBySubjectEnrollmentIds(ids);
-        }
-
-        return response;
-    }
-
-
     private decimal GetNewAverageGrade(List<Assessment> assessments, decimal newGrade)
     {
         int assessmentCount = assessments.Count;
@@ -144,11 +126,12 @@ public class AcademicService
         
         return newAverageGrade;
     }
-    
-    public decimal GetAverageGrade(List<Assessment> assessments) => GetAverageGrade(assessments
-        .Select(a => a.GradeValue)
-        .ToList());
-
+    public decimal GetAverageGrade(List<Assessment> assessments)
+    {
+        return GetAverageGrade(assessments
+            .Select(a => a.GradeValue)
+            .ToList());
+    } 
     public decimal GetAverageGrade(List<decimal> gradeValues)
     {
         decimal averageGrade = gradeValues.Count > 0
@@ -156,7 +139,6 @@ public class AcademicService
             : 0;
         return averageGrade;
     }
-
     
     public async Task<DataResponse<List<Assessment>>> GetAssessments(int studentId, int subjectId)
     {
@@ -165,8 +147,7 @@ public class AcademicService
         if (subjectEnrollmentResponse.Success)
         {
             var subjectEnrollmentId = subjectEnrollmentResponse.Value.Id;
-            response =
-                await _repos.AssessmentRepository.GetBySubjectEnrollmentId(subjectEnrollmentId);
+            response = await GetAssessments(subjectEnrollmentId);
         }
         else
         {
@@ -175,10 +156,79 @@ public class AcademicService
 
         return response;
     }
+    private async Task<DataResponse<List<Assessment>>> GetAssessments(int subjectEnrollmentId)
+    {
+        var response = new DataResponse<List<Assessment>>();
+        var submissionsResponse = await _repos.SubmissionRepository.GetBySubjectEnrollmentId(subjectEnrollmentId);
+
+        if (submissionsResponse.Success)
+        {
+            var ids = _methodHelper.GetIds(submissionsResponse.Value);
+            response = await _repos.AssessmentRepository.GetBySubmissionIds(ids);
+        }
+        else
+        {
+            response.SetStatus(false, submissionsResponse.Message);
+        }
+
+        return response;
+    }
+    private async Task<DataResponse<List<Assessment>>> GetAssessments(List<int> subjectEnrollmentIds)
+    {
+        var response = new DataResponse<List<Assessment>>();
+        var submissionsResponse = await _repos.SubmissionRepository.GetBySubjectEnrollmentIds(subjectEnrollmentIds);
+        
+        if (submissionsResponse.Success)
+        {
+            var ids = _methodHelper.GetIds(submissionsResponse.Value);
+            response = await _repos.AssessmentRepository.GetBySubmissionIds(ids);
+        }
+        else
+        {
+            response.SetStatus(false, submissionsResponse.Message);
+        }
+
+        return response;
+    }
+    private async Task<DataResponse<List<Assessment>>> GetAssessmentsByStudent(int studentId)
+    {
+        var response = new DataResponse<List<Assessment>>();
+        var subjectEnrollmentsResponse = await _repos.SubjectEnrollmentRepository.GetByStudentId(studentId);
+
+        if (subjectEnrollmentsResponse.Success)
+        {
+            var ids = await _repos.SubjectEnrollmentRepository.GetIds(subjectEnrollmentsResponse.Value);
+            response = await GetAssessments(ids);
+        }
+        else
+        {
+            response.SetStatus(false, subjectEnrollmentsResponse.Message);
+        }
+
+        return response;
+    }
+    private async Task<DataResponse<List<Assessment>>> GetAssessmentsBySubject(int subjectId)
+    {
+        var response = new  DataResponse<List<Assessment>>();
+
+        var subjectEnrollmentsResponse = await GetSubjectEnrollments(subjectId);
+
+        if (subjectEnrollmentsResponse.Success)
+        {
+            var subjectEnrollmentIds = _methodHelper.GetIds(subjectEnrollmentsResponse.Value);
+            response = await GetAssessments(subjectEnrollmentIds);
+        }
+        else
+        {
+            response.SetStatus(false, subjectEnrollmentsResponse.Message);
+        }
+
+        return response;
+    }
     
     #endregion
     
-    #region Students
+    #region Students & Subjects
     
     public async Task<DataResponse<List<UserDisplayDTO>>> GetAllStudentsWithSubject(int subjectId)
     {
@@ -196,7 +246,6 @@ public class AcademicService
         }
         return response;
     }
-    
     public async Task<DataResponse<List<User>>> GetStudentsBySubject(int subjectId)
     {
         var response =  new DataResponse<List<User>>();
@@ -214,9 +263,36 @@ public class AcademicService
         return response;
     }
     
-    #endregion
-    
-    #region Subjects
+    public async Task<DataResponse<SubjectEnrollment>> GetSubjectEnrollment(int studentId, int subjectId)
+    {
+        DataResponse<SubjectEnrollment> response = new();
+        var classResponse = await _repos.SchoolClassRepository.GetClassBySubjectId(subjectId);
+        if (classResponse.Success)
+        {
+            response = await _repos.SubjectEnrollmentRepository.GetByStudentAndClassIds(studentId, classResponse.Value.Id);
+        }
+        else
+        {
+            response.SetStatus(false, classResponse.Message);
+        }
+
+        return response;
+    }
+    public async Task<DataResponse<List<SubjectEnrollment>>> GetSubjectEnrollments(int subjectId)
+    {
+        var response = new  DataResponse<List<SubjectEnrollment>>();
+        var classIdsResponse = await GetClassIdsBySubject(subjectId);
+        if (classIdsResponse.Success)
+        {
+            response = await _repos.SubjectEnrollmentRepository.GetByClassIds(classIdsResponse.Value);
+        }
+        else
+        {
+            response.SetStatus(false, classIdsResponse.Message);
+        }
+
+        return response;
+    }
 
     public async Task<DataResponse<List<Subject>>> GetSubjectsByStudent(int studentId)
     {
@@ -245,57 +321,10 @@ public class AcademicService
 
         return response;
     }
-    
-    #endregion
-    
-    #region Subject Enrollments
-    public async Task<DataResponse<SubjectEnrollment>> GetSubjectEnrollment(int studentId, int subjectId)
-    {
-        DataResponse<SubjectEnrollment> response = new();
-        var classResponse = await _repos.SchoolClassRepository.GetClassBySubjectId(subjectId);
-        if (classResponse.Success)
-        {
-            response = await _repos.SubjectEnrollmentRepository.GetByStudentAndClassIds(studentId, classResponse.Value.Id);
-        }
-        else
-        {
-            response.SetStatus(false, classResponse.Message);
-        }
-
-        return response;
-    }
-
-    public async Task<DataResponse<List<SubjectEnrollment>>> GetSubjectEnrollments(int subjectId)
-    {
-        var response = new  DataResponse<List<SubjectEnrollment>>();
-        var classIdsResponse = await GetClassIdsBySubject(subjectId);
-        if (classIdsResponse.Success)
-        {
-            var subjectEnrollmentsResponse = await _repos.SubjectEnrollmentRepository.GetByClassIds(classIdsResponse.Value);
-            if (subjectEnrollmentsResponse.Success)
-            {
-                response.SetData(subjectEnrollmentsResponse.Value);
-            }
-            else
-            {
-                response.SetStatus(false, subjectEnrollmentsResponse.Message);
-            }
-        }
-        else
-        {
-            response.SetStatus(false, classIdsResponse.Message);
-        }
-
-        return response;
-    }
-
-    #endregion
-    
-    #region Classes
 
     private async Task<DataResponse<List<int>>> GetClassIdsBySubject(int subjectId)
     {
-        return await _helper.Execute<DataResponse<List<int>>, DataResponse<List<SchoolClass>>>(async response =>
+        return await _methodHelper.Execute<DataResponse<List<int>>, DataResponse<List<SchoolClass>>>(async response =>
         {
             var classesResponse = await _repos.SchoolClassRepository.GetClassesBySubjectId(subjectId);
 
@@ -310,6 +339,5 @@ public class AcademicService
     }
     
     #endregion
-
     
 }

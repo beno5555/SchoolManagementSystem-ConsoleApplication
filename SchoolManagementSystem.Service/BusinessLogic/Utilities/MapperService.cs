@@ -1,5 +1,6 @@
 ﻿using ProjectHelperLibrary.Response;
 using SchoolManagementSystem.Data.Models;
+using SchoolManagementSystem.Data.Models.Academic;
 using SchoolManagementSystem.Service.BusinessLogic.Factories;
 using SchoolManagementSystem.Service.DTOs.StudentJournal;
 using SchoolManagementSystem.Service.DTOs.User.Auth;
@@ -131,18 +132,24 @@ public class MapperService
     {
         var response = new DataResponse<Assessment>();
 
-        var assignmentExists = await _repos.AssignmentRepository.ExistsAsync(assessmentDTO.AssignmentId);
+        var assignmentExists = await _repos.AssignmentRepository.ExistsAsync(assessmentDTO.SubmissionId);
+        
         if (assignmentExists)
         {
-            var assessment = new Assessment
+            var submissionResponse = await _repos.SubmissionRepository.GetById(assessmentDTO.SubmissionId);
+            
+            if (submissionResponse.Success)
             {
-                GradeValue = assessmentDTO.NewGrade,
-                AssignmentId = assessmentDTO.AssignmentId,
-                Comment = assessmentDTO.Comment,
-                
-                SubjectEnrollmentId = subjectEnrollmentId, 
-            };
-            response.SetData(assessment);
+                var assessment = new Assessment
+                {
+                    GradeValue = assessmentDTO.NewGradeValue,
+                    VerbalAssessment = assessmentDTO.VerbalAssessment,
+                    
+                    SubmissionId = assessmentDTO.SubmissionId,
+                    AssignmentId = submissionResponse.Value.AssignmentId
+                };
+                response.SetData(assessment);
+            }
         }
         else
         {

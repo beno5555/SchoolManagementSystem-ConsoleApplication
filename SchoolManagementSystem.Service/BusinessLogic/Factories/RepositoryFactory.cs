@@ -14,7 +14,7 @@ public class RepositoryFactory
     private readonly Lazy<GroupRepository> _groupRepositoryFactory = new(() => new GroupRepository());
     private readonly Lazy<AssignmentRepository> _assignmentRepositoryFactory = new(() => new AssignmentRepository());
     private readonly Lazy<AssessmentRepository> _assessmentRepositoryFactory = new(() => new AssessmentRepository());
-
+    private readonly Lazy<SubmissionRepository> _submissionRepositoryFactory = new(() => new SubmissionRepository());
     
     public UserRepository UserRepository => _userRepositoryFactory.Value;
     public SubjectRepository SubjectRepository => _subjectRepositoryFactory.Value;
@@ -26,5 +26,5 @@ public class RepositoryFactory
     public GroupRepository GroupRepository => _groupRepositoryFactory.Value;
     public AssignmentRepository AssignmentRepository => _assignmentRepositoryFactory.Value;
     public AssessmentRepository AssessmentRepository => _assessmentRepositoryFactory.Value;
-    
+    public SubmissionRepository SubmissionRepository => _submissionRepositoryFactory.Value;
 }

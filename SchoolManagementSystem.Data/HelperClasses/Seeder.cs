@@ -1,6 +1,7 @@
 ﻿using SchoolManagementSystem.Data.Config;
 using SchoolManagementSystem.Data.Models;
 using SchoolManagementSystem.Data.Models.Base;
+using SchoolManagementSystem.Data.Models.Named;
 
 namespace SchoolManagementSystem.Data.HelperClasses;
 
