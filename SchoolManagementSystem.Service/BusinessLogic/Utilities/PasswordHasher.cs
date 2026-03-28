@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using ProjectHelperLibrary.Response;
 
-namespace SchoolManagementSystem.Service.BusinessLogic.Auth;
+namespace SchoolManagementSystem.Service.BusinessLogic.Utilities;
 
 public class PasswordHasher
 {

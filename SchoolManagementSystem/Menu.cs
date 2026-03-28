@@ -1,7 +1,7 @@
 ﻿using ProjectHelperLibrary.Utilities;
 using SchoolManagementSystem.Service;
 using SchoolManagementSystem.Service.BusinessLogic;
-using SchoolManagementSystem.Service.BusinessLogic.Auth;
+using SchoolManagementSystem.Service.BusinessLogic.Factories;
 using SchoolManagementSystem.Service.Display;
 using SchoolManagementSystem.Service.DTOs.User.Auth;
 
@@ -10,12 +10,12 @@ namespace SchoolManagementSystem;
 public static class Menu
 {
     private static readonly RepositoryFactory Repos = new ();
-    private static readonly UserService UserService = new(Repos);
-    private static readonly AuthService AuthService = new();
+    private static readonly UtilityFactory Utilities = new (Repos);
+    
+    private static readonly ServiceFactory Services = new(Utilities);
     public static async Task Run()
     {
         await Initializer.Execute();
-
         // test
         var loginRequestDTO = new LoginDTO
         {
@@ -23,7 +23,7 @@ public static class Menu
             PrivateId = null,
             Password = "admin123"
         };
-        var loginResponse = await AuthService.Login(loginRequestDTO);
+        var loginResponse = await Services.AuthService.Login(loginRequestDTO);
         if (loginResponse.Success)
         {
             Console.WriteLine("Login successful");
@@ -60,14 +60,14 @@ public static class Menu
             PrivateId = "nagdiId",
         };
 
-        var userRegisterResponse = await AuthService.RegisterUser(user);
-        var studentRegisterResponse = await AuthService.RegisterStudent(student);
+        var userRegisterResponse = await Services.AuthService.RegisterUser(user);
+        var studentRegisterResponse = await Services.AuthService.RegisterStudent(student);
         
         ConsoleUtilities.ResetMenu();
         
         if (userRegisterResponse.Success)
         {
-            var registeredUserResponse = await UserService.GetUserByEmail(user.Email);
+            var registeredUserResponse = await Services.StudentService.GetUserByEmail(user.Email);
             if (registeredUserResponse.Success)
             {
                 var registeredUser = registeredUserResponse.Value;
@@ -87,7 +87,7 @@ public static class Menu
         
         if (studentRegisterResponse.Success)
         {
-            var registeredUserResponse = await UserService.GetUserByEmail(student.Email);
+            var registeredUserResponse = await Services.StudentService.GetUserByEmail(student.Email);
             if (registeredUserResponse.Success)
             {
                 var registeredStudent = registeredUserResponse.Value;
@@ -105,7 +105,7 @@ public static class Menu
         }
 
 
-        // var getUserResponse = await UserService.GetUserById(3);
+        // var getUserResponse = await Services.StudentService.GetUserById(3);
         // if (getUserResponse.Success)
         // {
         //     Console.WriteLine("User successfully retrieved");

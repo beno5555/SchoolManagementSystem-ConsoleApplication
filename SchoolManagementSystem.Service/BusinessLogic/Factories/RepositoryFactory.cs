@@ -1,7 +1,6 @@
 ﻿using SchoolManagementSystem.Data.Repositories;
-using SchoolManagementSystem.Service.Mapping;
 
-namespace SchoolManagementSystem.Service.BusinessLogic;
+namespace SchoolManagementSystem.Service.BusinessLogic.Factories;
 
 public class RepositoryFactory
 {
@@ -16,9 +15,6 @@ public class RepositoryFactory
     private readonly Lazy<AssignmentRepository> _assignmentRepositoryFactory = new(() => new AssignmentRepository());
     private readonly Lazy<AssessmentRepository> _assessmentRepositoryFactory = new(() => new AssessmentRepository());
 
-    private readonly Lazy<Mapper> _mapperFactory = new(() => new Mapper());
-    
-    
     
     public UserRepository UserRepository => _userRepositoryFactory.Value;
     public SubjectRepository SubjectRepository => _subjectRepositoryFactory.Value;
@@ -31,5 +27,4 @@ public class RepositoryFactory
     public AssignmentRepository AssignmentRepository => _assignmentRepositoryFactory.Value;
     public AssessmentRepository AssessmentRepository => _assessmentRepositoryFactory.Value;
     
-    public Mapper Mapper => _mapperFactory.Value;
 }

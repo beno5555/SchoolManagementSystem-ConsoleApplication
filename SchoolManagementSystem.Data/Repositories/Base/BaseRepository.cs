@@ -6,7 +6,7 @@ namespace SchoolManagementSystem.Data.Repositories.Base;
 
 public class BaseRepository<T> where T : BaseModel
 {
-    protected readonly List<T> _collection;
+    private readonly List<T> _collection;
     private bool _loaded;
     
     protected BaseRepository(List<T> collection)
@@ -29,7 +29,7 @@ public class BaseRepository<T> where T : BaseModel
     
     #region Modifying
     
-    private async Task AddInternal(T entity)
+    private void AddInternal(T entity)
     {
         entity.Id = IdGenerator.Next<T>();
         _collection.Add(entity);
@@ -38,7 +38,7 @@ public class BaseRepository<T> where T : BaseModel
     public async Task AddAsync(T entity)
     {
         await EnsureLoadAsync();
-        await AddInternal(entity);
+        AddInternal(entity);
         await _collection.SaveAsync();
     }
 
@@ -47,7 +47,7 @@ public class BaseRepository<T> where T : BaseModel
         await EnsureLoadAsync();
         foreach (var entity in entities)
         {
-            await AddInternal(entity);
+            AddInternal(entity);
         }
         await _collection.SaveAsync();
     }
@@ -119,6 +119,12 @@ public class BaseRepository<T> where T : BaseModel
             $"Could not find {typeof(T).Name} with id: {id}"); 
         return response;
     }
+    public async Task<int> GetIdBy(Func<T, bool> filter)
+    {
+        var entityResponse = await GetSingle(filter);
+        var result = entityResponse.Success ? entityResponse.Value.Id : -1;
+        return result;
+    }
 
     public async Task<bool> ExistsAsync(int id)
     {
@@ -134,19 +140,12 @@ public class BaseRepository<T> where T : BaseModel
         return exists;
     }
 
-    public async Task<int> GetIdBy(Func<T, bool> filter)
-    {
-        var entityResponse = await GetSingle(filter);
-        var result = entityResponse.Success ? entityResponse.Value.Id : -1;
-        return result;
-    }
     
     public async Task<DataResponse<T>> GetSingle(Func<T, bool> filter, string errorMessage = "")
     {
         await EnsureLoadAsync();
         DataResponse<T> response = new();
-        var entity = _collection
-            .FirstOrDefault(filter);
+        var entity = _collection.FirstOrDefault(filter);
         
         if (entity is not null)
         {

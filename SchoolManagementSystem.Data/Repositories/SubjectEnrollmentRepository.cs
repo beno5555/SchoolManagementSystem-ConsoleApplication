@@ -27,4 +27,5 @@ public class SubjectEnrollmentRepository : BaseRepository<SubjectEnrollment>
             "Subject Enrollment for the current student not found");
         return response;
     }
+
 }

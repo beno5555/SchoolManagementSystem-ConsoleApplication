@@ -13,7 +13,7 @@ public class SubjectEnrollment : BaseModel
     [Reference<SchoolClass>]
     public int SchoolClassId { get; set; }
 
-    public decimal FinalGrade => Math.Round(AverageGrade);
+    public int FinalGrade => (int)AverageGrade;
     public decimal AverageGrade { get; set; }
     // public List<Assessment> Assessments { get; set; } = new(200);
 

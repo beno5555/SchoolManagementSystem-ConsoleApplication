@@ -1,42 +1,52 @@
 ﻿using ProjectHelperLibrary.Response;
 using SchoolManagementSystem.Data.Models;
-using SchoolManagementSystem.Data.Repositories;
-using SchoolManagementSystem.Service.BusinessLogic.Auth;
+using SchoolManagementSystem.Service.BusinessLogic.Factories;
+using SchoolManagementSystem.Service.DTOs.StudentJournal;
 using SchoolManagementSystem.Service.DTOs.User.Auth;
 using SchoolManagementSystem.Service.DTOs.User.Display;
 
-namespace SchoolManagementSystem.Service.Mapping;
+namespace SchoolManagementSystem.Service.BusinessLogic.Utilities;
 
-public class Mapper
+public class MapperService
 {
-    private readonly RoleRepository _roleRepository = new();
-    private readonly GroupRepository _groupRepository = new();
-    private readonly RoomRepository _roomRepository = new();
-    private readonly PasswordHasher _passwordHasher = new();
+    // private readonly RoleRepository _roleRepository = new();
+    // private readonly GroupRepository _groupRepository = new();
+    // private readonly RoomRepository _roomRepository = new();
+    // private readonly PasswordHasher _passwordHasher = new();
+
+    private readonly RepositoryFactory _repos;
+    private readonly PasswordHasher _passwordHasher;
+
+    public MapperService(RepositoryFactory repos, PasswordHasher passwordHasher)
+    {
+        _repos = repos; 
+        _passwordHasher = passwordHasher;
+    }
     
     #region Singles
     
     #region Users
-    public async Task<UserDisplayDTO?> UserToDisplayDTO(User user)
+
+    public async Task<DataResponse<UserDisplayDTO>> UserToDisplayDTO(User user)
     {
-        UserDisplayDTO? result = null;
+        var response = new DataResponse<UserDisplayDTO>();
 
         string? groupName = null;
         string? officeRoomName = null;
 
         if (user.GroupId.HasValue)
         {
-            var groupResponse = await _groupRepository.GetById(user.GroupId.Value);
+            var groupResponse = await _repos.GroupRepository.GetById(user.GroupId.Value);
             groupName = groupResponse.Success ? groupResponse.Value.Name : null;
         }
 
         if (user.OfficeRoomId.HasValue)
         {
-            var officeRoomResponse = await _roomRepository.GetById(user.OfficeRoomId.Value);
+            var officeRoomResponse = await _repos.RoomRepository.GetById(user.OfficeRoomId.Value);
             officeRoomName = officeRoomResponse.Success ? officeRoomResponse.Value.Name : null;
         }
         
-        var roleResponse = await _roleRepository.GetById(user.RoleId);
+        var roleResponse = await _repos.RoleRepository.GetById(user.RoleId);
         if (roleResponse.Success)
         {
             var dto = new UserDisplayDTO
@@ -52,9 +62,13 @@ public class Mapper
                 GroupName = groupName,
                 OfficeRoomName = officeRoomName
             };
-            result = dto;
+            response.SetData(dto);
         }
-        return result;
+        else
+        {
+            response.SetStatus(false, "Mapping to display format failed");
+        }
+        return response;
     }
 
     public User RegisterDTOToUser(BaseRegisterDTO registerDTO)
@@ -88,12 +102,16 @@ public class Mapper
     {
         DataResponse<List<UserDisplayDTO>> response = new();
 
-        var tasks = users.Select(UserToDisplayDTO);
-        var mappingResult = await Task.WhenAll(tasks);
-        
-        List<UserDisplayDTO> userDisplayDTOs = mappingResult.OfType<UserDisplayDTO>().ToList();
-        if (userDisplayDTOs.Any())
+        if (users.Count > 0)
         {
+            var tasks = users.Select(UserToDisplayDTO);
+            var mappingResult = await Task.WhenAll(tasks);
+
+            var userDisplayDTOs = mappingResult
+                .Where(res => res.Success)
+                .Select(res => res.Value)
+                .ToList();
+            
             if (userDisplayDTOs.Count == users.Count)
             {
                 response.SetData(userDisplayDTOs);
@@ -107,8 +125,32 @@ public class Mapper
         {
             response.SetStatus(false, "List is empty");
         }
-        
         return response;
     }
     #endregion
+
+    public async Task<DataResponse<Assessment>> ToAssessment(AssessmentDTO assessmentDTO, int subjectEnrollmentId)
+    {
+        var response = new DataResponse<Assessment>();
+
+        var assignmentExists = await _repos.AssignmentRepository.ExistsAsync(assessmentDTO.AssignmentId);
+        if (assignmentExists)
+        {
+            var assessment = new Assessment
+            {
+                GradeValue = assessmentDTO.NewGrade,
+                AssignmentId = assessmentDTO.AssignmentId,
+                Comment = assessmentDTO.Comment,
+                
+                SubjectEnrollmentId = subjectEnrollmentId, 
+            };
+            response.SetData(assessment);
+        }
+        else
+        {
+            response.SetStatus(false, "Assignment not found");
+        }
+
+        return response;
+    }
 }

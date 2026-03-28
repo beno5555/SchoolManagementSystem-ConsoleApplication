@@ -27,11 +27,23 @@ public static class AppConstants
     public static class FolderPaths
     {
         public const string DataFolder = "DataFolder";
-    
-        public static string DataPath => Path.Combine(
-            AppContext.BaseDirectory, 
-            @"..\..\..\..\SchoolManagementSystem.Data", 
-            DataFolder);
+
+        public static string DataPath
+        {
+            get
+            {
+                var directory = new DirectoryInfo(AppContext.BaseDirectory);
+                while (directory.GetFiles("*.sln*").Length == 0)
+                {
+                    directory = directory.Parent!;
+                }
+                return Path.Combine(directory.FullName, "SchoolManagementSystem.Data", DataFolder);
+            }
+        }
+            // Path.Combine(
+            // AppContext.BaseDirectory, 
+            // @"..\..\..\..\SchoolManagementSystem.Data", 
+            // DataFolder);
         
 
         public static List<string> JsonPaths = [];

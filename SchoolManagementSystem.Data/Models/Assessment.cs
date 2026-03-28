@@ -26,4 +26,9 @@ public class Assessment : BaseModel
         GradeValue = gradeValue;
         Comment = comment;
     }
+
+    public Assessment()
+    {
+        
+    }
 }

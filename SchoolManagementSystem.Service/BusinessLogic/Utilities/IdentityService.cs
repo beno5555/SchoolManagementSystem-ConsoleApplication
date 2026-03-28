@@ -1,18 +1,27 @@
 ﻿using ProjectHelperLibrary.Response;
 using SchoolManagementSystem.Data.Models;
-using SchoolManagementSystem.Data.Repositories;
+using SchoolManagementSystem.Service.BusinessLogic.Factories;
 using SchoolManagementSystem.Service.DTOs.User.Auth;
 using SchoolManagementSystem.Service.DTOs.User.Display;
-using SchoolManagementSystem.Service.Mapping;
 
-namespace SchoolManagementSystem.Service.BusinessLogic.Auth;
+namespace SchoolManagementSystem.Service.BusinessLogic.Utilities;
 
-public class CredentialService
+public class IdentityService
 {
-    private readonly UserRepository _userRepository = new();
-    private readonly Mapper _mapper = new();
-    private readonly PasswordHasher _passwordHasher = new();
-
+    
+    private readonly RepositoryFactory _repos;
+    
+    // utils
+    private readonly MapperService _mapperService;
+    private readonly PasswordHasher _passwordHasher;
+    
+    public IdentityService(RepositoryFactory repos, MapperService mapperService, PasswordHasher passwordHasher)
+    {
+        _repos = repos;
+        _mapperService = mapperService;
+        _passwordHasher = passwordHasher;
+    }
+    
     #region Methods
     
     public async Task<DataResponse<User>> PrepareForRegistration(BaseRegisterDTO registerDTO)
@@ -22,7 +31,7 @@ public class CredentialService
 
         if (credentialValidationResponse.Success)
         {
-            var userToRegister = _mapper.RegisterDTOToUser(registerDTO);
+            var userToRegister = _mapperService.RegisterDTOToUser(registerDTO);
             response.SetData(userToRegister);
         }
         else
@@ -35,14 +44,14 @@ public class CredentialService
     private async Task<BaseResponse> AreCredentialsUnique(string email, string privateId)
     {
         BaseResponse response = new();
-        bool existsByEmail = await _userRepository.ExistsByEmail(email);
+        bool existsByEmail = await _repos.UserRepository.ExistsByEmail(email);
         if (existsByEmail)
         {
             response.SetStatus(false, "Email is already taken");
         }
         else
         {
-            bool existsByPrivateId = await _userRepository.ExistsByPrivateId(privateId);
+            bool existsByPrivateId = await _repos.UserRepository.ExistsByPrivateId(privateId);
             if (existsByPrivateId)
             {
                 response.SetStatus(false, "User with private id is already in the database");
@@ -63,15 +72,7 @@ public class CredentialService
                 
         if (validPasswordResponse.Success)
         {
-            var userDisplayDTO = await _mapper.UserToDisplayDTO(userToAuthenticate);
-            if (userDisplayDTO is not null)
-            {
-                response.SetData(userDisplayDTO);
-            }
-            else
-            {
-                response.SetStatus(false, "Could not identify role (temporary message)");
-            }
+            response = await _mapperService.UserToDisplayDTO(userToAuthenticate);
         }
         else
         {
@@ -86,11 +87,11 @@ public class CredentialService
         DataResponse<User> response = new();
         if (!string.IsNullOrWhiteSpace(loginDTO.Email))
         {
-            response = await _userRepository.GetByEmail(loginDTO.Email);
+            response = await _repos.UserRepository.GetByEmail(loginDTO.Email);
         }
         else if (!string.IsNullOrWhiteSpace(loginDTO.PrivateId))
         {
-            response = await _userRepository.GetByPrivateId(loginDTO.PrivateId);
+            response = await _repos.UserRepository.GetByPrivateId(loginDTO.PrivateId);
         }
         else
         {

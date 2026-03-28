@@ -1,17 +1,20 @@
 ﻿using ProjectHelperLibrary.Response;
 using SchoolManagementSystem.Data.Config;
 using SchoolManagementSystem.Data.Models;
-using SchoolManagementSystem.Data.Repositories;
+using SchoolManagementSystem.Service.BusinessLogic.Factories;
 using SchoolManagementSystem.Service.DTOs.User.Auth;
 using SchoolManagementSystem.Service.DTOs.User.Display;
 
-namespace SchoolManagementSystem.Service.BusinessLogic.Auth;
+namespace SchoolManagementSystem.Service.BusinessLogic.Services;
 
 public class AuthService
 {
-    private readonly UserRepository _userRepository = new();
-    private readonly RoleRepository _roleRepository = new();
-    private readonly CredentialService _credentialService = new();
+    private readonly UtilityFactory _utilities;
+
+    public AuthService(UtilityFactory utilities)
+    {
+        _utilities = utilities;
+    }
     
     #region Registration
     
@@ -22,7 +25,7 @@ public class AuthService
     {
         var response = await Register(adminRegisterDTO, async userToRegister =>
         {
-            bool isValidRole = await _roleRepository.ExistsAsync(adminRegisterDTO.RoleId);
+            bool isValidRole = await _utilities.Repos.RoleRepository.ExistsAsync(adminRegisterDTO.RoleId);
             if (isValidRole)
             {
                 userToRegister.RoleId = adminRegisterDTO.RoleId;
@@ -42,7 +45,7 @@ public class AuthService
     {
         var response = await Register(studentRegisterDTO, async studentToRegister =>
         {
-            int studentRoleId = await _roleRepository.GetIdByName(nameof(SchoolEnums.RoleName.Student));
+            int studentRoleId = await _utilities.Repos.RoleRepository.GetIdByName(nameof(SchoolEnums.RoleName.Student));
             bool isValidRole = studentRoleId != -1;
             if (isValidRole)
             {
@@ -58,11 +61,11 @@ public class AuthService
     /// generic register method
     /// </summary>
     /// <returns>success and message</returns>
-    public async Task<BaseResponse> Register<T>(T registerDTO, Func<User, Task<bool>> assignSpecifics)
+    private async Task<BaseResponse> Register<T>(T registerDTO, Func<User, Task<bool>> assignSpecifics)
     where T : BaseRegisterDTO
     {
         BaseResponse response = new();
-        var prepareResponse = await _credentialService.PrepareForRegistration(registerDTO);
+        var prepareResponse = await _utilities.IdentityService.PrepareForRegistration(registerDTO);
 
         if (prepareResponse.Success)
         {
@@ -71,7 +74,7 @@ public class AuthService
             
             if (specificsSuccess)
             {
-                await _userRepository.AddAsync(userToRegister);
+                await _utilities.Repos.UserRepository.AddAsync(userToRegister);
             }
             else
             {
@@ -93,11 +96,11 @@ public class AuthService
     public async Task<DataResponse<UserDisplayDTO>> Login(LoginDTO loginDTO)
     {
         DataResponse<UserDisplayDTO> response = new();
-        var userResponse = await _credentialService.GetUserByUniqueIdentifier(loginDTO);
+        var userResponse = await _utilities.IdentityService.GetUserByUniqueIdentifier(loginDTO);
         
         if (userResponse.Success)
         {
-            response = await _credentialService.Authenticate(userResponse.Value, loginDTO.Password);
+            response = await _utilities.IdentityService.Authenticate(userResponse.Value, loginDTO.Password);
         }
         else
         {

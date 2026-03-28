@@ -37,4 +37,9 @@ public class Assignment : BaseModel
         Description = description;
         DueDate = dueDate;
     }
+
+    public Assignment()
+    {
+        
+    }
 }

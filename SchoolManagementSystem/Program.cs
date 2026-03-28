@@ -9,7 +9,7 @@ public class Program
         await Menu.Run();
 
         // await SchoolContext.Execute();
-        // var userService = new UserService();
+        // var userService = new StudentService();
         // var userRepository = new UserRepository();
 
         // var student = User.CreateStudent(
