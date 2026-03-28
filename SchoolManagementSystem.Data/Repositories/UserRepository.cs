@@ -83,7 +83,7 @@ public class UserRepository : BaseRepository<User>
             "Could not find the teacher with this group");
         return response;
     }
-    
+
     #endregion
     
     #region Exists by

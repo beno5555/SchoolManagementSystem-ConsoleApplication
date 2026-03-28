@@ -19,5 +19,11 @@ public class AssessmentRepository : BaseRepository<Assessment>
         return response;
     }
 
-    
+
+    public async Task<DataResponse<List<Assessment>>> GetBySubjectEnrollmentIds(List<int> ids)
+    {
+        return await GetWhere(
+            assessment => ids.Contains(assessment.SubjectEnrollmentId),
+            "Assessments for this subject enrollment could not be found");
+    }
 }

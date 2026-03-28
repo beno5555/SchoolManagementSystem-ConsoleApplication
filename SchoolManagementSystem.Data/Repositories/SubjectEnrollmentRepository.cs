@@ -28,4 +28,10 @@ public class SubjectEnrollmentRepository : BaseRepository<SubjectEnrollment>
         return response;
     }
 
+    public async Task<DataResponse<List<SubjectEnrollment>>> GetByStudentId(int studentId)
+    {
+        return await GetWhere(
+            se => se.StudentId == studentId,
+            "Could not find subject enrollments associated with the student");
+    }
 }

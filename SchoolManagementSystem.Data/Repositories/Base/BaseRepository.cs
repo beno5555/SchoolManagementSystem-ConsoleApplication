@@ -119,11 +119,17 @@ public class BaseRepository<T> where T : BaseModel
             $"Could not find {typeof(T).Name} with id: {id}"); 
         return response;
     }
+
     public async Task<int> GetIdBy(Func<T, bool> filter)
     {
         var entityResponse = await GetSingle(filter);
         var result = entityResponse.Success ? entityResponse.Value.Id : -1;
         return result;
+    }
+
+    public async Task<List<int>> GetIds(List<T> entities)
+    {
+        return entities.Select(entity => entity.Id).Distinct().ToList();
     }
 
     public async Task<bool> ExistsAsync(int id)

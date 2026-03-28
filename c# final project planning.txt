@@ -24,9 +24,15 @@ Group
 Enums: AssignmentStatus, UserStatus, 
 
 Operations for:
+
 students:
+Seeing an average grade of their specific subject - DONE
+Seeing a final grade of their specific subject - DONE
+Seeing their average grade (all subjects) - DONE
+Seeing their final grade (all subjects combined) - DONE
+-- every other option of viewing grade - done
+ 
 Seeing their own journal;
-Seeing a grade of their specific subject;
 Seeing if there is any homework due in his class;
 submitting homework;
 rating a teacher;

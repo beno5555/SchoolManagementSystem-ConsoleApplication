@@ -16,12 +16,14 @@ public class MapperService
 
     private readonly RepositoryFactory _repos;
     private readonly PasswordHasher _passwordHasher;
+    private readonly MethodHelper _helper;
 
-    public MapperService(RepositoryFactory repos, PasswordHasher passwordHasher)
+    public MapperService(RepositoryFactory repos, MethodHelper helper, PasswordHasher passwordHasher)
     {
-        _repos = repos; 
+        _repos = repos;
+        _helper = helper;
         _passwordHasher = passwordHasher;
-    }
+    }   
     
     #region Singles
     
@@ -105,20 +107,16 @@ public class MapperService
         if (users.Count > 0)
         {
             var tasks = users.Select(UserToDisplayDTO);
-            var mappingResult = await Task.WhenAll(tasks);
 
-            var userDisplayDTOs = mappingResult
-                .Where(res => res.Success)
-                .Select(res => res.Value)
-                .ToList();
+            var dtosResponse = await _helper.TasksToValues(tasks);
             
-            if (userDisplayDTOs.Count == users.Count)
+            if (dtosResponse.Success)
             {
-                response.SetData(userDisplayDTOs);
+                response.SetData(dtosResponse.Value);
             }
             else
             {
-                response.SetStatus(false, "One or more users could not be mapped correctly"); 
+                response.SetStatus(false, dtosResponse.Message); 
             }
         }
         else

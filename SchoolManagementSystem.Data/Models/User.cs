@@ -31,7 +31,8 @@ public class User : BaseModel
     
     [Reference<Group>]
     public int? GroupId { get; set; } // mandatory for students, optional for teachers
-    
+
+    public decimal? AverageGrade { get; set; } // student-specific
     public int? FinalGrade { get; set; } // student-specific
     
     [Reference<Room>]
