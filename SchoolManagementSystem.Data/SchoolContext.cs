@@ -86,16 +86,6 @@ public static class SchoolContext
         return SubjectEnrollments.Where(se => se.StudentId == studentId);
     }
 
-    private static List<IGrouping<int, Assessment>> GetSubjectEnrollmentAssessments(IEnumerable<int> subjectEnrollmentIds)
-    {
-        return null;
-        // return Assessments
-        //     .Where(assessment => subjectEnrollmentIds
-        //         .Contains(assessment.Id))
-        //     .GroupBy(assessment => assessment.)
-        //     .ToList();
-    }
-
     private static List<decimal> GetAverageGradePerSubject(List<IGrouping<int, Assessment>> subjectEnrollmentAssessments)
     {
         var averageGradePerSubject = subjectEnrollmentAssessments
@@ -112,9 +102,9 @@ public static class SchoolContext
             .Average();
         return (int)Math.Round(studentAverageGrade);
     }
-        
+
     #endregion
-    
+
     #region Every teacher of the student
 
     public static List<User> GetStudentTeachers(int studentId)
@@ -146,6 +136,16 @@ public static class SchoolContext
             .OfType<User>()
             .ToList();
     }
+
+    private static List<IGrouping<int, Assessment>> GetSubjectEnrollmentAssessments(IEnumerable<int> subjectEnrollmentIds)
+    {
+        return Assessments
+            .Where(assessment => subjectEnrollmentIds
+                .Contains(assessment.Id))
+            .GroupBy(assessment => assessment.Id)
+            .ToList();
+    }
+
     #endregion
 
     #endregion

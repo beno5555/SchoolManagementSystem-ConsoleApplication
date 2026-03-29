@@ -2,7 +2,7 @@
 using SchoolManagementSystem.Data.Models.JoinedModels;
 using SchoolManagementSystem.Data.Repositories.Base;
 
-namespace SchoolManagementSystem.Data.Repositories;
+namespace SchoolManagementSystem.Data.Repositories.Joined;
 
 public class SubjectEnrollmentRepository : BaseRepository<SubjectEnrollment>
 {

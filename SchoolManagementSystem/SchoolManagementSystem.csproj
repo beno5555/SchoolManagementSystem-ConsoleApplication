@@ -9,6 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="ProjectHelperLibrary" Version="1.0.6.1"/>
+        <PackageReference Include="Spectre.Console" Version="0.54.1-alpha.0.86" />
     </ItemGroup>
 
     <ItemGroup>

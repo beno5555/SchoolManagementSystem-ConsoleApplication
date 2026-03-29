@@ -70,6 +70,29 @@ public class MapperService
         return response;
     }
 
+    public async Task<DataResponse<SessionUser?>> UserToSessionDTO(User user)
+    {
+        var response = new DataResponse<SessionUser?>();
+        var roleResponse = await _repos.RoleRepository.GetById(user.RoleId);
+        if (roleResponse.Success)
+        {
+            var sessionUser = new SessionUser
+            {
+                Id = user.Id,
+                FullName = user.FullName,
+                Email = user.Email,
+                Role = roleResponse.Value.Name,
+                
+            };
+            response.SetData(sessionUser);
+        }
+        else
+        {
+            response.SetStatus(false, roleResponse.Message);
+        }
+        
+        return response;
+    }
     public User RegisterDTOToUser(BaseRegisterDTO registerDTO)
     {
         var (hash, salt) = _passwordHasher.HashPassword(registerDTO.Password);

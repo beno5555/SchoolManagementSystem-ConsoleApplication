@@ -3,7 +3,6 @@ using SchoolManagementSystem.Data.Config;
 using SchoolManagementSystem.Data.Models;
 using SchoolManagementSystem.Service.BusinessLogic.Factories;
 using SchoolManagementSystem.Service.DTOs.User.Auth;
-using SchoolManagementSystem.Service.DTOs.User.Display;
 
 namespace SchoolManagementSystem.Service.BusinessLogic.Services;
 
@@ -39,7 +38,7 @@ public class AuthService
     }
 
     /// <summary>
-    /// self register (only as a user)
+    /// self register (only as a student)
     /// </summary>
     public async Task<BaseResponse> RegisterStudent(StudentRegisterDTO studentRegisterDTO)
     {
@@ -66,7 +65,6 @@ public class AuthService
     {
         BaseResponse response = new();
         var prepareResponse = await _utilities.IdentityService.PrepareForRegistration(registerDTO);
-
         if (prepareResponse.Success)
         {
             User userToRegister = prepareResponse.Value;
@@ -86,16 +84,17 @@ public class AuthService
             response.SetStatus(false, prepareResponse.Message);
         }
 
+
         return response;
     }
     
     #endregion
     
-    #region Login
+    #region SignIn
     
-    public async Task<DataResponse<UserDisplayDTO>> Login(LoginDTO loginDTO)
+    public async Task<DataResponse<SessionUser?>> SignIn(LoginDTO loginDTO)
     {
-        DataResponse<UserDisplayDTO> response = new();
+        DataResponse<SessionUser?> response = new();
         var userResponse = await _utilities.IdentityService.GetUserByUniqueIdentifier(loginDTO);
         
         if (userResponse.Success)

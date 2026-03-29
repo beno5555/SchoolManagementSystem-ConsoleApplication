@@ -1,22 +1,20 @@
 ﻿using ProjectHelperLibrary.Response;
+using SchoolManagementSystem.Data.Config;
 using SchoolManagementSystem.Data.HelperClasses;
 using SchoolManagementSystem.Data.Models.Base;
 
 namespace SchoolManagementSystem.Data.Repositories.Base;
 
-public class BaseRepository<T> where T : BaseModel
+public class BaseRepository<T> : FileRepository<T> where T : BaseModel
 {
-    private readonly List<T> _collection;
-    private bool _loaded;
     
-    protected BaseRepository(List<T> collection)
+    protected BaseRepository(List<T> collection) : base(collection)
     {
-        _collection = collection;
     }
     
     #region Load & Save Helper 
 
-    protected async Task EnsureLoadAsync()
+    protected override async Task EnsureLoadAsync()
     {
         if (!_loaded)
         {
@@ -94,23 +92,6 @@ public class BaseRepository<T> where T : BaseModel
     #endregion
     
     #region Reading only
-    
-    public async Task<DataResponse<List<T>>> GetAll()
-    {
-        var response = new DataResponse<List<T>>();
-        await EnsureLoadAsync();
-        
-        if (_collection.Count != 0)
-        {
-            response.SetData(_collection.ToList()); // passing a copy
-        }
-        else
-        {
-            response.SetStatus(false, $"{typeof(T).Name} collection is empty");
-        }
-
-        return response;
-    }
 
     public async Task<DataResponse<T>> GetById(int id)
     {
@@ -146,26 +127,7 @@ public class BaseRepository<T> where T : BaseModel
         return exists;
     }
 
-    
-    public async Task<DataResponse<T>> GetSingle(Func<T, bool> filter, string errorMessage = "")
-    {
-        await EnsureLoadAsync();
-        DataResponse<T> response = new();
-        var entity = _collection.FirstOrDefault(filter);
-        
-        if (entity is not null)
-        {
-            response.SetData(entity);
-        }
-        else
-        {
-            response.SetStatus(false, errorMessage);
-        }
-
-        return response;
-    }
-
-    protected async Task<DataResponse<List<T>>> GetWhere(Func<T, bool> filter, string errorMessage)
+    protected override async Task<DataResponse<List<T>>> GetWhere(Func<T, bool> filter, string errorMessage)
     {
         await EnsureLoadAsync();
         DataResponse<List<T>> response = new();

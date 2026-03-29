@@ -2,7 +2,6 @@
 using SchoolManagementSystem.Data.Models;
 using SchoolManagementSystem.Service.BusinessLogic.Factories;
 using SchoolManagementSystem.Service.DTOs.User.Auth;
-using SchoolManagementSystem.Service.DTOs.User.Display;
 
 namespace SchoolManagementSystem.Service.BusinessLogic.Utilities;
 
@@ -47,7 +46,7 @@ public class IdentityService
         bool existsByEmail = await _repos.UserRepository.ExistsByEmail(email);
         if (existsByEmail)
         {
-            response.SetStatus(false, "Email is already taken");
+            response.SetStatus(false, "Identifier is already taken");
         }
         else
         {
@@ -61,18 +60,15 @@ public class IdentityService
         return response;
     }
 
-    public async Task<DataResponse<UserDisplayDTO>> Authenticate(User userToAuthenticate, string password)
+    public async Task<DataResponse<SessionUser?>> Authenticate(User userToAuthenticate, string password)
     {
-        DataResponse<UserDisplayDTO> response = new();
+        DataResponse<SessionUser?> response = new();
 
-        var validPasswordResponse = _passwordHasher.VerifyPassword(
-            password, 
-            userToAuthenticate.PasswordHash, 
-            userToAuthenticate.PasswordSalt);
+        var validPasswordResponse = _passwordHasher.VerifyPassword(password, userToAuthenticate.PasswordHash, userToAuthenticate.PasswordSalt);
                 
         if (validPasswordResponse.Success)
         {
-            response = await _mapperService.UserToDisplayDTO(userToAuthenticate);
+            response = await _mapperService.UserToSessionDTO(userToAuthenticate);
         }
         else
         {
@@ -84,23 +80,20 @@ public class IdentityService
     
     public async Task<DataResponse<User>> GetUserByUniqueIdentifier(LoginDTO loginDTO)
     {
-        DataResponse<User> response = new();
-        if (!string.IsNullOrWhiteSpace(loginDTO.Email))
+        DataResponse<User> response;
+        if (IsEmail(loginDTO.Identifier))
         {
-            response = await _repos.UserRepository.GetByEmail(loginDTO.Email);
+            response = await _repos.UserRepository.GetByEmail(loginDTO.Identifier);
         }
-        else if (!string.IsNullOrWhiteSpace(loginDTO.PrivateId))
+        else 
         {
-            response = await _repos.UserRepository.GetByPrivateId(loginDTO.PrivateId);
-        }
-        else
-        {
-            response.SetStatus(false, 
-                $"Missing unique identifier ({nameof(loginDTO.Email)} or {nameof(loginDTO.PrivateId)})");
+            response = await _repos.UserRepository.GetByPrivateId(loginDTO.Identifier);
         }
 
         return response;
     }
-    
+
+    private bool IsEmail(string loginDTOIdentifier) => loginDTOIdentifier.Contains('@');
+
     #endregion
 }

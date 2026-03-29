@@ -1,7 +1,10 @@
-﻿namespace SchoolManagementSystem.Service.Display;
+﻿namespace SchoolManagementSystem.ConsoleDisplay;
 
 public static class DisplayManager
 {
+    /// <summary>
+    /// do not use this for UI
+    /// </summary>
     public static void PrintCollection<T>(List<T> collection) where T : class
     {
         if (collection.Count == 0)
@@ -16,7 +19,9 @@ public static class DisplayManager
         }
     }
     
-
+    /// <summary>
+    /// do not use this for UI
+    /// </summary>
     public static void Print<T>(T objectToPrint, string divider = ": ") where T : class
     {
         var properties = objectToPrint.GetType().GetProperties();

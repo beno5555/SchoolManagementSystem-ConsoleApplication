@@ -1,4 +1,8 @@
-﻿using SchoolManagementSystem.Data.Repositories;
+﻿using SchoolManagementSystem.Data.Models.JoinedModels;
+using SchoolManagementSystem.Data.Repositories;
+using SchoolManagementSystem.Data.Repositories.Academic;
+using SchoolManagementSystem.Data.Repositories.Joined;
+using SchoolManagementSystem.Data.Repositories.Named;
 
 namespace SchoolManagementSystem.Service.BusinessLogic.Factories;
 
@@ -15,6 +19,8 @@ public class RepositoryFactory
     private readonly Lazy<AssignmentRepository> _assignmentRepositoryFactory = new(() => new AssignmentRepository());
     private readonly Lazy<AssessmentRepository> _assessmentRepositoryFactory = new(() => new AssessmentRepository());
     private readonly Lazy<SubmissionRepository> _submissionRepositoryFactory = new(() => new SubmissionRepository());
+    private readonly Lazy<GroupClassRepository> _groupClassRepositoryFactory = new(() => new GroupClassRepository());
+    private readonly Lazy<RolePermissionRepository> _rolePermissionRepositoryFactory = new(() => new RolePermissionRepository());
     
     public UserRepository UserRepository => _userRepositoryFactory.Value;
     public SubjectRepository SubjectRepository => _subjectRepositoryFactory.Value;
@@ -27,4 +33,6 @@ public class RepositoryFactory
     public AssignmentRepository AssignmentRepository => _assignmentRepositoryFactory.Value;
     public AssessmentRepository AssessmentRepository => _assessmentRepositoryFactory.Value;
     public SubmissionRepository SubmissionRepository => _submissionRepositoryFactory.Value;
+    public GroupClassRepository GroupClassRepository => _groupClassRepositoryFactory.Value;
+    public RolePermissionRepository RolePermissionRepository => _rolePermissionRepositoryFactory.Value;
 }

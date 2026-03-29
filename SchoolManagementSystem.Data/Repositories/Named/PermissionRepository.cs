@@ -1,9 +1,9 @@
 ﻿using SchoolManagementSystem.Data.Models.Named;
 using SchoolManagementSystem.Data.Repositories.Base;
 
-namespace SchoolManagementSystem.Data.Repositories;
+namespace SchoolManagementSystem.Data.Repositories.Named;
 
-public class PermissionRepository : BaseRepository<Permission>
+public class PermissionRepository : NamedModelRepository<Permission>
 {
     public PermissionRepository() : base(SchoolContext.Permissions)
     {

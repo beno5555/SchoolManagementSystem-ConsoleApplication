@@ -2,9 +2,9 @@
 using SchoolManagementSystem.Data.Models.Named;
 using SchoolManagementSystem.Data.Repositories.Base;
 
-namespace SchoolManagementSystem.Data.Repositories;
+namespace SchoolManagementSystem.Data.Repositories.Named;
 
-public class SubjectRepository : BaseRepository<Subject>
+public class SubjectRepository : NamedModelRepository<Subject>
 {
     public SubjectRepository() : base(SchoolContext.Subjects) 
     {

@@ -2,7 +2,7 @@
 using SchoolManagementSystem.Data.Models.Academic;
 using SchoolManagementSystem.Data.Repositories.Base;
 
-namespace SchoolManagementSystem.Data.Repositories;
+namespace SchoolManagementSystem.Data.Repositories.Academic;
 
 public class AssignmentRepository : BaseRepository<Assignment>
 {

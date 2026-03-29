@@ -1,4 +1,4 @@
-﻿using SchoolManagementSystem.Service.BusinessLogic;
+﻿using SchoolManagementSystem.Menus;
 
 namespace SchoolManagementSystem;
 
@@ -77,7 +77,7 @@ public class Program
         // await menu.Run();
 
         // temporary
-        Console.ReadKey();
+        // Console.ReadKey();
     }
 
     

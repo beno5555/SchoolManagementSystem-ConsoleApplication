@@ -14,7 +14,7 @@ namespace SchoolManagementSystem.Data.Models.Academic;
 public class Assignment : BaseModel
 
 {
-    public string AssignmentName { get; set; } 
+    public string AssignmentName { get; set; } = string.Empty; 
 
     [Reference<AssignmentType>]
     public int AssignmentTypeId { get; set; }
