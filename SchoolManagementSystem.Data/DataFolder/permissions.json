@@ -1,7 +1,7 @@
 [
   {
     "Id": 1,
-    "Name": "ViewGrade"
+    "Name": "ViewOwnGrade"
   },
   {
     "Id": 2,
@@ -17,46 +17,54 @@
   },
   {
     "Id": 5,
-    "Name": "GetOwnStudent"
+    "Name": "ViewStudentGrade"
   },
   {
     "Id": 6,
-    "Name": "GetSubjects"
+    "Name": "GetOwnStudent"
   },
   {
     "Id": 7,
-    "Name": "UploadHomework"
+    "Name": "GetSubjects"
   },
   {
     "Id": 8,
-    "Name": "AssessStudent"
+    "Name": "UploadHomework"
   },
   {
     "Id": 9,
-    "Name": "ScheduleTest"
+    "Name": "ViewSubmittedHomework"
   },
   {
     "Id": 10,
-    "Name": "GetAllMembers"
+    "Name": "AssessStudent"
   },
   {
     "Id": 11,
-    "Name": "GetAverageGradeOfAnyKind"
+    "Name": "ScheduleTest"
   },
   {
     "Id": 12,
-    "Name": "AddMember"
+    "Name": "ViewAnyGrade"
   },
   {
     "Id": 13,
-    "Name": "RemoveMember"
+    "Name": "GetAllMembers"
   },
   {
     "Id": 14,
-    "Name": "GetMember"
+    "Name": "GetAverageGradeOfAnyKind"
   },
   {
     "Id": 15,
-    "Name": "UpdateProfile"
+    "Name": "AddMember"
+  },
+  {
+    "Id": 16,
+    "Name": "RemoveMember"
+  },
+  {
+    "Id": 17,
+    "Name": "GetMember"
   }
 ]

@@ -12,24 +12,28 @@ public static class SchoolEnums
 
     public enum PermissionName
     {
-        ViewGrade,
+        // Student
+        ViewOwnGrade,
         ViewHomeworks,
         SubmitHomework,
         RateTeacher,
 
+        // Teacher
+        ViewStudentGrade,
         GetOwnStudent,
         GetSubjects,
         UploadHomework,
+        ViewSubmittedHomework,
         AssessStudent,
         ScheduleTest,
 
+        // Principal
+        ViewAnyGrade,
         GetAllMembers,
         GetAverageGradeOfAnyKind,
         AddMember,
         RemoveMember,
         GetMember,
-
-        UpdateProfile
     }
 
     public enum AssignmentStatus

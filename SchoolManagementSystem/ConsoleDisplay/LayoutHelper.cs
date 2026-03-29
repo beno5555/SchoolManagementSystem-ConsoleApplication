@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using SchoolManagementSystem.Data.Models.Named;
 using Spectre.Console;
 
 namespace SchoolManagementSystem.ConsoleDisplay;
@@ -68,6 +69,55 @@ public static class LayoutHelper
         AnsiConsole.WriteLine();
     }
 
+    public static void RenderGradeTable(string title, decimal average, int final)
+    {
+        var table = new Table()
+            .Title($"[bold steelblue1]{title}[/]")
+            .Border(TableBorder.Rounded)
+            .BorderColor(Color.SteelBlue1)
+            .HideHeaders()
+            .AddColumn(new TableColumn(""))
+            .AddColumn(new TableColumn("").RightAligned());
+
+        table.AddRow("[grey]Average[/]", $"[bold]{average:F2}[/]");
+        table.AddRow("[grey]Final[/]",   $"[bold]{final}[/]");
+
+        AnsiConsole.WriteLine();
+        AnsiConsole.Write(table);
+        AnsiConsole.WriteLine();
+        Pause();
+    }
+    
+    public static void RenderStudentGradeTable(
+        List<Subject> subjects, 
+        List<decimal> subjectsAverages, 
+        List<int> subjectsFinals, 
+        decimal average, 
+        int final)
+    {
+        var table = new Table()
+            .Title("[bold steelblue1]My Grades[/]")
+            .Border(TableBorder.Rounded)
+            .BorderColor(Color.SteelBlue1)
+            .AddColumn(new TableColumn("[grey]Subject[/]"))
+            .AddColumn(new TableColumn("[grey]Average[/]").RightAligned())
+            .AddColumn(new TableColumn("[grey]Final[/]").RightAligned());
+
+        for (int i = 0; i < subjects.Count; i++)
+        {
+            table.AddRow(subjects[i].Name, $"{subjectsAverages[i]:F2}", $"{subjectsFinals[i]:F2}");
+        }
+
+        table.AddEmptyRow();
+
+        table.AddRow("[bold]Overall[/]", $"[bold]{average:F2}[/]", $"[bold]{final:F2}[/]");
+
+        AnsiConsole.WriteLine();
+        AnsiConsole.Write(table);
+        AnsiConsole.WriteLine();
+        Pause();
+    }
+    
     public static void RenderSectionTitle(string title)
     {
         var rule = new Rule($"[grey]{title}[/]")
@@ -161,4 +211,6 @@ public static class LayoutHelper
         "student"     => "mediumspringgreen",
         _             => "grey"
     };
+
+    
 }

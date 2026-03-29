@@ -353,34 +353,7 @@ public class AcademicService
         return response;
     }
 
-    public async Task<DataResponse<List<Subject>>> GetSubjectsByStudent(int studentId)
-    {
-        var response = new DataResponse<List<Subject>>();
-
-        var subjectEnrollmentsResponse = await GetSubjectEnrollments(studentId);
-
-        if (subjectEnrollmentsResponse.Success)
-        {
-            var subjectEnrollmentIds = await _repos.SubjectEnrollmentRepository.GetIds(subjectEnrollmentsResponse.Value);
-            var subjectsResponse = await _repos.SubjectRepository.GetBySubjectEnrollmentIds(subjectEnrollmentIds);
-            
-            if (subjectsResponse.Success)
-            {
-                response.SetData(subjectsResponse.Value);    
-            }
-            else
-            {
-                response.SetStatus(false, subjectsResponse.Message);
-            }
-        }
-        else
-        {
-            response.SetStatus(false, subjectEnrollmentsResponse.Message);
-        }
-
-        return response;
-    }
-
+    
     private async Task<DataResponse<List<int>>> GetClassIdsBySubject(int subjectId)
     {
         return await _methodHelper.Execute<DataResponse<List<int>>, DataResponse<List<SchoolClass>>>(async response =>

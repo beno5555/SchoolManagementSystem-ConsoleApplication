@@ -1,6 +1,7 @@
 ﻿using SchoolManagementSystem.Data.Config;
 using SchoolManagementSystem.Data.Models;
 using SchoolManagementSystem.Data.Models.Base;
+using SchoolManagementSystem.Data.Models.JoinedModels;
 using SchoolManagementSystem.Data.Models.Named;
 
 namespace SchoolManagementSystem.Data.HelperClasses;
@@ -33,6 +34,60 @@ public static class Seeder
             await collection.SaveAsync();
         }
     }
+    
+    public static async Task SeedRolePermissions(List<RolePermission> rolePermissions, List<Role> roles, List<Permission> permissions)
+    {
+        if (rolePermissions.Count != 0) return;
+
+        var rolePermissionMappings = new Dictionary<SchoolEnums.RoleName, List<SchoolEnums.PermissionName>>
+        {
+            [SchoolEnums.RoleName.Student] = new()
+            {
+                SchoolEnums.PermissionName.ViewOwnGrade,
+                SchoolEnums.PermissionName.ViewHomeworks,
+                SchoolEnums.PermissionName.SubmitHomework,
+                SchoolEnums.PermissionName.RateTeacher
+            },
+            [SchoolEnums.RoleName.Teacher] = new()
+            {
+                SchoolEnums.PermissionName.ViewStudentGrade,
+                SchoolEnums.PermissionName.GetOwnStudent,
+                SchoolEnums.PermissionName.GetSubjects,
+                SchoolEnums.PermissionName.UploadHomework,
+                SchoolEnums.PermissionName.AssessStudent,
+                SchoolEnums.PermissionName.ScheduleTest
+            },
+            [SchoolEnums.RoleName.Principal] = new()
+            {
+                SchoolEnums.PermissionName.ViewAnyGrade,
+                SchoolEnums.PermissionName.GetAllMembers,
+                SchoolEnums.PermissionName.GetAverageGradeOfAnyKind,
+                SchoolEnums.PermissionName.AddMember,
+                SchoolEnums.PermissionName.RemoveMember,
+                SchoolEnums.PermissionName.GetMember,
+                SchoolEnums.PermissionName.GetSubjects,
+                SchoolEnums.PermissionName.AssessStudent
+            },
+            [SchoolEnums.RoleName.SuperAdmin] = Enum.GetValues<SchoolEnums.PermissionName>().ToList()
+        };
+
+        foreach (var (roleName, permissionNames) in rolePermissionMappings)
+        {
+            var role = roles.FirstOrDefault(r => r.Name == roleName.ToString());
+            if (role is null) continue;
+
+            foreach (var permissionName in permissionNames)
+            {
+                var permission = permissions.FirstOrDefault(p => p.Name == permissionName.ToString());
+                if (permission is null) continue;
+
+                rolePermissions.Add(new RolePermission(role.Id, permission.Id));
+            }
+        }
+
+        await rolePermissions.SaveAsync();
+    }
+    
     /// <summary>
     /// adds a superadmin to the users list if there already is not one. (superadmin data is hardcoded)
     /// </summary>

@@ -10,28 +10,28 @@ public static class AuthenticatedMenu
     {
         ["Student"] = new()
         {
-            ("My Subjects",     "student_subjects"),
-            ("My Grades",       "student_grades"),
-            ("My Assignments",  "student_assignments"),
-            ("My Teachers",     "student_teachers"),
-            ("Logout",          "logout")
+            ("My Subjects",     nameof(MenuConstants.ActionEnums.StudentAction.Subjects)),
+            ("My Grades",       nameof(MenuConstants.ActionEnums.StudentAction.ViewMyGrades)),
+            ("My Assignments",  nameof(MenuConstants.ActionEnums.StudentAction.Assignments)),
+            ("My Teachers",     nameof(MenuConstants.ActionEnums.StudentAction.Teachers)),
+            ("Logout",          nameof(MenuConstants.ActionEnums.SharedAction.Logout))
         },
         ["Teacher"] = new()
         {
-            ("My Classes",      "teacher_classes"),
-            ("My Students",     "teacher_students"),
-            ("Enter Grades",    "teacher_grades"),
-            ("Assignments",     "teacher_assignments"),
-            ("Logout",          "logout")
+            ("My Classes",    nameof(MenuConstants.ActionEnums.TeacherAction.Classes)),
+            ("My Students",   nameof(MenuConstants.ActionEnums.TeacherAction.Students)),
+            ("Enter Grades",  nameof(MenuConstants.ActionEnums.TeacherAction.EnterGrades)),
+            ("Assignments",   nameof(MenuConstants.ActionEnums.TeacherAction.Assignments)),
+            ("Logout",        nameof(MenuConstants.ActionEnums.SharedAction.Logout))
         },
         ["Principal"] = new()
         {
-            ("Manage Teachers", "principal_teachers"),
-            ("Manage Students", "principal_students"),
-            ("Manage Subjects", "principal_subjects"),
-            ("Manage Rooms",    "principal_rooms"),
-            ("View Reports",    "principal_reports"),
-            ("Logout",          "logout")
+            ("Manage Teachers", nameof(MenuConstants.ActionEnums.PrincipalAction.Teachers)),
+            ("Manage Students", nameof(MenuConstants.ActionEnums.PrincipalAction.Students)),
+            ("Manage Subjects", nameof(MenuConstants.ActionEnums.PrincipalAction.Subjects)),
+            ("Manage Rooms",    nameof(MenuConstants.ActionEnums.PrincipalAction.Rooms)),
+            ("View Reports",    nameof(MenuConstants.ActionEnums.PrincipalAction.ViewGradeReports)),
+            ("Logout",          nameof(MenuConstants.ActionEnums.SharedAction.Logout))
         },
         ["SuperAdmin"] = new()
         {

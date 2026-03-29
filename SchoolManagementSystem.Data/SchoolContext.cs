@@ -52,7 +52,8 @@ public static class SchoolContext
         await Seeder.SeedEnums<SchoolEnums.SubjectName, Subject>(Subjects);
         await Seeder.SeedEnums<SchoolEnums.AssignmentTypeName, AssignmentType>(AssignmentTypes);
         await Seeder.SeedEnums<SchoolEnums.RoomTypeName, RoomType>(RoomTypes);
-        
+
+        await Seeder.SeedRolePermissions(RolePermissions, Roles, Permissions);
         await Seeder.SeedSuperAdmin(Users, Roles);
     }
     #endregion

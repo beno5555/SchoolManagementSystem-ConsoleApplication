@@ -1,5 +1,5 @@
-﻿using ProjectHelperLibrary.Utilities;
-using SchoolManagementSystem.ConsoleDisplay;
+﻿using SchoolManagementSystem.ConsoleDisplay;
+using SchoolManagementSystem.Controllers;
 using SchoolManagementSystem.Service;
 using SchoolManagementSystem.Service.BusinessLogic.Factories;
 using SchoolManagementSystem.Service.DTOs.User.Auth;
@@ -8,11 +8,12 @@ namespace SchoolManagementSystem.Menus;
 
 public static class Menu
 {
+    private static SessionUser? _sessionUser;
     private static readonly RepositoryFactory Repos = new ();
     private static readonly UtilityFactory Utilities = new (Repos);
-    private static SessionUser? _sessionUser;
     
     private static readonly ServiceFactory Services = new(Utilities);
+    private static readonly ControllerFactory Controllers = new(Services, _sessionUser);
     public static async Task Run()
     {
         await Initializer.Execute();
@@ -47,6 +48,7 @@ public static class Menu
             if (action.Equals(nameof(MenuConstants.ActionEnums.SharedAction.Logout), StringComparison.OrdinalIgnoreCase))
             {
                 _sessionUser = null;
+                Controllers.ClearSession();
             }
             else
                 await CompleteAction(action);
@@ -56,32 +58,48 @@ public static class Menu
     private static async Task CompleteAction(string action)
     {   
         if (_sessionUser is null) return;
+        
+        // temporarily disregarding permission checking for simplicity's sake
         bool hasPermission = await Services.PermissionService.HasPermission(action, _sessionUser.Role);
 
-        if (hasPermission)
+        switch (_sessionUser.Role)
         {
-            switch (_sessionUser.Role)
-            {
-                case MenuConstants.Roles.Student:
-                    await CompleteStudentAction(action);
-                    break;
-                case MenuConstants.Roles.Teacher:
-                    await CompleteTeacherAction(action);
-                    break;
-                case MenuConstants.Roles.Principal:
-                    await CompletePrincipalAction(action);
-                    break;
-                case MenuConstants.Roles.SuperAdmin:
-                    await CompleteSuperAdminAction(action); 
-                    break;
-            }
+            case MenuConstants.Roles.Student:
+                await CompleteStudentAction(action);
+                break;
+            case MenuConstants.Roles.Teacher:
+                await CompleteTeacherAction(action);
+                break;
+            case MenuConstants.Roles.Principal:
+                await CompletePrincipalAction(action);
+                break;
+            case MenuConstants.Roles.SuperAdmin:
+                await CompleteSuperAdminAction(action); 
+                break;
         }
     }
 
     private static async Task CompleteStudentAction(string action)
     {
-        
+        switch (action)
+        {
+            case nameof(MenuConstants.ActionEnums.StudentAction.ViewMyGrades):
+                await Controllers.StudentController.ViewMyGrades();
+                break;
+            case nameof(MenuConstants.ActionEnums.StudentAction.Subjects):
+                await Controllers.StudentController.ViewMySubjects();
+                break;
+            case nameof(MenuConstants.ActionEnums.StudentAction.Assignments):
+                await Controllers.StudentController.ViewAssignments();
+                break;
+            case nameof(MenuConstants.ActionEnums.StudentAction.Teachers):
+                await Controllers.StudentController.ViewMyTeachers();
+                break;
+        }
     }
+
+
+    
 
     private static async Task CompleteTeacherAction(string action)
     {
@@ -115,6 +133,7 @@ public static class Menu
         {
             LayoutHelper.ShowSuccess("You are signed in!");
             _sessionUser = result.Value;
+            Controllers.SetUser(_sessionUser);
         }
         else
         {
@@ -157,16 +176,6 @@ public static class Menu
             Identifier = "superadmin@gmail.com",
             Password = "admin123"
         };
-        var loginResponse = await Services.AuthService.SignIn(loginRequestDTO);
-        if (loginResponse.Success)
-        {
-            Console.WriteLine("SignIn successful");
-            // DisplayManager.Print(loginResponse.Value, " - ");
-        }
-        else
-        {
-            Console.WriteLine($"Log in failed. {loginResponse.Message}");
-        }
         
         var user = new AdminRegisterDTO
         {
@@ -194,58 +203,5 @@ public static class Menu
             PrivateId = "nagdiId",
         };
 
-        var userRegisterResponse = await Services.AuthService.RegisterUser(user);
-        var studentRegisterResponse = await Services.AuthService.RegisterStudent(student);
-        
-        ConsoleUtilities.ResetMenu();
-        
-        if (userRegisterResponse.Success)
-        {
-            var registeredUserResponse = await Services.StudentService.GetUserByEmail(user.Email);
-            if (registeredUserResponse.Success)
-            {
-                var registeredUser = registeredUserResponse.Value;
-                Console.WriteLine($"User {registeredUser.FullName} successfully registered. (privateId: {registeredUser.PrivateId})");
-            }
-            else
-            {
-                Console.WriteLine(registeredUserResponse.Message);
-            }
-        }
-        else
-        {
-            Console.WriteLine(userRegisterResponse.Message);
-        }
-        
-        ConsoleUtilities.ResetMenu();
-        
-        if (studentRegisterResponse.Success)
-        {
-            var registeredUserResponse = await Services.StudentService.GetUserByEmail(student.Email);
-            if (registeredUserResponse.Success)
-            {
-                var registeredStudent = registeredUserResponse.Value;
-                Console.WriteLine(
-                    $"Student - {registeredStudent.FullName} - successfully registered. PrivateId: {registeredStudent.PrivateId}");
-            }
-            else
-            {
-                Console.WriteLine(registeredUserResponse.Message);
-            }
-        }
-        else
-        {
-            Console.WriteLine(studentRegisterResponse.Message);
-        }
-
-
-        // var getUserResponse = await Services.StudentService.GetUserById(3);
-        // if (getUserResponse.Success)
-        // {
-        //     Console.WriteLine("User successfully retrieved");
-        //     DisplayManager.Print(getUserResponse.Value, " - ");
-        // }
-        //
-        ConsoleUtilities.ResetMenu(userMessage: "Press any key to exit menu...");
     }
 }

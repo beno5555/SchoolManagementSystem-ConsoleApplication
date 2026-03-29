@@ -1,4 +1,6 @@
-﻿namespace SchoolManagementSystem.Menus;
+﻿using System.Xml;
+
+namespace SchoolManagementSystem.Menus;
 
 public static class MenuConstants
 {
@@ -22,7 +24,9 @@ public static class MenuConstants
             Classes = 1,
             Students,
             Assessment,
-            Assignment
+            Assignment,
+            EnterGrades,
+            Assignments
         }
 
         public enum PrincipalAction
@@ -52,4 +56,5 @@ public static class MenuConstants
         public const string Principal = "Principal";    
         public const string SuperAdmin = "SuperAdmin";
     }
+
 }

@@ -2,6 +2,7 @@
 using ProjectHelperLibrary.Response;
 using SchoolManagementSystem.Data.Models;
 using SchoolManagementSystem.Data.Models.JoinedModels;
+using SchoolManagementSystem.Data.Models.Named;
 using SchoolManagementSystem.Service.BusinessLogic.Factories;
 using SchoolManagementSystem.Service.DTOs.Academic.Assessments;
 using SchoolManagementSystem.Service.DTOs.Academic.Submissions;
@@ -63,7 +64,7 @@ public class StudentService
     {
         return await _utilities.MethodHelper.Execute<DataResponse<List<T>>>(async response =>
         {
-            var subjectsResponse = await _utilities.AcademicService.GetSubjectsByStudent(studentId);
+            var subjectsResponse = await GetSubjectsByStudent(studentId);
 
             if (subjectsResponse.Success)
             {
@@ -154,6 +155,39 @@ public class StudentService
 
         return response;
     }
+    #endregion
+    
+    #region Subjects
+    
+    public async Task<DataResponse<List<Subject>>> GetSubjectsByStudent(int studentId)
+    {
+        var response = new DataResponse<List<Subject>>();
+
+        var subjectEnrollmentsResponse = await _utilities.AcademicService.GetSubjectEnrollments(studentId);
+
+        if (subjectEnrollmentsResponse.Success)
+        {
+            var subjectEnrollmentIds = await _utilities.Repos.SubjectEnrollmentRepository.GetIds(subjectEnrollmentsResponse.Value);
+            var subjectsResponse = await _utilities.Repos.SubjectRepository.GetBySubjectEnrollmentIds(subjectEnrollmentIds);
+            
+            if (subjectsResponse.Success)
+            {
+                response.SetData(subjectsResponse.Value);    
+            }
+            else
+            {
+                response.SetStatus(false, subjectsResponse.Message);
+            }
+        }
+        else
+        {
+            response.SetStatus(false, subjectEnrollmentsResponse.Message);
+        }
+
+        return response;
+    }
+
+    
     #endregion
     
     #endregion
