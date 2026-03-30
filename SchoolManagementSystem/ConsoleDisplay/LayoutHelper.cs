@@ -1,4 +1,6 @@
 ﻿using System.Globalization;
+using ProjectHelperLibrary.Validations;
+using SchoolManagementSystem.Data.Models.Base;
 using SchoolManagementSystem.Data.Models.Named;
 using Spectre.Console;
 
@@ -53,21 +55,30 @@ public static class LayoutHelper
 
     // ─── Menu Rendering ────────────────────────────────────────────────────
 
+    public static void RenderMenuOptions<T>(List<T> options) where T : NamedModel
+    {
+        foreach(var option in options)
+        {
+            AnsiConsole.MarkupLine($"  [bold steelblue1]{option.Id}[/]  {option.GetName()}");
+        }
+
+        AnsiConsole.WriteLine();
+    }
+
     public static void RenderMenuOptions(List<string> options)
     {
         for (int i = 0; i < options.Count; i++)
         {
             var isLast = i == options.Count - 1;
 
-            // Visually separate the last option (usually Logout/Exit)
+            // Visually separate the last option (Logout/Exit)
             if (isLast && options.Count > 1)
                 AnsiConsole.WriteLine();
-
             AnsiConsole.MarkupLine($"  [bold steelblue1]{i + 1}[/]  {options[i]}");
         }
 
         AnsiConsole.WriteLine();
-    }
+    } 
 
     public static void RenderGradeTable(string title, decimal average, int final)
     {
@@ -105,7 +116,7 @@ public static class LayoutHelper
 
         for (int i = 0; i < subjects.Count; i++)
         {
-            table.AddRow(subjects[i].Name, $"{subjectsAverages[i]:F2}", $"{subjectsFinals[i]:F2}");
+            table.AddRow(subjects[i].GetName(), $"{subjectsAverages[i]:F2}", $"{subjectsFinals[i]:F2}");
         }
 
         table.AddEmptyRow();
@@ -132,6 +143,12 @@ public static class LayoutHelper
 
     // ─── Input ─────────────────────────────────────────────────────────────
 
+    public static int GetMenuChoice(List<string> options)
+    {
+        RenderMenuOptions(options);
+        return GetMenuChoice(1, options.Count);
+    }
+
     public static int GetMenuChoice(int min, int max)
     {
         while (true)
@@ -145,10 +162,27 @@ public static class LayoutHelper
             AnsiConsole.MarkupLine("[red]Invalid option.[/]");
         }
     }
+
+    
+    public static int GetMenuChoice<T>(List<T> choices) where T : NamedModel
+    {
+        RenderMenuOptions(choices);
+        List<int> choiceIds = choices.Select(teacher => teacher.Id).ToList();
+        while (true)
+        {
+            AnsiConsole.Markup("[grey]>[/] ");
+            var input = Console.ReadLine()?.Trim();
+            if (int.TryParse(input, out int choice) && choiceIds.Contains(choice))
+                return choice;
+            
+            AnsiConsole.MarkupLine("[red]Invalid option.[/]");
+        }
+    }
     
     public static string GetInput(string label, bool secret = false)
     {
-        while (true)
+        string finalInput = string.Empty;
+        while (finalInput == string.Empty)
         {
             AnsiConsole.Markup($"  [grey]{label}:[/] ");
 
@@ -157,10 +191,44 @@ public static class LayoutHelper
                 : Console.ReadLine()?.Trim() ?? string.Empty;
 
             if (!string.IsNullOrWhiteSpace(input))
-                return input;
+            {
+                if (input.Contains('@'))
+                {
+                    var emailResponse = input.ValidateEmail();
 
-            ShowError($"{label} cannot be empty.");
+                    if (emailResponse.Success)
+                    {
+                        finalInput = input;
+                    }
+                    else
+                    {
+                        ShowError("Email you entered was invalid");
+                    }
+                }       
+                else if (input.All(char.IsDigit))
+                {
+                    if (input.Length == 11)
+                    {
+                        finalInput = input;
+                    }
+                    else
+                    {
+                        ShowError("National ID you provided was invalid");
+                    }
+                }
+                else
+                {
+                    finalInput = input;
+                        
+                }
+            }
+            else
+            {
+                ShowError($"{label} cannot be empty.");
+            }
         }
+
+        return finalInput;
     }
     
     public static DateTime GetDateInput(string label, string format = "dd/MM/yyyy")

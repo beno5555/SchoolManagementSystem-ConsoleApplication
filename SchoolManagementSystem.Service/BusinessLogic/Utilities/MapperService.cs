@@ -5,6 +5,7 @@ using SchoolManagementSystem.Service.DTOs.Academic.Assessments;
 using SchoolManagementSystem.Service.DTOs.User.Auth;
 using SchoolManagementSystem.Service.DTOs.User.Display;
 using SchoolManagementSystem.Service.BusinessLogic.Factories;
+using SchoolManagementSystem.Service.DTOs.Academic.Assignments;
 using SchoolManagementSystem.Service.DTOs.Academic.Submissions;
 
 namespace SchoolManagementSystem.Service.BusinessLogic.Utilities;
@@ -184,6 +185,22 @@ public class MapperService
             response.SetStatus(false, "Assignment not found");
         }
         
+        return response;
+    }
+
+    public DataResponse<Assignment> ToAssignment(AssignmentUploadDTO assignmentUploadDTO, int groupClassId)
+    {
+        var response = new DataResponse<Assignment>();
+
+        var assignment = new Assignment
+        {
+            AssignmentName = assignmentUploadDTO.AssignmentName,
+            Description = assignmentUploadDTO.Description,
+            AssignmentTypeId =  assignmentUploadDTO.AssignmentTypeId,
+            GroupClassId = groupClassId,
+            DueDate = assignmentUploadDTO.DueDate,
+        };
+        response.SetData(assignment);
         return response;
     }
 }

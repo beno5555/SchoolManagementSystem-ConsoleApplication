@@ -1,5 +1,6 @@
 ﻿using SchoolManagementSystem.ConsoleDisplay;
 using SchoolManagementSystem.Controllers;
+using SchoolManagementSystem.DTOCreation;
 using SchoolManagementSystem.Service;
 using SchoolManagementSystem.Service.BusinessLogic.Factories;
 using SchoolManagementSystem.Service.DTOs.User.Auth;
@@ -13,7 +14,7 @@ public static class Menu
     private static readonly UtilityFactory Utilities = new (Repos);
     
     private static readonly ServiceFactory Services = new(Utilities);
-    private static readonly ControllerFactory Controllers = new(Services, _sessionUser);
+    private static readonly ControllerFactory Controllers = new(Services);
     public static async Task Run()
     {
         await Initializer.Execute();
@@ -64,16 +65,16 @@ public static class Menu
 
         switch (_sessionUser.Role)
         {
-            case MenuConstants.Roles.Student:
+            case nameof(MenuConstants.Roles.Student):
                 await CompleteStudentAction(action);
                 break;
-            case MenuConstants.Roles.Teacher:
+            case nameof(MenuConstants.Roles.Teacher):
                 await CompleteTeacherAction(action);
                 break;
-            case MenuConstants.Roles.Principal:
+            case nameof(MenuConstants.Roles.Principal):
                 await CompletePrincipalAction(action);
                 break;
-            case MenuConstants.Roles.SuperAdmin:
+            case nameof(MenuConstants.Roles.SuperAdmin):
                 await CompleteSuperAdminAction(action); 
                 break;
         }
@@ -97,13 +98,19 @@ public static class Menu
                 break;
         }
     }
-
-
     
 
     private static async Task CompleteTeacherAction(string action)
     {
-        
+        switch (action)
+        {
+            case nameof(MenuConstants.ActionEnums.TeacherAction.Assignments):
+                await Controllers.TeacherController.UploadAssignment();
+                break;
+            case nameof(MenuConstants.ActionEnums.TeacherAction.Assessment):
+                await Controllers.TeacherController.WriteAssessment();
+                break;
+        }
     }
 
     private static async Task CompletePrincipalAction(string action)
@@ -113,7 +120,18 @@ public static class Menu
 
     private static async Task CompleteSuperAdminAction(string action)
     {
-        
+        switch (action)
+        {
+            case nameof(MenuConstants.ActionEnums.SuperAdminAction.RegisterUser):
+                await Controllers.SuperAdminController.RegisterUser();
+                break;
+            case nameof(MenuConstants.ActionEnums.SuperAdminAction.AssignSubjectToTeacher):
+                await Controllers.SuperAdminController.AssignSubjectToTeacher();
+                break;
+            case nameof(MenuConstants.ActionEnums.SuperAdminAction.Groups):
+                await Controllers.SuperAdminController.ManageGroups();
+                break;
+        } 
     }
 
     private static async Task SignIn()
@@ -145,17 +163,7 @@ public static class Menu
         LayoutHelper.RenderWelcomeScreen();
         LayoutHelper.RenderSectionTitle("Sign Up");
 
-        var studentRegisterDTO = new StudentRegisterDTO
-        {
-            FirstName = LayoutHelper.GetInput("First Name"),
-            LastName = LayoutHelper.GetInput("Last Name"),
-            PhoneNumber = LayoutHelper.GetInput("Phone Number"),
-            Address = LayoutHelper.GetInput("Address"),
-            PrivateId = LayoutHelper.GetInput("National Id number"),
-            Email = LayoutHelper.GetInput("Email"),
-            DateOfBirth = LayoutHelper.GetDateInput("Birth Date"),
-            Password = LayoutHelper.GetInput("Password", secret: true)
-        };
+        var studentRegisterDTO = (StudentRegisterDTO)UserDTOCreation.PromptBaseRegisterDTO();
         var signUpResponse = await Services.AuthService.RegisterStudent(studentRegisterDTO);
 
         if (signUpResponse.Success)

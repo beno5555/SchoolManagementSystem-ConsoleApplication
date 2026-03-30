@@ -8,12 +8,12 @@ public class StudentController
 {
     private SessionUser? _user;
     private readonly ServiceFactory _services;
-    public StudentController(ServiceFactory services, SessionUser sessionUser)
+    public StudentController(ServiceFactory services)
     {
         _services = services;
     }
 
-    public void SetUser(SessionUser? sessionUser)
+    public void SetUser(SessionUser sessionUser)
     {
         _user = sessionUser;
     }
@@ -24,15 +24,15 @@ public class StudentController
     }
     public async Task ViewMyTeachers()
     {
-        throw new NotImplementedException();
+        LayoutHelper.ShowInfo("Service is currently unavailable");
     }
     public async Task ViewAssignments()
     {
-        throw new NotImplementedException();
+        LayoutHelper.ShowInfo("Service is currently unavailable");
     }
     public async Task ViewMySubjects()
     {
-        LayoutHelper.RenderSectionTitle("My Subjects");
+        LayoutHelper.ShowInfo("Service is currently unavailable");
     }
 
     public async Task ViewMyGrades(int? studentId = null)
@@ -47,7 +47,7 @@ public class StudentController
         };
         
         LayoutHelper.RenderMenuOptions(options);
-        var choice = LayoutHelper.GetMenuChoice(1, options.Count);
+        var choice = LayoutHelper.GetMenuChoice(options);
 
         switch (choice)
         {
@@ -55,7 +55,7 @@ public class StudentController
                 await ViewSubjectGrade(targetStudentId);
                 break;
             case 2:
-                await ViewStudentGrade();
+                await ViewStudentGrade(targetStudentId);
                 break;
         }
     }
@@ -86,12 +86,8 @@ public class StudentController
         var subjectsResponse = await _services.StudentService.GetSubjectsByStudent(_user.Id);
         if (subjectsResponse.Success)
         {
-            var subjects = subjectsResponse.Value;
             LayoutHelper.RenderSectionTitle("Select a Subject");
-            LayoutHelper.RenderMenuOptions(subjectsResponse.Value.Select(s => s.Name).ToList());
-            
-            var choice = LayoutHelper.GetMenuChoice(1, subjects.Count);
-            result = subjects[choice - 1].Id;
+            result = LayoutHelper.GetMenuChoice(subjectsResponse.Value);
         }
         else
         {
@@ -100,15 +96,15 @@ public class StudentController
         return result;
     }
 
-    private async Task ViewStudentGrade()
+    private async Task ViewStudentGrade(int studentId)
     {
-        var studentAverageGradeResponse = await _services.StudentService.GetAverageStudentGrade(_user.Id);
-        var studentFinalGradeResponse = await _services.StudentService.GetFinalStudentGrade(_user.Id);
+        var studentAverageGradeResponse = await _services.StudentService.GetAverageStudentGrade(studentId);
+        var studentFinalGradeResponse = await _services.StudentService.GetFinalStudentGrade(studentId);
         
-        var allAveragesResponse = await _services.StudentService.GetAllAverageSubjectGrades(_user.Id);
-        var allFinalsResponse = await _services.StudentService.GetAllFinalSubjectGrades(_user.Id);
+        var allAveragesResponse = await _services.StudentService.GetAllAverageSubjectGrades(studentId);
+        var allFinalsResponse = await _services.StudentService.GetAllFinalSubjectGrades(studentId);
         
-        var subjectsResponse = await _services.StudentService.GetSubjectsByStudent(_user.Id);
+        var subjectsResponse = await _services.StudentService.GetSubjectsByStudent(studentId);
         
         bool successfulDataRetrieval = studentAverageGradeResponse.Success && 
                                        studentFinalGradeResponse.Success &&

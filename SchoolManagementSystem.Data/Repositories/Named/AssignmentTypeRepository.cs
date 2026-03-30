@@ -5,7 +5,7 @@ namespace SchoolManagementSystem.Data.Repositories.Named;
 
 public class AssignmentTypeRepository : NamedModelRepository<AssignmentType>
 {
-    protected AssignmentTypeRepository() : base(SchoolContext.AssignmentTypes)
+    public AssignmentTypeRepository() : base(SchoolContext.AssignmentTypes)
     {
     }
 }

@@ -8,7 +8,7 @@ using SchoolManagementSystem.Data.Models.Named;
 namespace SchoolManagementSystem.Data.Models;
 
 [FileNamePrefix("users")]
-public class User : BaseModel
+public class User : NamedModel
 {
     #region Properties
 
@@ -40,6 +40,7 @@ public class User : BaseModel
     public int? OfficeRoomId { get; set; } // principal-specific
     
     #endregion
+    
     
     #endregion
     
@@ -136,4 +137,9 @@ public class User : BaseModel
     }
     
     #endregion
+
+    public override string GetName()
+    {
+        return FullName;
+    }
 }

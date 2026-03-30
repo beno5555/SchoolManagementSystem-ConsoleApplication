@@ -1,6 +1,6 @@
 ﻿using SchoolManagementSystem.Data.Config;
 
-namespace SchoolManagementSystem.Service.DTOs.Assignments;
+namespace SchoolManagementSystem.Service.DTOs.Academic.Assignments;
 
 public class AssignmentDisplayDTO
 {

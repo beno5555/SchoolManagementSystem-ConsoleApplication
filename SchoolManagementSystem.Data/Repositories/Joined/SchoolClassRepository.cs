@@ -2,7 +2,7 @@
 using SchoolManagementSystem.Data.Models.JoinedModels;
 using SchoolManagementSystem.Data.Repositories.Base;
 
-namespace SchoolManagementSystem.Data.Repositories;
+namespace SchoolManagementSystem.Data.Repositories.Joined;
 
 public class SchoolClassRepository : BaseRepository<SchoolClass>
 {
@@ -42,5 +42,12 @@ public class SchoolClassRepository : BaseRepository<SchoolClass>
             schoolClass => schoolClass.SubjectId == subjectId,
             "Class assigned to the teacher not found");
         return response;
+    }
+
+    public async Task<bool> ExistsByTeacherAndSubjectIds(int subjectId, int teacherId)
+    {
+        return await ExistsAsync(
+            schoolClass => schoolClass.TeacherId == teacherId && 
+                           schoolClass.SubjectId == subjectId);
     }
 }

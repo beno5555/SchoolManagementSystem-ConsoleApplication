@@ -21,4 +21,21 @@ public class NamedModelRepository<T> : BaseRepository<T> where T : NamedModel
     {
         return await GetIdBy(role => role.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
     }
+
+    public async Task<DataResponse<List<string>>> GetNames()
+    {
+        var response = new DataResponse<List<string>>();
+        var all = await GetAll();
+        if (all.Success)
+        {
+            List<string> names = all.Value.Select(entity => entity.Name).ToList();
+            response.SetData(names);
+        }
+        else
+        {
+            response.SetStatus(false, all.Message);
+        }
+
+        return response;
+    }
 }

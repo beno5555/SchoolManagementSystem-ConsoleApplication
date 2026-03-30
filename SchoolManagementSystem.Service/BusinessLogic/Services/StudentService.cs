@@ -5,6 +5,7 @@ using SchoolManagementSystem.Data.Models.JoinedModels;
 using SchoolManagementSystem.Data.Models.Named;
 using SchoolManagementSystem.Service.BusinessLogic.Factories;
 using SchoolManagementSystem.Service.DTOs.Academic.Assessments;
+using SchoolManagementSystem.Service.DTOs.Academic.Assignments;
 using SchoolManagementSystem.Service.DTOs.Academic.Submissions;
 using SchoolManagementSystem.Service.DTOs.User.Display;
 
@@ -155,6 +156,56 @@ public class StudentService
 
         return response;
     }
+
+    public async Task<BaseResponse> UploadAssignment(AssignmentUploadDTO assignmentUploadDTO, int teacherId)
+    {
+        var response = new BaseResponse();
+
+        var groupClassResponse =
+            await GetGroupClass(assignmentUploadDTO.GroupId, assignmentUploadDTO.SubjectId, teacherId);
+
+        if (groupClassResponse.Success)
+        {
+            response = await _utilities.AcademicService.UploadAssignmentToGroupClass(assignmentUploadDTO, groupClassResponse.Value.Id);
+        }
+        else
+        {
+            response.SetStatus(false, groupClassResponse.Message);
+        }
+        
+        return response;
+    }
+
+    private async Task<DataResponse<GroupClass>> GetGroupClass(int groupId, int subjectId, int teacherId)
+    {
+        var response = new DataResponse<GroupClass>();
+        var validIds = await _utilities.AcademicService.AreValidIds(groupId, subjectId);
+        if (validIds.Success)
+        {
+            var classResponse = await _utilities.Repos.SchoolClassRepository.GetBySubjectAndTeacherId(subjectId, teacherId);
+
+            if (classResponse.Success)
+            {
+                response = await _utilities.Repos.GroupClassRepository.GetByGroupAndClassIdAsync(groupId, classResponse.Value.Id);
+            }
+            else
+            {
+                response.SetStatus(false, classResponse.Message);
+            }
+        }
+        else
+        {
+            response.SetStatus(false, validIds.Message);
+        }
+
+        return response;
+    }
+
+    public async Task<DataResponse<List<AssignmentType>>> GetAssignmentTypes()
+    {
+        return await _utilities.Repos.AssignmentTypeRepository.GetAll();
+    }
+
     #endregion
     
     #region Subjects
@@ -187,6 +238,63 @@ public class StudentService
         return response;
     }
 
+    public async Task<DataResponse<List<Subject>>> GetSubjectsByTeacher(int teacherId)
+    {
+        var response = new DataResponse<List<Subject>>();
+        var classesResponse = await _utilities.Repos.SchoolClassRepository.GetByTeacherId(teacherId);
+
+        if (classesResponse.Success)
+        {
+            var subjectIds = classesResponse.Value.Select(c => c.SubjectId).Distinct().ToList();
+            response = await _utilities.Repos.SubjectRepository.GetByIds(subjectIds);
+        }
+
+        return response;
+    }
+
+    public async Task<DataResponse<List<Subject>>> GetSubjectsNotAssignedToTeacher(int teacherId)
+    {
+        var response = new DataResponse<List<Subject>>();
+
+        var classesResponse = await _utilities.Repos.SchoolClassRepository.GetByTeacherId(teacherId);
+        var subjectIds = classesResponse.Value.Select(c => c.SubjectId).Distinct().ToList();
+
+        response = await _utilities.Repos.SubjectRepository.GetByNotIds(subjectIds);
+        return response;
+    }
+    
+    #endregion
+    
+    #region Groups
+
+    public async Task<DataResponse<List<Group>>> GetGroupsBySubjectAndTeacher(int subjectId, int teacherId)
+    {
+        var response = new DataResponse<List<Group>>();
+        var classResponse = await _utilities.Repos.SchoolClassRepository.GetBySubjectAndTeacherId(subjectId, teacherId);
+
+        if (classResponse.Success)
+        {
+            var groupClassesResponse =
+                await _utilities.Repos.GroupClassRepository.GetByClassIdAsync(classResponse.Value.Id);
+
+            if (groupClassesResponse.Success)
+            {
+                var groupClasses = groupClassesResponse.Value;
+                var groupIds = groupClasses.Select(gc => gc.GroupId).Distinct().ToList();
+                response = await _utilities.Repos.GroupRepository.GetByIds(groupIds);
+            }
+            else
+            {
+                response.SetStatus(false, "Could not get subjects --> " + groupClassesResponse.Message);
+            }
+        }
+        else
+        {
+            response.SetStatus(false, "Could not get subjects --> " + classResponse.Message);
+        }
+        
+        return response;
+    }
     
     #endregion
     
@@ -228,6 +336,29 @@ public class StudentService
         else
         {
             response.SetStatus(false, userResponse.Message);
+        }
+
+        return response;
+    }
+
+
+    public async Task<BaseResponse> AssignSubjectToTeacher(int subjectId, int teacherId)
+    {
+        var response = new BaseResponse();
+        var schoolClassExists = await _utilities.Repos.SchoolClassRepository.ExistsByTeacherAndSubjectIds(subjectId, teacherId);
+
+        if (!schoolClassExists)
+        {
+            var schoolClass = new SchoolClass
+            {
+                SubjectId = subjectId,
+                TeacherId = teacherId
+            };
+            await _utilities.Repos.SchoolClassRepository.AddAsync(schoolClass);
+        }
+        else
+        {
+            response.SetStatus(false, "Subject is already assigned to the teacher");
         }
 
         return response;

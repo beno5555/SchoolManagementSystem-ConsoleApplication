@@ -1,4 +1,5 @@
 ﻿using SchoolManagementSystem.Data.Models.JoinedModels;
+using SchoolManagementSystem.Data.Models.Named;
 using SchoolManagementSystem.Data.Repositories;
 using SchoolManagementSystem.Data.Repositories.Academic;
 using SchoolManagementSystem.Data.Repositories.Joined;
@@ -21,7 +22,9 @@ public class RepositoryFactory
     private readonly Lazy<SubmissionRepository> _submissionRepositoryFactory = new(() => new SubmissionRepository());
     private readonly Lazy<GroupClassRepository> _groupClassRepositoryFactory = new(() => new GroupClassRepository());
     private readonly Lazy<RolePermissionRepository> _rolePermissionRepositoryFactory = new(() => new RolePermissionRepository());
-    
+    private readonly Lazy<AssignmentTypeRepository> _assignmentTypeRepositoryFactory = new(() => new AssignmentTypeRepository());
+    private readonly Lazy<RoomTypeRepository> _roomTypeRepositoryFactory = new(() => new RoomTypeRepository());
+
     public UserRepository UserRepository => _userRepositoryFactory.Value;
     public SubjectRepository SubjectRepository => _subjectRepositoryFactory.Value;
     public SubjectEnrollmentRepository SubjectEnrollmentRepository => _subjectEnrollmentRepositoryFactory.Value;
@@ -35,4 +38,6 @@ public class RepositoryFactory
     public SubmissionRepository SubmissionRepository => _submissionRepositoryFactory.Value;
     public GroupClassRepository GroupClassRepository => _groupClassRepositoryFactory.Value;
     public RolePermissionRepository RolePermissionRepository => _rolePermissionRepositoryFactory.Value;
+    public AssignmentTypeRepository AssignmentTypeRepository => _assignmentTypeRepositoryFactory.Value;
+    public RoomTypeRepository RoomTypeRepository => _roomTypeRepositoryFactory.Value;
 }

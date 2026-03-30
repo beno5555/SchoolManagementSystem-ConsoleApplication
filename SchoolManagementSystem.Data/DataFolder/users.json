@@ -88,5 +88,41 @@
     "AverageGrade": null,
     "FinalGrade": 0,
     "OfficeRoomId": null
+  },
+  {
+    "Id": 6,
+    "FirstName": "gio",
+    "LastName": "dzidziguri",
+    "PhoneNumber": "5344343433",
+    "Address": "signagi",
+    "PrivateId": "12345678901",
+    "Email": "gio@gmail.com",
+    "PasswordHash": "c2dLvQ746WMh3cV/l8K6RG01WWQCkUpaEwZwYgSkslc=",
+    "PasswordSalt": "VaO\u002B4agpJLSBC0269Lf\u002ByAS0eqx84A/PbxB6Q8oZd0M=",
+    "DateOfBirth": "2001-03-31T00:00:00",
+    "RegistrationDate": "2026-03-30T13:10:09.7446416+04:00",
+    "RoleId": 4,
+    "GroupId": null,
+    "AverageGrade": null,
+    "FinalGrade": 0,
+    "OfficeRoomId": null
+  },
+  {
+    "Id": 7,
+    "FirstName": "Shorena",
+    "LastName": "Xmaladze",
+    "PhoneNumber": "54333344333",
+    "Address": "xidebi",
+    "PrivateId": "45443433333",
+    "Email": "teacher@gmail.com",
+    "PasswordHash": "zSkur0PCroilXkhHiOJLmnzOLLEv1UF9Mxa/jbTCd5U=",
+    "PasswordSalt": "Ix/kvzBU2YpmHGLe6YiYC5YBB8Y7zir3eMLd8WQ08Ew=",
+    "DateOfBirth": "1981-04-01T00:00:00",
+    "RegistrationDate": "2026-03-30T16:50:29.4782236+04:00",
+    "RoleId": 3,
+    "GroupId": null,
+    "AverageGrade": null,
+    "FinalGrade": null,
+    "OfficeRoomId": null
   }
 ]

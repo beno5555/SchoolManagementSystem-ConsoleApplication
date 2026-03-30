@@ -26,6 +26,7 @@ public static class SchoolEnums
         ViewSubmittedHomework,
         AssessStudent,
         ScheduleTest,
+        EnrollStudentInASubject,
 
         // Principal
         ViewAnyGrade,

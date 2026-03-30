@@ -17,4 +17,11 @@ public class SubjectRepository : NamedModelRepository<Subject>
             subject => subjectEnrollmentIds.Contains(subject.Id),
             "No subjects associated with the following enrollments");
     }
+
+    public async Task<DataResponse<List<Subject>>> GetByNotIds(List<int> subjectIds)
+    {
+        return await GetWhere(
+            subject => !subjectIds.Contains(subject.Id),
+            "Could not retrieve any subjects excluding the ones told to exclude");
+    }
 }

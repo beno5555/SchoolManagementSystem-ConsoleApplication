@@ -35,13 +35,12 @@ public static class AuthenticatedMenu
         },
         ["SuperAdmin"] = new()
         {
-            ("Manage Users",        "admin_users"),
-            ("Manage Roles",        "admin_roles"),
-            ("Manage Permissions",  "admin_permissions"),
-            ("Manage Subjects",     "admin_subjects"),
-            ("Manage Rooms",        "admin_rooms"),
-            ("Manage Groups",       "admin_groups"),
-            ("Logout",              "logout")
+            ("Register User",      nameof(MenuConstants.ActionEnums.SuperAdminAction.RegisterUser)),
+            ("Assign a subject to teacher",       nameof(MenuConstants.ActionEnums.SuperAdminAction.AssignSubjectToTeacher)),
+            ("Manage Groups",      nameof(MenuConstants.ActionEnums.SuperAdminAction.Groups)),
+            ("Manage Roles",       nameof(MenuConstants.ActionEnums.SuperAdminAction.Roles)),
+            ("Manage Permissions", nameof(MenuConstants.ActionEnums.SuperAdminAction.Permissions)),
+            ("Logout",              nameof(MenuConstants.ActionEnums.SharedAction.Logout))
         }
     };      
 

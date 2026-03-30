@@ -24,7 +24,6 @@ public static class MenuConstants
             Classes = 1,
             Students,
             Assessment,
-            Assignment,
             EnterGrades,
             Assignments
         }
@@ -41,11 +40,13 @@ public static class MenuConstants
         public enum SuperAdminAction
         {
             Users = 1,
+            RegisterUser,
             Roles,
             Permissions,
             Subjects,
             Rooms,
-            Groups
+            Groups,
+            AssignSubjectToTeacher
         }
     }
 

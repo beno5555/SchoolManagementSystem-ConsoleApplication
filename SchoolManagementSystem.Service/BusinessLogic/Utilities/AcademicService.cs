@@ -6,6 +6,7 @@ using SchoolManagementSystem.Data.Models.JoinedModels;
 using SchoolManagementSystem.Service.DTOs.Academic.Assessments;
 using SchoolManagementSystem.Service.DTOs.User.Display;
 using SchoolManagementSystem.Service.BusinessLogic.Factories;
+using SchoolManagementSystem.Service.DTOs.Academic.Assignments;
 using SchoolManagementSystem.Service.DTOs.Academic.Submissions;
 
 namespace SchoolManagementSystem.Service.BusinessLogic.Utilities;
@@ -371,5 +372,42 @@ public class AcademicService
     }
     
     #endregion
-    
+
+    public async Task<BaseResponse> UploadAssignmentToGroupClass(AssignmentUploadDTO assignmentUploadDTO, int groupClassId)
+    {
+        var response = new BaseResponse();
+        var toAssignmentResponse = _mapperService.ToAssignment(assignmentUploadDTO, groupClassId);
+
+        if (toAssignmentResponse.Success)
+        {
+            await _repos.AssignmentRepository.AddAsync(toAssignmentResponse.Value);
+        }
+        else
+        {
+            response.SetStatus(false, toAssignmentResponse.Message);
+        }
+
+        return response;
+    }
+
+    public async Task<BaseResponse> AreValidIds(int groupId, int subjectId)
+    {
+        var response = new BaseResponse();
+        bool groupExists = await _repos.GroupRepository.ExistsAsync(groupId);
+        if (groupExists)
+        {
+            bool subjectExists = await _repos.SubjectRepository.ExistsAsync(subjectId);
+
+            if (!subjectExists)
+            {
+                response.SetStatus(false, "Subject not found");
+            }
+        }
+        else
+        {
+            response.SetStatus(false, "Group not found");
+        }
+
+        return response;
+    }
 }

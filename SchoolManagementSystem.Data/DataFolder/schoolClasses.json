@@ -1,1 +1,7 @@
-[]
+[
+  {
+    "Id": 1,
+    "TeacherId": 7,
+    "SubjectId": 4
+  }
+]

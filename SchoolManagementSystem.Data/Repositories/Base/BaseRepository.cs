@@ -101,6 +101,13 @@ public class BaseRepository<T> : FileRepository<T> where T : BaseModel
         return response;
     }
 
+    public async Task<DataResponse<List<T>>> GetByIds(List<int> ids)
+    {
+        return await GetWhere(
+            entity => ids.Contains(entity.Id),
+            $"Could not find {typeof(T).Name} with ids");
+    }
+
     public async Task<int> GetIdBy(Func<T, bool> filter)
     {
         var entityResponse = await GetSingle(filter);
@@ -142,6 +149,7 @@ public class BaseRepository<T> : FileRepository<T> where T : BaseModel
         else
         {
             response.SetStatus(false, errorMessage);
+            response.SetData(new List<T>());
         }
 
         return response;
