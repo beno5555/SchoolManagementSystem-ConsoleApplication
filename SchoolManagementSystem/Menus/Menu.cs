@@ -131,6 +131,9 @@ public static class Menu
             case nameof(MenuConstants.ActionEnums.SuperAdminAction.Groups):
                 await Controllers.SuperAdminController.ManageGroups();
                 break;
+            case nameof(MenuConstants.ActionEnums.SuperAdminAction.Rooms):
+                await Controllers.SuperAdminController.ManageRooms();
+                break;
         } 
     }
 

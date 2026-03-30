@@ -363,4 +363,10 @@ public class StudentService
 
         return response;
     }
+
+    public async Task<DataResponse<List<string>>> GetTeacherSubjectNames(List<SchoolClass> classes)
+    {
+        await Task.Delay(3000);
+        return null;
+    }
 }

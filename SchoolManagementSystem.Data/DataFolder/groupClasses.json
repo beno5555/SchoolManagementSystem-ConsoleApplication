@@ -1,1 +1,7 @@
-[]
+[
+  {
+    "Id": 1,
+    "GroupId": 2,
+    "SchoolClassId": 1
+  }
+]

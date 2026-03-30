@@ -4,5 +4,11 @@
     "TeacherId": 1,
     "ClassroomId": 1,
     "Name": "meate pirveli"
+  },
+  {
+    "Id": 2,
+    "TeacherId": 1,
+    "ClassroomId": 1,
+    "Name": "Mecxre pirveli"
   }
 ]

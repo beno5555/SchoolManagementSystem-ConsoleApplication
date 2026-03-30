@@ -5,7 +5,7 @@ using SchoolManagementSystem.Data.Models.Named;
 namespace SchoolManagementSystem.Data.Models.JoinedModels;
 
 [FileNamePrefix("schoolClasses")]
-public class SchoolClass : BaseModel
+public class SchoolClass : NamedModel
 {
     [Reference<User>]
     public int TeacherId { get; set; }

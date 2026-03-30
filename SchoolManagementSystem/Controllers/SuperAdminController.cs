@@ -1,6 +1,7 @@
 ﻿using System.Xml.XPath;
 using SchoolManagementSystem.ConsoleDisplay;
 using SchoolManagementSystem.Data.Config;
+using SchoolManagementSystem.Data.Models.JoinedModels;
 using SchoolManagementSystem.DTOCreation;
 using SchoolManagementSystem.Service.BusinessLogic.Factories;
 using SchoolManagementSystem.Service.DTOs.Groups;
@@ -154,6 +155,7 @@ public class SuperAdminController
         var options = new List<string>()
         {
             "Add a new group",
+            "Assign class to a group",
             "Assign Student to a group"
         };
         var choice = LayoutHelper.GetMenuChoice(options);
@@ -164,6 +166,9 @@ public class SuperAdminController
                 await AddNewGroup();
                 break;
             case 2:
+                await AssignClassToGroup();
+                break;
+            case 3:
                 await AssignStudentToGroup();
                 break;
         }
@@ -235,5 +240,110 @@ public class SuperAdminController
         return result;
     }
 
+
+
+    public async Task AssignClassToGroup()
+    {
+        var groupClass = await PromptGroupClassDTO();
+        if (groupClass is not null)
+        {
+            await _services.RoomService.CreateGroupClass(groupClass);
+            LayoutHelper.ShowSuccess("Group assigned successfully");
+        }
+    }
+
+    private async Task<CreateGroupClassDTO?> PromptGroupClassDTO()
+    {
+        CreateGroupClassDTO? result = null;
+        var classesResponse = await _services.RoomService.GetClasses();
+        if (classesResponse.Success)
+        {
+            var teacherSubjectName = await _services.StudentService.GetTeacherSubjectNames(classesResponse.Value);
+            var groupsResponse = await _services.RoomService.GetGroups();
+            if (groupsResponse.Success)
+            {
+                result = new CreateGroupClassDTO
+                {
+                    GroupId = LayoutHelper.GetMenuChoice(groupsResponse.Value),
+                    ClassId = LayoutHelper.GetMenuChoice(classesResponse.Value),
+                };
+            }
+            else
+            {
+                LayoutHelper.ShowError("There are currently no groups in the database");
+            }
+        }
+        else
+        {
+            LayoutHelper.ShowError("There are currently no classes in the database");
+        }
+
+        return result;
+    }
+
+
+    #endregion
+
+    #region Manage Rooms
+    
+    public async Task ManageRooms()
+    {
+        LayoutHelper.RenderSectionTitle("Rooms");
+
+        var options = new List<string>
+        {
+            "Add a new room"
+        };
+        var choice = LayoutHelper.GetMenuChoice(options);
+        switch (choice)
+        {
+            case 1:
+                await AddNewRoom();
+                break;
+        }
+    }
+
+    private async Task AddNewRoom()
+    {
+        LayoutHelper.ShowInfo("Under development...");
+
+        LayoutHelper.RenderSectionTitle("Add a new room");
+        var roomDTO = await PromptRoomDTO();
+        if (roomDTO is not null)
+        {
+            await _services.RoomService.CreateRoom(roomDTO);
+            LayoutHelper.ShowSuccess("Room added successfully!");
+        }
+    }
+
+    private async Task<CreateRoomDTO?> PromptRoomDTO()
+    {
+        CreateRoomDTO? result = null;
+        var roomTypeId = await PromptRoomType();
+        if (roomTypeId != -1)
+        {
+            result = new CreateRoomDTO
+            {
+                RoomName = LayoutHelper.GetInput("Room Name"),
+                RoomTypeId = roomTypeId,
+            };
+        }
+
+        return result;
+    }
+
+    private async Task<int> PromptRoomType()
+    {
+        int result = -1;
+        var roomTypesResponse = await _services.RoomService.GetRoomTypes();
+
+        if (roomTypesResponse.Success)
+        {
+            result = LayoutHelper.GetMenuChoice(roomTypesResponse.Value);
+        }
+
+        return result;
+    }
+    
     #endregion
 }

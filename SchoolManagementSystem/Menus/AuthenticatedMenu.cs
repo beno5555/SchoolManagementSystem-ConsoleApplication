@@ -38,6 +38,7 @@ public static class AuthenticatedMenu
             ("Register User",      nameof(MenuConstants.ActionEnums.SuperAdminAction.RegisterUser)),
             ("Assign a subject to teacher",       nameof(MenuConstants.ActionEnums.SuperAdminAction.AssignSubjectToTeacher)),
             ("Manage Groups",      nameof(MenuConstants.ActionEnums.SuperAdminAction.Groups)),
+            ("Manage Rooms",       nameof(MenuConstants.ActionEnums.SuperAdminAction.Rooms)),
             ("Manage Roles",       nameof(MenuConstants.ActionEnums.SuperAdminAction.Roles)),
             ("Manage Permissions", nameof(MenuConstants.ActionEnums.SuperAdminAction.Permissions)),
             ("Logout",              nameof(MenuConstants.ActionEnums.SharedAction.Logout))

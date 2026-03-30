@@ -2,6 +2,13 @@
   {
     "Id": 1,
     "TeacherId": 7,
-    "SubjectId": 4
+    "SubjectId": 4,
+    "Name": ""
+  },
+  {
+    "Id": 2,
+    "TeacherId": 7,
+    "SubjectId": 10,
+    "Name": ""
   }
 ]

@@ -4,7 +4,7 @@ using SchoolManagementSystem.Data.Repositories.Base;
 
 namespace SchoolManagementSystem.Data.Repositories.Joined;
 
-public class SchoolClassRepository : BaseRepository<SchoolClass>
+public class SchoolClassRepository : NamedModelRepository<SchoolClass>
 {
     public SchoolClassRepository() : base(SchoolContext.SchoolClasses)
     {
